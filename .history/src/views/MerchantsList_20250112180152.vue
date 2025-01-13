@@ -268,7 +268,7 @@ export default {
         <div class="col-md-3 product_category"></div>
         <div class="col-md-3 product_location"></div>
         <div class="col-md-3 d-flex align-items-center justify-content-md-end">
-          <button class="dt-button add-new btn btn-primary" @click="$router.push('/merchant/add')">
+          <button class="dt-button add-new btn btn-primary" @click="$router.push('/merchants/add')">
             <span
               ><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i
               ><span class="d-none d-sm-inline-block">Add Merchant</span></span

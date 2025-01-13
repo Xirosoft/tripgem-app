@@ -21,7 +21,7 @@ const router = createRouter({
       component: () => import('@/views/MerchantsList.vue'),
     },
     {
-      path: '/merchant/add',
+      path: '/merchants/add',
       name: 'AddMerchant',
       component: () => import('@/views/AddMerchant.vue'),
     },

@@ -34,11 +34,28 @@ export default {
       if (this.table) {
         this.table.destroy()
       }
+
+      // Add data mapping function
+      const mapMerchantData = (merchant) => ({
+        DT_RowId: merchant._id || merchant.id, // Handle both MongoDB _id and SQL id
+        id: merchant._id || merchant.id,
+        logo_url: merchant.logo_url || '',
+        company_name: merchant.company_name || '',
+        business_type: merchant.business_type || '',
+        headquarters_location: merchant.headquarters_location || '',
+        registration_number: merchant.registration_number || '',
+        phone_number: merchant.phone_number || '',
+        email_address: merchant.email_address || '',
+        status: merchant.status || 'pending',
+      })
+
       this.table = $(this.$refs.merchantsTable).DataTable({
-        data: this.merchantStore.getAllMerchants,
+        data: this.merchantStore.getAllMerchants.map(mapMerchantData),
         columns: [
+          // Checkbox column
           {
             data: null,
+            defaultContent: '',
             orderable: false,
             searchable: false,
             render: function () {
@@ -46,30 +63,67 @@ export default {
             },
             className: 'dt-checkboxes-cell',
           },
-          { data: 'id' },
+          // Other columns
+          { 
+            data: 'id',
+            render: function(data) {
+              return data || 'N/A'
+            }
+          },
           {
             data: 'logo_url',
-            render: function (data) {
+            render: function(data) {
               return data ? `<img src="${data}" alt="logo" class="rounded" height="32">` : ''
-            },
+            }
           },
-          { data: 'company_name' },
-          { data: 'business_type' },
-          { data: 'headquarters_location' }, // Add location column
-          { data: 'registration_number' },
-          { data: 'phone_number' },
-          { data: 'email_address' },
+          { 
+            data: 'company_name',
+            render: function(data) {
+              return data || 'N/A'
+            }
+          },
+          { 
+            data: 'business_type',
+            render: function(data) {
+              return data || 'N/A'
+            }
+          },
+          { 
+            data: 'headquarters_location',
+            render: function(data) {
+              return data || 'N/A'
+            }
+          },
+          { 
+            data: 'registration_number',
+            render: function(data) {
+              return data || 'N/A'
+            }
+          },
+          { 
+            data: 'phone_number',
+            render: function(data) {
+              return data || 'N/A'
+            }
+          },
+          { 
+            data: 'email_address',
+            render: function(data) {
+              return data || 'N/A'
+            }
+          },
           {
             data: 'status',
-            render: function (data) {
+            render: function(data) {
               const statusClasses = {
                 pending: 'bg-label-warning',
                 approved: 'bg-label-success',
-                inactive: 'bg-label-danger',
+                inactive: 'bg-label-danger'
               }
-              return `<span class="badge ${statusClasses[data] || 'bg-label-primary'}">${data}</span>`
-            },
+              return `<span class="badge ${statusClasses[data] || 'bg-label-primary'}">${data || 'pending'}</span>`
+            }
           },
+          // Actions column
           {
             data: null,
             defaultContent: `

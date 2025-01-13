@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AdminDashboard from '../views/AdminDashboard.vue'
+import MerchantsList from '../views/MerchantsList.vue'
+import AddMerchants from '../views/AddMerchants.vue'
 import Login from '../views/Login.vue'
 
 const router = createRouter({
@@ -17,13 +19,13 @@ const router = createRouter({
     },
     {
       path: '/merchants',
-      name: 'MerchantsList',
-      component: () => import('@/views/MerchantsList.vue'),
+      name: 'merchants',
+      component: MerchantsList,
     },
     {
-      path: '/merchant/add',
-      name: 'AddMerchant',
-      component: () => import('@/views/AddMerchant.vue'),
+      path: '/merchants/add',
+      name: 'addmerchants',
+      component: AddMerchants,
     },
   ],
 })
