@@ -7,7 +7,6 @@ import Tagify from '@yaireo/tagify'
 import flatpickr from 'flatpickr'
 import { useToast } from 'vue-toastification'
 import { useUsersStore } from '@/stores/users'
-import AddressBlock from '@/components/AddressBlock.vue'
 
 import jQuery from 'jquery'
 const $ = jQuery
@@ -27,13 +26,38 @@ import 'select2/dist/js/select2.full.js'
 // Add typeahead import
 import 'typeahead.js'
 
+// Add this constant at the top level of the script
+const SAMPLE_DATA = {
+  provinces: {
+    US: [
+      { id: 'NY', name: 'New York' },
+      { id: 'CA', name: 'California' },
+      { id: 'TX', name: 'Texas' },
+    ],
+    GB: [
+      { id: 'LDN', name: 'London' },
+      { id: 'MNC', name: 'Manchester' },
+      { id: 'EDH', name: 'Edinburgh' },
+    ],
+    // Add more countries as needed
+  },
+  cities: {
+    NY: [
+      { id: 'NYC', name: 'New York City', zip: '10001' },
+      { id: 'BUF', name: 'Buffalo', zip: '14201' },
+    ],
+    CA: [
+      { id: 'LA', name: 'Los Angeles', zip: '90001' },
+      { id: 'SF', name: 'San Francisco', zip: '94101' },
+    ],
+    // Add more cities as needed
+  },
+}
+
 Dropzone.autoDiscover = false
 
 export default {
   name: 'AddMerchants',
-  components: {
-    AddressBlock,
-  },
   setup() {
     const toast = useToast()
     const merchantStore = useMerchantsStore()
@@ -55,6 +79,7 @@ export default {
         headquarters_location: '',
         branch_locations: [], // Keep as array
         business_type: '',
+        address: '',
         phone_number: '',
         email_address: '',
         website: '',
@@ -72,13 +97,11 @@ export default {
         business_permits: [],
         membership_certificates: [],
         documents: [],
-        addressDetails: {
-          country: '',
-          province: '',
-          city: '',
-          zip_code: '',
-          address_details: '',
-        },
+        country: '',
+        province: '',
+        city: '',
+        address_details: '',
+        zip_code: '',
       },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
@@ -97,6 +120,12 @@ export default {
         documents: [],
       },
       users: [],
+      locationData: {
+        countries: [],
+        provinces: [],
+        cities: [],
+        zipCodes: {},
+      },
     }
   },
   async created() {
@@ -112,6 +141,7 @@ export default {
     this.$nextTick(() => {
       this.initializeComponents()
     })
+    this.loadCountries()
   },
   methods: {
     initializeComponents() {
@@ -465,6 +495,61 @@ export default {
         console.warn('Select2 initialization warning:', error)
       }
     },
+
+    async loadCountries() {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/all')
+        const data = await response.json()
+        this.locationData.countries = data
+          .map((country) => ({
+            id: country.cca2,
+            name: country.name.common,
+            flag: country.flags.png,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name))
+      } catch (error) {
+        console.error('Failed to load countries:', error)
+        this.toast.error('Failed to load countries')
+      }
+    },
+
+    async loadProvinces() {
+      if (!this.formData.country) {
+        this.locationData.provinces = []
+        return
+      }
+      // Use sample data instead of API call
+      this.locationData.provinces = SAMPLE_DATA.provinces[this.formData.country] || []
+      this.formData.province = ''
+      this.formData.city = ''
+      this.formData.zip_code = ''
+    },
+
+    async loadCities() {
+      if (!this.formData.province) {
+        this.locationData.cities = []
+        return
+      }
+      // Use sample data instead of API call
+      this.locationData.cities = SAMPLE_DATA.cities[this.formData.province] || []
+      this.formData.city = ''
+      this.formData.zip_code = ''
+    },
+
+    async updateZipCode() {
+      if (!this.formData.city) {
+        this.formData.zip_code = ''
+        return
+      }
+      // Find the city in sample data and get its zip code
+      const city = this.locationData.cities.find((c) => c.id === this.formData.city)
+      this.formData.zip_code = city ? city.zip : ''
+    },
+  },
+  watch: {
+    'formData.country': 'loadProvinces',
+    'formData.province': 'loadCities',
+    'formData.city': 'updateZipCode',
   },
   beforeUnmount() {
     this.cleanupComponents()
@@ -550,10 +635,66 @@ export default {
             <h5 class="card-title mb-0">Contact Information</h5>
           </div>
           <div class="card-body">
-            <AddressBlock v-model="formData.addressDetails" />
-
-            <!-- Keep other contact fields -->
             <div class="row">
+              <div class="col-md-6 mb-4">
+                <label class="form-label">Country*</label>
+                <select v-model="formData.country" class="form-select select2" required>
+                  <option value="">Select Country</option>
+                  <option
+                    v-for="country in locationData.countries"
+                    :key="country.id"
+                    :value="country.id"
+                  >
+                    <img
+                      :src="country.flag"
+                      :alt="country.name"
+                      style="width: 20px; margin-right: 8px"
+                    />
+                    {{ country.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label">Province*</label>
+                <select v-model="formData.province" class="form-select select2" required>
+                  <option value="">Select Province</option>
+                  <option
+                    v-for="province in locationData.provinces"
+                    :key="province.id"
+                    :value="province.id"
+                  >
+                    {{ province.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label">City*</label>
+                <select v-model="formData.city" class="form-select select2" required>
+                  <option value="">Select City</option>
+                  <option v-for="city in locationData.cities" :key="city.id" :value="city.id">
+                    {{ city.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label">ZIP Code</label>
+                <input v-model="formData.zip_code" type="text" class="form-control" readonly />
+              </div>
+
+              <div class="col-md-12 mb-4">
+                <label class="form-label">Detailed Address*</label>
+                <input
+                  v-model="formData.address_details"
+                  type="text"
+                  class="form-control"
+                  required
+                  placeholder="Street address, building name, etc."
+                />
+              </div>
+
               <div class="col-md-6 mb-4">
                 <label class="form-label">Headquarters Location*</label>
                 <input
@@ -573,10 +714,12 @@ export default {
                   placeholder="Separate with commas"
                 />
               </div>
+
               <div class="col-md-6 mb-4">
                 <label class="form-label">Phone Number*</label>
                 <input v-model="formData.phone_number" type="tel" class="form-control" required />
               </div>
+
               <div class="col-md-6 mb-4">
                 <label class="form-label">Email Address*</label>
                 <input
@@ -798,27 +941,11 @@ export default {
   }
 
   .select2-selection__rendered {
-    img.flag-icon {
+    img {
       width: 20px;
-      height: 15px;
       margin-right: 8px;
       vertical-align: middle;
-      object-fit: cover;
     }
-  }
-  img.flag-icon {
-    width: 20px;
-  }
-}
-
-// Add styles for dropdown flags
-.select2-results__option {
-  img.flag-icon {
-    width: 20px;
-    height: 15px;
-    margin-right: 8px;
-    vertical-align: middle;
-    object-fit: cover;
   }
 }
 </style>

@@ -555,25 +555,6 @@ export default {
             <!-- Keep other contact fields -->
             <div class="row">
               <div class="col-md-6 mb-4">
-                <label class="form-label">Headquarters Location*</label>
-                <input
-                  v-model="formData.headquarters_location"
-                  type="text"
-                  class="form-control"
-                  required
-                />
-              </div>
-
-              <div class="col-md-6 mb-4">
-                <label class="form-label">Branch Locations</label>
-                <input
-                  v-model="formData.branch_locations"
-                  type="text"
-                  class="form-control"
-                  placeholder="Separate with commas"
-                />
-              </div>
-              <div class="col-md-6 mb-4">
                 <label class="form-label">Phone Number*</label>
                 <input v-model="formData.phone_number" type="tel" class="form-control" required />
               </div>

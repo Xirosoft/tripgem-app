@@ -7,7 +7,6 @@ import Tagify from '@yaireo/tagify'
 import flatpickr from 'flatpickr'
 import { useToast } from 'vue-toastification'
 import { useUsersStore } from '@/stores/users'
-import AddressBlock from '@/components/AddressBlock.vue'
 
 import jQuery from 'jquery'
 const $ = jQuery
@@ -27,13 +26,48 @@ import 'select2/dist/js/select2.full.js'
 // Add typeahead import
 import 'typeahead.js'
 
+// Add this constant at the top level of the script
+const SAMPLE_DATA = {
+  provinces: {
+    US: [
+      { id: 'CA', name: 'California' },
+      { id: 'NY', name: 'New York' },
+      { id: 'TX', name: 'Texas' },
+      { id: 'FL', name: 'Florida' },
+    ],
+    GB: [
+      { id: 'ENG', name: 'England' },
+      { id: 'SCT', name: 'Scotland' },
+      { id: 'WLS', name: 'Wales' },
+    ],
+    // Add more countries as needed
+  },
+  cities: {
+    CA: [
+      { id: 'LA', name: 'Los Angeles', zip: '90001' },
+      { id: 'SF', name: 'San Francisco', zip: '94101' },
+      { id: 'SD', name: 'San Diego', zip: '92101' },
+    ],
+    NY: [
+      { id: 'NYC', name: 'New York City', zip: '10001' },
+      { id: 'BUF', name: 'Buffalo', zip: '14201' },
+      { id: 'ALB', name: 'Albany', zip: '12201' },
+    ],
+    ENG: [
+      { id: 'LDN', name: 'London', zip: 'SW1A 1AA' },
+      { id: 'MNC', name: 'Manchester', zip: 'M1 1AA' },
+    ],
+    SCT: [
+      { id: 'EDI', name: 'Edinburgh', zip: 'EH1 1BB' },
+      { id: 'GLA', name: 'Glasgow', zip: 'G1 1AA' },
+    ],
+  },
+}
+
 Dropzone.autoDiscover = false
 
 export default {
   name: 'AddMerchants',
-  components: {
-    AddressBlock,
-  },
   setup() {
     const toast = useToast()
     const merchantStore = useMerchantsStore()
@@ -55,6 +89,7 @@ export default {
         headquarters_location: '',
         branch_locations: [], // Keep as array
         business_type: '',
+        address: '',
         phone_number: '',
         email_address: '',
         website: '',
@@ -72,13 +107,11 @@ export default {
         business_permits: [],
         membership_certificates: [],
         documents: [],
-        addressDetails: {
-          country: '',
-          province: '',
-          city: '',
-          zip_code: '',
-          address_details: '',
-        },
+        country: '',
+        province: '',
+        city: '',
+        address_details: '',
+        zip_code: '',
       },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
@@ -97,6 +130,12 @@ export default {
         documents: [],
       },
       users: [],
+      locationData: {
+        countries: [],
+        provinces: [],
+        cities: [],
+        zipCodes: {},
+      },
     }
   },
   async created() {
@@ -112,6 +151,7 @@ export default {
     this.$nextTick(() => {
       this.initializeComponents()
     })
+    this.loadCountries()
   },
   methods: {
     initializeComponents() {
@@ -465,6 +505,115 @@ export default {
         console.warn('Select2 initialization warning:', error)
       }
     },
+
+    async loadCountries() {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/all')
+        const data = await response.json()
+        this.locationData.countries = data
+          .map((country) => ({
+            id: country.cca2,
+            name: country.name.common,
+            flag: country.flags.png,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name))
+      } catch (error) {
+        console.error('Failed to load countries:', error)
+        this.toast.error('Failed to load countries')
+      }
+    },
+
+    async loadProvinces() {
+      if (!this.formData.country) {
+        this.locationData.provinces = []
+        return
+      }
+
+      // Clear dependent fields
+      this.formData.province = ''
+      this.formData.city = ''
+      this.formData.zip_code = ''
+
+      try {
+        // Get provinces for selected country
+        const provinces = SAMPLE_DATA.provinces[this.formData.country] || []
+        this.locationData.provinces = provinces
+
+        // Reinitialize select2 for provinces
+        this.$nextTick(() => {
+          $('.select2').select2()
+        })
+      } catch (error) {
+        console.error('Failed to load provinces:', error)
+        this.toast.error('Failed to load provinces')
+      }
+    },
+
+    async loadCities() {
+      if (!this.formData.province) {
+        this.locationData.cities = []
+        return
+      }
+
+      // Clear dependent fields
+      this.formData.city = ''
+      this.formData.zip_code = ''
+
+      try {
+        // Get cities for selected province
+        const cities = SAMPLE_DATA.cities[this.formData.province] || []
+        this.locationData.cities = cities
+
+        // Reinitialize select2 for cities
+        this.$nextTick(() => {
+          $('.select2').select2()
+        })
+      } catch (error) {
+        console.error('Failed to load cities:', error)
+        this.toast.error('Failed to load cities')
+      }
+    },
+
+    async updateZipCode() {
+      if (!this.formData.city) {
+        this.formData.zip_code = ''
+        return
+      }
+
+      try {
+        // Find the selected city in the current cities array
+        const selectedCity = this.locationData.cities.find((city) => city.id === this.formData.city)
+        if (selectedCity) {
+          this.formData.zip_code = selectedCity.zip
+        } else {
+          this.formData.zip_code = ''
+        }
+      } catch (error) {
+        console.error('Failed to update zip code:', error)
+        this.toast.error('Failed to update zip code')
+      }
+    },
+
+    // Add this helper method
+    initializeLocationSelects() {
+      this.$nextTick(() => {
+        // Initialize or reinitialize select2 for all location selects
+        $('#country-select, #province-select, #city-select').each(function () {
+          if ($(this).hasClass('select2-hidden-accessible')) {
+            $(this).select2('destroy')
+          }
+          $(this).select2({
+            placeholder: $(this).attr('placeholder'),
+            allowClear: true,
+          })
+        })
+      })
+    },
+  },
+  watch: {
+    'formData.country': 'loadProvinces',
+    'formData.province': 'loadCities',
+    'formData.city': 'updateZipCode',
   },
   beforeUnmount() {
     this.cleanupComponents()
@@ -550,10 +699,86 @@ export default {
             <h5 class="card-title mb-0">Contact Information</h5>
           </div>
           <div class="card-body">
-            <AddressBlock v-model="formData.addressDetails" />
-
-            <!-- Keep other contact fields -->
             <div class="row">
+              <div class="col-md-6 mb-4">
+                <label class="form-label">Country*</label>
+                <select
+                  id="country-select"
+                  v-model="formData.country"
+                  class="form-select select2"
+                  placeholder="Select Country"
+                  required
+                >
+                  <option value="">Select Country</option>
+                  <option
+                    v-for="country in locationData.countries"
+                    :key="country.id"
+                    :value="country.id"
+                  >
+                    <img
+                      :src="country.flag"
+                      :alt="country.name"
+                      style="width: 20px; margin-right: 8px"
+                    />
+                    {{ country.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label">Province*</label>
+                <select
+                  id="province-select"
+                  v-model="formData.province"
+                  class="form-select select2"
+                  placeholder="Select Province"
+                  required
+                  :disabled="!formData.country"
+                >
+                  <option value="">Select Province</option>
+                  <option
+                    v-for="province in locationData.provinces"
+                    :key="province.id"
+                    :value="province.id"
+                  >
+                    {{ province.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label">City*</label>
+                <select
+                  id="city-select"
+                  v-model="formData.city"
+                  class="form-select select2"
+                  placeholder="Select City"
+                  required
+                  :disabled="!formData.province"
+                >
+                  <option value="">Select City</option>
+                  <option v-for="city in locationData.cities" :key="city.id" :value="city.id">
+                    {{ city.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label">ZIP Code</label>
+                <input v-model="formData.zip_code" type="text" class="form-control" readonly />
+              </div>
+
+              <div class="col-md-12 mb-4">
+                <label class="form-label">Detailed Address*</label>
+                <input
+                  v-model="formData.address_details"
+                  type="text"
+                  class="form-control"
+                  required
+                  placeholder="Street address, building name, etc."
+                />
+              </div>
+
               <div class="col-md-6 mb-4">
                 <label class="form-label">Headquarters Location*</label>
                 <input
@@ -573,10 +798,12 @@ export default {
                   placeholder="Separate with commas"
                 />
               </div>
+
               <div class="col-md-6 mb-4">
                 <label class="form-label">Phone Number*</label>
                 <input v-model="formData.phone_number" type="tel" class="form-control" required />
               </div>
+
               <div class="col-md-6 mb-4">
                 <label class="form-label">Email Address*</label>
                 <input
@@ -798,27 +1025,11 @@ export default {
   }
 
   .select2-selection__rendered {
-    img.flag-icon {
+    img {
       width: 20px;
-      height: 15px;
       margin-right: 8px;
       vertical-align: middle;
-      object-fit: cover;
     }
-  }
-  img.flag-icon {
-    width: 20px;
-  }
-}
-
-// Add styles for dropdown flags
-.select2-results__option {
-  img.flag-icon {
-    width: 20px;
-    height: 15px;
-    margin-right: 8px;
-    vertical-align: middle;
-    object-fit: cover;
   }
 }
 </style>

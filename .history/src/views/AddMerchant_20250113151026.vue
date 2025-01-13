@@ -7,7 +7,6 @@ import Tagify from '@yaireo/tagify'
 import flatpickr from 'flatpickr'
 import { useToast } from 'vue-toastification'
 import { useUsersStore } from '@/stores/users'
-import AddressBlock from '@/components/AddressBlock.vue'
 
 import jQuery from 'jquery'
 const $ = jQuery
@@ -27,13 +26,41 @@ import 'select2/dist/js/select2.full.js'
 // Add typeahead import
 import 'typeahead.js'
 
+// Add axios import at the top
+import axios from 'axios'
+
+// Update the SAMPLE_DATA constant
+// const SAMPLE_DATA = {
+//   provinces: {
+//     US: [
+//       { id: 'FL', name: 'Florida' },
+//     ],
+//     GB: [
+//       { id: 'ENG', name: 'England' },
+//       { id: 'SCT', name: 'Scotland' },
+//       { id: 'WLS', name: 'Wales' },
+//     ],
+//     // Add more as needed
+//   },
+//   cities: {
+//     CA: [
+//       { id: 'LA', name: 'Los Angeles', zip: '90001' },
+//       { id: 'SF', name: 'San Francisco', zip: '94101' },
+//       { id: 'SD', name: 'San Diego', zip: '92101' },
+//     ],
+//     NY: [
+//       { id: 'NYC', name: 'New York City', zip: '10001' },
+//       { id: 'BUF', name: 'Buffalo', zip: '14201' },
+//       { id: 'ALB', name: 'Albany', zip: '12201' },
+//     ],
+//     // Add more as needed
+//   },
+// }
+
 Dropzone.autoDiscover = false
 
 export default {
   name: 'AddMerchants',
-  components: {
-    AddressBlock,
-  },
   setup() {
     const toast = useToast()
     const merchantStore = useMerchantsStore()
@@ -55,6 +82,7 @@ export default {
         headquarters_location: '',
         branch_locations: [], // Keep as array
         business_type: '',
+        address: '',
         phone_number: '',
         email_address: '',
         website: '',
@@ -72,13 +100,11 @@ export default {
         business_permits: [],
         membership_certificates: [],
         documents: [],
-        addressDetails: {
-          country: '',
-          province: '',
-          city: '',
-          zip_code: '',
-          address_details: '',
-        },
+        country: '',
+        province: '',
+        city: '',
+        address_details: '',
+        zip_code: '',
       },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
@@ -97,6 +123,12 @@ export default {
         documents: [],
       },
       users: [],
+      locationData: {
+        countries: [],
+        provinces: [],
+        cities: [],
+        zipCodes: {},
+      },
     }
   },
   async created() {
@@ -111,6 +143,8 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.initializeComponents()
+      this.loadCountries()
+      this.initializeLocationFields()
     })
   },
   methods: {
@@ -465,6 +499,210 @@ export default {
         console.warn('Select2 initialization warning:', error)
       }
     },
+
+    async loadCountries() {
+      try {
+        const options = {
+          method: 'GET',
+          url: 'https://wft-geo-db.p.rapidapi.com/v1/geo/countries',
+          headers: {
+            'x-rapidapi-key': 'fd09aa16a9msh16fe0226ca85e00p131604jsna2c1f9f7fa68',
+            'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
+          },
+        }
+
+        const response = await axios.request(options)
+        this.locationData.countries = response.data.data
+          .map((country) => ({
+            id: country.code,
+            name: country.name,
+            flag: `https://flagcdn.com/w20/${country.code.toLowerCase()}.png`,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name))
+      } catch (error) {
+        console.error('Failed to load countries:', error)
+        this.toast.error('Failed to load countries')
+      }
+    },
+
+    async loadProvinces() {
+      this.formData.province = ''
+      this.formData.city = ''
+      this.formData.zip_code = ''
+
+      if (!this.formData.country) {
+        this.locationData.provinces = []
+        return
+      }
+
+      try {
+        const options = {
+          method: 'GET',
+          url: `https://wft-geo-db.p.rapidapi.com/v1/geo/countries/${this.formData.country}/regions`,
+          //   params: { limit: '100' },
+          headers: {
+            'x-rapidapi-key': 'fd09aa16a9msh16fe0226ca85e00p131604jsna2c1f9f7fa68',
+            'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
+          },
+        }
+
+        const response = await axios.request(options)
+        this.locationData.provinces = response.data.data.map((region) => ({
+          id: region.id.toString(),
+          name: region.name,
+        }))
+
+        this.$nextTick(() => {
+          const $provinceSelect = $('#province-select')
+          $provinceSelect.empty().trigger('change')
+
+          // Add default option
+          const $defaultOption = new Option('Select Province', '', true, true)
+          $provinceSelect.append($defaultOption)
+
+          // Add province options
+          this.locationData.provinces.forEach((province) => {
+            const $option = new Option(province.name, province.id, false, false)
+            $provinceSelect.append($option)
+          })
+
+          $provinceSelect.trigger('change')
+        })
+      } catch (error) {
+        console.error('Failed to load provinces:', error)
+        this.toast.error('Failed to load provinces')
+      }
+    },
+
+    async loadCities() {
+      this.formData.city = ''
+      this.formData.zip_code = ''
+
+      if (!this.formData.province) {
+        this.locationData.cities = []
+        return
+      }
+
+      try {
+        const options = {
+          method: 'GET',
+          url: 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities',
+          params: {
+            countryIds: this.formData.country,
+            regionId: this.formData.province,
+            limit: '100',
+          },
+          headers: {
+            'x-rapidapi-key': 'fd09aa16a9msh16fe0226ca85e00p131604jsna2c1f9f7fa68',
+            'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com',
+          },
+        }
+
+        const response = await axios.request(options)
+        this.locationData.cities = response.data.data.map((city) => ({
+          id: city.id.toString(),
+          name: city.name,
+          zip: city.postalCode || '',
+        }))
+
+        this.$nextTick(() => {
+          const $citySelect = $('#city-select')
+          $citySelect.empty().trigger('change')
+
+          // Add default option
+          const $defaultOption = new Option('Select City', '', true, true)
+          $citySelect.append($defaultOption)
+
+          // Add city options
+          this.locationData.cities.forEach((city) => {
+            const $option = new Option(city.name, city.id, false, false)
+            $citySelect.append($option)
+          })
+
+          $citySelect.trigger('change')
+        })
+      } catch (error) {
+        console.error('Failed to load cities:', error)
+        this.toast.error('Failed to load cities')
+      }
+    },
+
+    async updateZipCode() {
+      if (!this.formData.city) {
+        this.formData.zip_code = ''
+        return
+      }
+
+      try {
+        // Find the selected city in the current cities array
+        const selectedCity = this.locationData.cities.find((city) => city.id === this.formData.city)
+        if (selectedCity) {
+          this.formData.zip_code = selectedCity.zip
+        } else {
+          this.formData.zip_code = ''
+        }
+      } catch (error) {
+        console.error('Failed to update zip code:', error)
+        this.toast.error('Failed to update zip code')
+      }
+    },
+
+    // Add this helper method
+    initializeLocationFields() {
+      this.$nextTick(() => {
+        // Initialize country select
+        $('#country-select')
+          .select2({
+            placeholder: 'Select Country',
+            allowClear: true,
+            templateResult: (country) => {
+              if (!country.id || !country.element) return country.text
+              const $country = $(
+                `<span><img src="${country.element.dataset.flag}" class="flag-icon"/> ${country.text}</span>`,
+              )
+              return $country
+            },
+          })
+          .on('select2:select', (e) => {
+            this.formData.country = e.target.value
+            this.loadProvinces()
+          })
+          .on('select2:clear', () => {
+            this.formData.country = ''
+            this.loadProvinces()
+          })
+
+        // Initialize province select
+        $('#province-select')
+          .select2({
+            placeholder: 'Select Province',
+            allowClear: true,
+          })
+          .on('select2:select', (e) => {
+            this.formData.province = e.target.value
+            this.loadCities()
+          })
+          .on('select2:clear', () => {
+            this.formData.province = ''
+            this.loadCities()
+          })
+
+        // Initialize city select
+        $('#city-select')
+          .select2({
+            placeholder: 'Select City',
+            allowClear: true,
+          })
+          .on('select2:select', (e) => {
+            this.formData.city = e.target.value
+            this.updateZipCode()
+          })
+          .on('select2:clear', () => {
+            this.formData.city = ''
+            this.updateZipCode()
+          })
+      })
+    },
   },
   beforeUnmount() {
     this.cleanupComponents()
@@ -550,10 +788,74 @@ export default {
             <h5 class="card-title mb-0">Contact Information</h5>
           </div>
           <div class="card-body">
-            <AddressBlock v-model="formData.addressDetails" />
-
-            <!-- Keep other contact fields -->
             <div class="row">
+              <div class="col-md-6 mb-4">
+                <label class="form-label">Country*</label>
+                <select id="country-select" v-model="formData.country" class="form-select" required>
+                  <option value="">Select Country</option>
+                  <option
+                    v-for="country in locationData.countries"
+                    :key="country.id"
+                    :value="country.id"
+                    :data-flag="country.flag"
+                  >
+                    {{ country.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label">Province*</label>
+                <select
+                  id="province-select"
+                  v-model="formData.province"
+                  class="form-select"
+                  required
+                  :disabled="!formData.country"
+                >
+                  <option value="">Select Province</option>
+                  <option
+                    v-for="province in locationData.provinces"
+                    :key="province.id"
+                    :value="province.id"
+                  >
+                    {{ province.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label">City*</label>
+                <select
+                  id="city-select"
+                  v-model="formData.city"
+                  class="form-select"
+                  required
+                  :disabled="!formData.province"
+                >
+                  <option value="">Select City</option>
+                  <option v-for="city in locationData.cities" :key="city.id" :value="city.id">
+                    {{ city.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label">ZIP Code</label>
+                <input v-model="formData.zip_code" type="text" class="form-control" readonly />
+              </div>
+
+              <div class="col-md-12 mb-4">
+                <label class="form-label">Detailed Address*</label>
+                <input
+                  v-model="formData.address_details"
+                  type="text"
+                  class="form-control"
+                  required
+                  placeholder="Street address, building name, etc."
+                />
+              </div>
+
               <div class="col-md-6 mb-4">
                 <label class="form-label">Headquarters Location*</label>
                 <input
@@ -573,10 +875,12 @@ export default {
                   placeholder="Separate with commas"
                 />
               </div>
+
               <div class="col-md-6 mb-4">
                 <label class="form-label">Phone Number*</label>
                 <input v-model="formData.phone_number" type="tel" class="form-control" required />
               </div>
+
               <div class="col-md-6 mb-4">
                 <label class="form-label">Email Address*</label>
                 <input
@@ -798,27 +1102,14 @@ export default {
   }
 
   .select2-selection__rendered {
-    img.flag-icon {
+    img {
       width: 20px;
-      height: 15px;
       margin-right: 8px;
       vertical-align: middle;
-      object-fit: cover;
     }
   }
   img.flag-icon {
     width: 20px;
-  }
-}
-
-// Add styles for dropdown flags
-.select2-results__option {
-  img.flag-icon {
-    width: 20px;
-    height: 15px;
-    margin-right: 8px;
-    vertical-align: middle;
-    object-fit: cover;
   }
 }
 </style>

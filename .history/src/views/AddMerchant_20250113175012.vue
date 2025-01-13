@@ -27,6 +27,37 @@ import 'select2/dist/js/select2.full.js'
 // Add typeahead import
 import 'typeahead.js'
 
+// Add axios import at the top
+import axios from 'axios'
+
+// Update the SAMPLE_DATA constant
+// const SAMPLE_DATA = {
+//   provinces: {
+//     US: [
+//       { id: 'FL', name: 'Florida' },
+//     ],
+//     GB: [
+//       { id: 'ENG', name: 'England' },
+//       { id: 'SCT', name: 'Scotland' },
+//       { id: 'WLS', name: 'Wales' },
+//     ],
+//     // Add more as needed
+//   },
+//   cities: {
+//     CA: [
+//       { id: 'LA', name: 'Los Angeles', zip: '90001' },
+//       { id: 'SF', name: 'San Francisco', zip: '94101' },
+//       { id: 'SD', name: 'San Diego', zip: '92101' },
+//     ],
+//     NY: [
+//       { id: 'NYC', name: 'New York City', zip: '10001' },
+//       { id: 'BUF', name: 'Buffalo', zip: '14201' },
+//       { id: 'ALB', name: 'Albany', zip: '12201' },
+//     ],
+//     // Add more as needed
+//   },
+// }
+
 Dropzone.autoDiscover = false
 
 export default {
@@ -554,25 +585,6 @@ export default {
 
             <!-- Keep other contact fields -->
             <div class="row">
-              <div class="col-md-6 mb-4">
-                <label class="form-label">Headquarters Location*</label>
-                <input
-                  v-model="formData.headquarters_location"
-                  type="text"
-                  class="form-control"
-                  required
-                />
-              </div>
-
-              <div class="col-md-6 mb-4">
-                <label class="form-label">Branch Locations</label>
-                <input
-                  v-model="formData.branch_locations"
-                  type="text"
-                  class="form-control"
-                  placeholder="Separate with commas"
-                />
-              </div>
               <div class="col-md-6 mb-4">
                 <label class="form-label">Phone Number*</label>
                 <input v-model="formData.phone_number" type="tel" class="form-control" required />
