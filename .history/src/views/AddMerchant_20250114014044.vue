@@ -421,7 +421,7 @@ export default {
           console.log('Redirecting to merchants page...')
 
           // Use the route path instead of name
-          await this.router.push('/')
+          await this.router.push('/merchants')
         }
       } catch (error) {
         console.error('Submission error:', error)

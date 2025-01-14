@@ -282,21 +282,21 @@ export default {
     onBeforeUnmount(() => {
       isMounted.value = false
       abortController.value
-      // .abort()
+        .abort()
 
-      // [
-      //   // Cleanup select2 instances
-      //   ('country-select', 'province-select', 'city-select')
-      // ].forEach((selectId) => {
-      //   const $select = $(`#${selectId}`)
-      //   if ($select.length && $select.hasClass('select2-hidden-accessible')) {
-      //     try {
-      //       $select.select2('destroy')
-      //     } catch (error) {
-      //       console.warn(`Failed to destroy select2 for ${selectId}`, error)
-      //     }
-      //   }
-      // })
+        [
+          // Cleanup select2 instances
+          ('country-select', 'province-select', 'city-select')
+        ].forEach((selectId) => {
+          const $select = $(`#${selectId}`)
+          if ($select.length && $select.hasClass('select2-hidden-accessible')) {
+            try {
+              $select.select2('destroy')
+            } catch (error) {
+              console.warn(`Failed to destroy select2 for ${selectId}`, error)
+            }
+          }
+        })
     })
 
     return {

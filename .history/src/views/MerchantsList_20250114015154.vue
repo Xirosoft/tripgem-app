@@ -31,12 +31,9 @@ export default {
       this.initializeDataTable()
     })
   },
-  onBeforeUnmount() {
-    this.$nextTick(() => {
-      this.initializeDataTable()
-    })
-  },
+  onBeforeUnmount(() => {
 
+    }),
   methods: {
     initializeDataTable() {
       if (this.table) {

@@ -71,18 +71,23 @@ export const useMerchantsStore = defineStore('merchants', {
       this.error = null
 
       try {
-        const response = await axios.post(`${config.apiUrl}/merchant/add`, merchantData, {
+        const response = await fetch(`${config.apiUrl}/merchants`, {
+          method: 'POST',
           headers: {
             ...config.getHeaders(),
+            'Content-Type': 'application/json',
           },
+          body: JSON.stringify(merchantData),
         })
 
-        if (!response.data) {
-          throw new Error('Failed to create merchant')
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.message || 'Failed to create merchant')
         }
 
+        const result = await response.json()
         this.loading = false
-        return response.data
+        return result
       } catch (error) {
         this.loading = false
         this.error = error.message

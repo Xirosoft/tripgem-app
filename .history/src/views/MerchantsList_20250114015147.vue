@@ -31,12 +31,25 @@ export default {
       this.initializeDataTable()
     })
   },
-  onBeforeUnmount() {
-    this.$nextTick(() => {
-      this.initializeDataTable()
-    })
-  },
+  onBeforeUnmount(() => {
+      isMounted.value = false
+      abortController.value
+      // .abort()
 
+      // [
+      //   // Cleanup select2 instances
+      //   ('country-select', 'province-select', 'city-select')
+      // ].forEach((selectId) => {
+      //   const $select = $(`#${selectId}`)
+      //   if ($select.length && $select.hasClass('select2-hidden-accessible')) {
+      //     try {
+      //       $select.select2('destroy')
+      //     } catch (error) {
+      //       console.warn(`Failed to destroy select2 for ${selectId}`, error)
+      //     }
+      //   }
+      // })
+    }),
   methods: {
     initializeDataTable() {
       if (this.table) {

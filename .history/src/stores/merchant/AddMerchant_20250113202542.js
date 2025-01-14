@@ -67,46 +67,38 @@ export const useMerchantsStore = defineStore('merchants', {
     },
 
     async createMerchant(merchantData) {
+      console.log('Merchants:', merchantData)
       this.loading = true
       this.error = null
-
       try {
         const response = await axios.post(`${config.apiUrl}/merchant/add`, merchantData, {
-          headers: {
-            ...config.getHeaders(),
-          },
+          headers: config.getHeaders(),
         })
-
-        if (!response.data) {
-          throw new Error('Failed to create merchant')
-        }
+        this.merchants.push(response.data)
 
         this.loading = false
+        this.setMessage('Merchant created successfully', 'success')
         return response.data
       } catch (error) {
+        console.error('Error creating merchant:', error)
+        this.error = error.response?.data?.message || 'Failed to create merchant'
         this.loading = false
-        this.error = error.message
+        this.setMessage(this.error, 'danger')
         throw error
       }
     },
 
     validateMerchantData(data) {
-      const requiredFields = [
-        'company_name',
-        'business_type',
-        'user_id',
-        'phone_number',
-        'email_address',
-        'registration_number',
-        'contact_person_name',
-        'position_designation',
-        'headquarters_location',
-      ]
+      const errors = {}
 
-      return requiredFields.every((field) => {
-        const value = data[field]
-        return value !== null && value !== undefined && value !== ''
-      })
+      if (!data.user_id) errors.user_id = 'Please select a user'
+      if (!data.company_name) errors.company_name = 'Company name is required'
+      if (!data.email_address) errors.email_address = 'Email is required'
+      if (!data.phone_number) errors.phone_number = 'Phone number is required'
+      if (!data.registration_number) errors.registration_number = 'Registration number is required'
+
+      this.validationErrors = errors
+      return Object.keys(errors).length === 0
     },
 
     resetNewMerchant() {

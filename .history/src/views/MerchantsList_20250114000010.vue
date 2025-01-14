@@ -27,16 +27,8 @@ export default {
     await this.merchantStore.fetchMerchants()
   },
   mounted() {
-    this.$nextTick(() => {
-      this.initializeDataTable()
-    })
+    // Remove initializeDataTable call from mounted
   },
-  onBeforeUnmount() {
-    this.$nextTick(() => {
-      this.initializeDataTable()
-    })
-  },
-
   methods: {
     initializeDataTable() {
       if (this.table) {

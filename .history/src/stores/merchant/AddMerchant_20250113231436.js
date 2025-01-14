@@ -74,6 +74,7 @@ export const useMerchantsStore = defineStore('merchants', {
         const response = await axios.post(`${config.apiUrl}/merchant/add`, merchantData, {
           headers: {
             ...config.getHeaders(),
+            'Content-Type': 'application/json',
           },
         })
 

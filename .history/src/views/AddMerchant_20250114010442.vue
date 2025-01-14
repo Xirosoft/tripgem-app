@@ -99,7 +99,6 @@ export default {
         documents: [],
       },
       users: [],
-      isSubmitting: false, // Add this line
     }
   },
   async created() {
@@ -385,7 +384,6 @@ export default {
 
     async submitForm() {
       console.log('Form data:', this.formData)
-      this.isSubmitting = true // Show progress bar
       try {
         // if (!this.merchantStore.validateMerchantData(this.formData)) {
         //   this.toast.error('Please fill in all required fields')
@@ -394,7 +392,6 @@ export default {
 
         if (!this.formData.logo_url) {
           this.toast.error('Please upload company logo')
-          this.isSubmitting = false // Hide progress bar
           return
         }
         console.log('Submitting form start...')
@@ -410,7 +407,7 @@ export default {
         }
 
         // Submit to store
-        const result = await this.merchantStore.createMerchant(submitData)
+        const result = await merchantStore.createMerchant(submitData)
 
         console.log('Submission result:', result)
 
@@ -428,8 +425,6 @@ export default {
         this.toast.error(error.message || 'Failed to create merchant')
 
         console.log('Submitting form end...')
-      } finally {
-        this.isSubmitting = false // Hide progress bar
       }
     },
 
@@ -501,24 +496,8 @@ export default {
           <button class="btn btn-label-secondary">Discard</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
-        <button
-          type="submit"
-          class="btn btn-primary"
-          @click.prevent="submitForm"
-          :disabled="isSubmitting"
-        >
-          Submit
-        </button>
+        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">Submit</button>
       </div>
-    </div>
-
-    <!-- Progress bar -->
-    <div v-if="isSubmitting" class="progress mb-4">
-      <div
-        class="progress-bar progress-bar-striped progress-bar-animated"
-        role="progressbar"
-        style="width: 100%"
-      ></div>
     </div>
 
     <div class="row">

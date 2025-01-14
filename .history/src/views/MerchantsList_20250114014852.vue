@@ -24,19 +24,19 @@ export default {
   },
   async created() {
     this.merchantStore = useMerchantsStore()
-    await this.merchantStore.fetchMerchants()
+    try {
+      await this.merchantStore.fetchMerchants()
+    } catch (error) {
+      console.error('Error fetching merchants:', error)
+      // Optionally, show a user-friendly error message
+      this.$toast.error('Failed to load merchants. Please try again later.')
+    }
   },
   mounted() {
     this.$nextTick(() => {
       this.initializeDataTable()
     })
   },
-  onBeforeUnmount() {
-    this.$nextTick(() => {
-      this.initializeDataTable()
-    })
-  },
-
   methods: {
     initializeDataTable() {
       if (this.table) {
