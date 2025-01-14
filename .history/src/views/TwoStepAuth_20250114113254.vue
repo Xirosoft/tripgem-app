@@ -1,9 +1,9 @@
 <script>
-import TripgemLogo from '@/components/Logo.vue'
 import { useUserStore } from '@/stores/TowStepUser' // Import the user store
-import axios from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
+import TripgemLogo from '@/components/Logo.vue'
 import config from '../config/config'
 
 export default {
@@ -51,29 +51,19 @@ export default {
 
     const handleInput = (index) => {
       return (event) => {
-        const value = event.target.value
+        const value = event.target.value;
         if (/^\d$/.test(value)) {
-          otp.value[index] = value
+          otp.value[index] = value;
           if (index < 5) {
-            document.getElementById(`otp-${index + 1}`).focus()
+            document.getElementById(`otp-${index + 1}`).focus();
           }
         } else if (event.inputType === 'deleteContentBackward') {
-          otp.value[index] = ''
+          otp.value[index] = '';
           if (index > 0) {
-            document.getElementById(`otp-${index - 1}`).focus()
+            document.getElementById(`otp-${index - 1}`).focus();
           }
         } else {
-          otp.value[index] = ''
-        }
-      }
-    }
-
-    const handleKeydown = (index) => {
-      return (event) => {
-        if (event.key === 'Backspace' && otp.value[index] === '') {
-          if (index > 0) {
-            document.getElementById(`otp-${index - 1}`).focus()
-          }
+          otp.value[index] = '';
         }
       }
     }
@@ -83,7 +73,6 @@ export default {
       verifyOtp,
       handlePaste,
       handleInput,
-      handleKeydown,
     }
   },
 }
@@ -181,6 +170,7 @@ export default {
           </form>
         </div>
       </div>
+            </div>
       <!-- / Two Steps Verification -->
     </div>
   </div>

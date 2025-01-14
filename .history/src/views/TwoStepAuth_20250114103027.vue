@@ -1,9 +1,9 @@
 <script>
-import TripgemLogo from '@/components/Logo.vue'
 import { useUserStore } from '@/stores/TowStepUser' // Import the user store
-import axios from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
+import TripgemLogo from '@/components/Logo.vue'
 import config from '../config/config'
 
 export default {
@@ -51,29 +51,8 @@ export default {
 
     const handleInput = (index) => {
       return (event) => {
-        const value = event.target.value
-        if (/^\d$/.test(value)) {
-          otp.value[index] = value
-          if (index < 5) {
-            document.getElementById(`otp-${index + 1}`).focus()
-          }
-        } else if (event.inputType === 'deleteContentBackward') {
-          otp.value[index] = ''
-          if (index > 0) {
-            document.getElementById(`otp-${index - 1}`).focus()
-          }
-        } else {
-          otp.value[index] = ''
-        }
-      }
-    }
-
-    const handleKeydown = (index) => {
-      return (event) => {
-        if (event.key === 'Backspace' && otp.value[index] === '') {
-          if (index > 0) {
-            document.getElementById(`otp-${index - 1}`).focus()
-          }
+        if (event.target.value.length === 1 && index < 5) {
+          document.getElementById(`otp-${index + 1}`).focus()
         }
       }
     }
@@ -83,7 +62,6 @@ export default {
       verifyOtp,
       handlePaste,
       handleInput,
-      handleKeydown,
     }
   },
 }
@@ -120,7 +98,6 @@ export default {
                   maxlength="1"
                   v-model="otp[0]"
                   @input="handleInput(0)"
-                  @keydown="handleKeydown(0)"
                   id="otp-0"
                   autofocus
                 />
@@ -130,7 +107,6 @@ export default {
                   maxlength="1"
                   v-model="otp[1]"
                   @input="handleInput(1)"
-                  @keydown="handleKeydown(1)"
                   id="otp-1"
                 />
                 <input
@@ -139,7 +115,6 @@ export default {
                   maxlength="1"
                   v-model="otp[2]"
                   @input="handleInput(2)"
-                  @keydown="handleKeydown(2)"
                   id="otp-2"
                 />
                 <input
@@ -148,7 +123,6 @@ export default {
                   maxlength="1"
                   v-model="otp[3]"
                   @input="handleInput(3)"
-                  @keydown="handleKeydown(3)"
                   id="otp-3"
                 />
                 <input
@@ -157,7 +131,6 @@ export default {
                   maxlength="1"
                   v-model="otp[4]"
                   @input="handleInput(4)"
-                  @keydown="handleKeydown(4)"
                   id="otp-4"
                 />
                 <input
@@ -166,7 +139,6 @@ export default {
                   maxlength="1"
                   v-model="otp[5]"
                   @input="handleInput(5)"
-                  @keydown="handleKeydown(5)"
                   id="otp-5"
                 />
               </div>

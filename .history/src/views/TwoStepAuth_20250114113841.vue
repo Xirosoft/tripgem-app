@@ -1,9 +1,9 @@
 <script>
-import TripgemLogo from '@/components/Logo.vue'
 import { useUserStore } from '@/stores/TowStepUser' // Import the user store
-import axios from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
+import TripgemLogo from '@/components/Logo.vue'
 import config from '../config/config'
 
 export default {
@@ -51,19 +51,19 @@ export default {
 
     const handleInput = (index) => {
       return (event) => {
-        const value = event.target.value
+        const value = event.target.value;
         if (/^\d$/.test(value)) {
-          otp.value[index] = value
+          otp.value[index] = value;
           if (index < 5) {
-            document.getElementById(`otp-${index + 1}`).focus()
+            document.getElementById(`otp-${index + 1}`).focus();
           }
         } else if (event.inputType === 'deleteContentBackward') {
-          otp.value[index] = ''
+          otp.value[index] = '';
           if (index > 0) {
-            document.getElementById(`otp-${index - 1}`).focus()
+            document.getElementById(`otp-${index - 1}`).focus();
           }
         } else {
-          otp.value[index] = ''
+          otp.value[index] = '';
         }
       }
     }
@@ -72,7 +72,7 @@ export default {
       return (event) => {
         if (event.key === 'Backspace' && otp.value[index] === '') {
           if (index > 0) {
-            document.getElementById(`otp-${index - 1}`).focus()
+            document.getElementById(`otp-${index - 1}`).focus();
           }
         }
       }
@@ -102,7 +102,7 @@ export default {
           <h4 class="mb-1">Two Step Verification 💬</h4>
           <p class="text-start mb-6">
             We sent a verification code to your Email. Enter the code from the Email in the field
-            below.
+            below. for 30 miniutes
             <span class="fw-medium d-block mt-1 text-heading">******1234</span>
           </p>
           <div v-if="message" :class="`alert alert-${messageType} mb-3`" role="alert">
