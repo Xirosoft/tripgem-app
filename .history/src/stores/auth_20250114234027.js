@@ -9,8 +9,6 @@ export const useAuthStore = defineStore('auth', {
     user: null,
     message: null,
     messageType: null, // 'success' or 'danger'
-    userEmail: null,
-    userId: null,
   }),
 
   actions: {
@@ -30,7 +28,7 @@ export const useAuthStore = defineStore('auth', {
     setEmailId(email, id) {
       this.userEmail = email
       this.userId = id
-    },
+    }
 
     async login(email, password) {
       try {
@@ -44,7 +42,6 @@ export const useAuthStore = defineStore('auth', {
           this.setToken(response.data.token) // Set the token
           this.setMessage(response.data.message || 'Login successful', 'success')
           this.setIsLoggedIn(true) // Set isLoggedIn to true if token is set
-          this.setEmailId(response.data.user_email, response.data.user_id) // Set isLoggedIn to true if token is set
           return response
         } else {
           throw new Error('Invalid response from server')

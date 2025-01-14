@@ -1,27 +1,24 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
-import { useUsersStore } from '@/stores/user'
-import { computed, onMounted } from 'vue'
+import { userDetails } from '@/stores/user'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const usersStore = useUsersStore()
-
+const userName = userDetails.name
 const handleLogout = () => {
   authStore.logout()
   router.push({ name: 'tripgemlogin' })
 }
 
-onMounted(() => {
-  usersStore.fetchUserDetails()
-})
+const userEmail = authStore.userEmail
+const token = authStore.token
+const userId = authStore.userId
+console.log(userEmail)
+console.log(token)
+console.log(userId)
 
-const user = computed(() => usersStore.getUser)
-const userName = computed(() =>
-  user.value ? `${user.value.first_name} ${user.value.last_name}` : '',
-)
-const userRole = computed(() => usersStore.getUserRole)
+// const userRole = authStore.user.role
 </script>
 
 <template>

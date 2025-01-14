@@ -21,7 +21,7 @@ const user = computed(() => usersStore.getUser)
 const userName = computed(() =>
   user.value ? `${user.value.first_name} ${user.value.last_name}` : '',
 )
-const userRole = computed(() => usersStore.getUserRole)
+const userRole = computed(() => (user.value ? user.value.role_id : ''))
 </script>
 
 <template>
