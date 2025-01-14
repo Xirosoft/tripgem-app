@@ -108,6 +108,12 @@ export default {
       }
     }
 
+    // if (!userStore.endTime) {
+    //   userStore.endTime = localStorage.getItem('endTime')
+    // } else {
+    //   localStorage.setItem('endTime', userStore.endTime)
+    // }
+
     if (!userStore.otpVerify) {
       router.push('/')
     }

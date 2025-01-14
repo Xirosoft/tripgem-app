@@ -5,7 +5,6 @@ export const useUserStore = defineStore('user', {
     email: '',
     startTime: '',
     endTime: '',
-    otpVerify: '',
   }),
   actions: {
     setEmail(email) {
@@ -16,9 +15,6 @@ export const useUserStore = defineStore('user', {
     },
     setEndTime(endTime) {
       this.endTime = endTime
-    },
-    setOtpVerify(otpVerify) {
-      this.otpVerify = otpVerify
     },
   },
   persist: true,

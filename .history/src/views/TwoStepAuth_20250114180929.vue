@@ -108,7 +108,13 @@ export default {
       }
     }
 
-    if (!userStore.otpVerify) {
+    // if (!userStore.endTime) {
+    //   userStore.endTime = localStorage.getItem('endTime')
+    // } else {
+    //   localStorage.setItem('endTime', userStore.endTime)
+    // }
+
+    if (userStore.setOtpVerify(false)) {
       router.push('/')
     }
 

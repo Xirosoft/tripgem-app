@@ -20,7 +20,6 @@ export default {
     const countdown = ref('')
     const countdownColor = ref('')
     console.log(userStore.email, userStore.endTime)
-    console.log(userStore.otpVerify)
 
     const verifyOtp = async () => {
       const otpCode = otp.value.join('')
@@ -36,7 +35,9 @@ export default {
           },
         )
         if (response.data.success) {
-          userStore.setOtpVerify(false) // Set otpVerify to false after successful verification
+          console.log(response)
+
+          //   localStorage.removeItem('endTime')
           router.push('/')
         } else {
           alert('Invalid OTP')
@@ -108,9 +109,15 @@ export default {
       }
     }
 
-    if (!userStore.otpVerify) {
-      router.push('/')
-    }
+    // if (!userStore.endTime) {
+    //   userStore.endTime = localStorage.getItem('endTime')
+    // } else {
+    //   localStorage.setItem('endTime', userStore.endTime)
+    // }
+
+    // if (!localStorage.getItem('endTime')) {
+    //   router.push('/')
+    // }
 
     updateCountdown()
     setInterval(updateCountdown, 1000)

@@ -17,10 +17,6 @@ const messageType = ref('')
 const router = useRouter()
 const userStore = useUserStore()
 
-if (!userStore.otpVerify) {
-  router.push('/')
-}
-
 const handleRegister = async () => {
   try {
     const response = await axios.post(
@@ -45,7 +41,6 @@ const handleRegister = async () => {
       userStore.setStartTime(currentTime)
       const endTime = new Date(currentTime.getTime() + 30 * 60000) // 30 minutes from now
       userStore.setEndTime(endTime)
-      userStore.setOtpVerify(true)
       // localStorage.setItem('endTime', endTime)
       setTimeout(() => {
         router.push({ name: 'TwoStepAuth' })

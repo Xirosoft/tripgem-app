@@ -1,5 +1,5 @@
 import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate' // Changed to default import
+import { piniaPluginPersistedstate } from 'pinia-plugin-persistedstate'
 import { createApp } from 'vue'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'

@@ -36,7 +36,7 @@ export default {
           },
         )
         if (response.data.success) {
-          userStore.setOtpVerify(false) // Set otpVerify to false after successful verification
+          localStorage.removeItem('endTime')
           router.push('/')
         } else {
           alert('Invalid OTP')
@@ -108,7 +108,13 @@ export default {
       }
     }
 
-    if (!userStore.otpVerify) {
+    if (!userStore.endTime) {
+      userStore.endTime = localStorage.getItem('endTime')
+    } else {
+      localStorage.setItem('endTime', userStore.endTime)
+    }
+
+    if (!localStorage.getItem('endTime')) {
       router.push('/')
     }
 

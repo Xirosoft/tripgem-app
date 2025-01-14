@@ -7,11 +7,16 @@ import { RouterLink, useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
+// const token = ref('')
 const router = useRouter()
 const authStore = useAuthStore()
 
 const message = computed(() => authStore.message)
 const messageType = computed(() => authStore.messageType)
+
+console.log(email.value)
+console.log(password.value)
+console.log(authStore.isAuthenticated)
 
 const handleLogin = async () => {
   // Basic validation

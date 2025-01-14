@@ -17,10 +17,6 @@ const messageType = ref('')
 const router = useRouter()
 const userStore = useUserStore()
 
-if (!userStore.otpVerify) {
-  router.push('/')
-}
-
 const handleRegister = async () => {
   try {
     const response = await axios.post(

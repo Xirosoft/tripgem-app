@@ -17,8 +17,8 @@ export const useUserStore = defineStore('user', {
     setEndTime(endTime) {
       this.endTime = endTime
     },
-    setOtpVerify(otpVerify) {
-      this.otpVerify = otpVerify
+    setEndTime(endTime) {
+      this.endTime = endTime
     },
   },
   persist: true,

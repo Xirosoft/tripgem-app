@@ -34,9 +34,10 @@ export const useAuthStore = defineStore('auth', {
         )
 
         if (response.data.token) {
-          this.setToken(response.data.token) // Set the token
+          this.token = response.data.token
           this.setMessage(response.data.message || 'Login successful', 'success')
-          this.setIsLoggedIn(true) // Set isLoggedIn to true if token is set
+          this.setToken(response.data.token)
+          this.isLoggedIn = true
           return response
         } else {
           throw new Error('Invalid response from server')
@@ -66,5 +67,4 @@ export const useAuthStore = defineStore('auth', {
   getters: {
     isAuthenticated: (state) => !!state.token,
   },
-  persist: true,
 })

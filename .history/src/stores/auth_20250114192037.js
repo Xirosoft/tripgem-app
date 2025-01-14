@@ -22,7 +22,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     setIsLoggedIn(isLoggedIn) {
-      if (this.token) this.isLoggedIn = isLoggedIn
+      if (this.token) this.isLoggedIn = true
     },
 
     async login(email, password) {
@@ -66,5 +66,4 @@ export const useAuthStore = defineStore('auth', {
   getters: {
     isAuthenticated: (state) => !!state.token,
   },
-  persist: true,
 })

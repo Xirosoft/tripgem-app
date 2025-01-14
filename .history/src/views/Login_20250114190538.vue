@@ -13,6 +13,10 @@ const authStore = useAuthStore()
 const message = computed(() => authStore.message)
 const messageType = computed(() => authStore.messageType)
 
+console.log(email.value)
+console.log(password.value)
+console.log(authStore.isAuthenticated)
+
 const handleLogin = async () => {
   // Basic validation
   if (!email.value || !password.value) {

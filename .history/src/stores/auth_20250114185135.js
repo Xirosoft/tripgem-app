@@ -17,14 +17,6 @@ export const useAuthStore = defineStore('auth', {
       this.messageType = type
     },
 
-    setToken(token) {
-      this.token = token
-    },
-
-    setIsLoggedIn(isLoggedIn) {
-      if (this.token) this.isLoggedIn = isLoggedIn
-    },
-
     async login(email, password) {
       try {
         const response = await axios.post(
@@ -34,9 +26,10 @@ export const useAuthStore = defineStore('auth', {
         )
 
         if (response.data.token) {
-          this.setToken(response.data.token) // Set the token
+          this.token = response.data.token
+          localStorage.setItem('loginToken', response.data.token)
           this.setMessage(response.data.message || 'Login successful', 'success')
-          this.setIsLoggedIn(true) // Set isLoggedIn to true if token is set
+          this.isLoggedIn = true
           return response
         } else {
           throw new Error('Invalid response from server')
@@ -55,6 +48,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoggedIn = false
       this.message = null
       this.messageType = null
+      localStorage.removeItem('loginToken')
     },
 
     clearMessage() {
@@ -66,5 +60,4 @@ export const useAuthStore = defineStore('auth', {
   getters: {
     isAuthenticated: (state) => !!state.token,
   },
-  persist: true,
 })
