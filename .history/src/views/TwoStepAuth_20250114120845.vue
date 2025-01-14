@@ -34,7 +34,6 @@ export default {
           },
         )
         if (response.data.success) {
-          localStorage.removeItem('endTime')
           router.push('/')
         } else {
           alert('Invalid OTP')
@@ -83,7 +82,7 @@ export default {
 
     const updateCountdown = () => {
       const now = new Date()
-      const endTime = new Date(userStore.endTime || localStorage.getItem('endTime'))
+      const endTime = new Date(userStore.endTime)
       const timeDiff = endTime - now
 
       if (timeDiff > 0) {
@@ -106,17 +105,6 @@ export default {
       }
     }
 
-    if (!userStore.endTime) {
-      userStore.endTime = localStorage.getItem('endTime')
-    } else {
-      localStorage.setItem('endTime', userStore.endTime)
-    }
-
-    if (!localStorage.getItem('endTime')) {
-      router.push('/')
-    }
-
-    updateCountdown()
     setInterval(updateCountdown, 1000)
 
     return {

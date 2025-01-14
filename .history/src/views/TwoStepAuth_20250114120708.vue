@@ -34,7 +34,6 @@ export default {
           },
         )
         if (response.data.success) {
-          localStorage.removeItem('endTime')
           router.push('/')
         } else {
           alert('Invalid OTP')
@@ -83,7 +82,7 @@ export default {
 
     const updateCountdown = () => {
       const now = new Date()
-      const endTime = new Date(userStore.endTime || localStorage.getItem('endTime'))
+      const endTime = new Date(userStore.endTime)
       const timeDiff = endTime - now
 
       if (timeDiff > 0) {
@@ -93,7 +92,7 @@ export default {
 
         if (timeDiff <= 5 * 60000) {
           // less than or equal to 5 minutes
-          countdownColor.value = 'danger'
+          countdownColor.value = 'denger'
         } else if (timeDiff <= 10 * 60000) {
           // less than or equal to 10 minutes
           countdownColor.value = 'warning'
@@ -102,21 +101,10 @@ export default {
         }
       } else {
         countdown.value = 'Expired'
-        countdownColor.value = 'danger'
+        countdownColor.value = 'denger'
       }
     }
 
-    if (!userStore.endTime) {
-      userStore.endTime = localStorage.getItem('endTime')
-    } else {
-      localStorage.setItem('endTime', userStore.endTime)
-    }
-
-    if (!localStorage.getItem('endTime')) {
-      router.push('/')
-    }
-
-    updateCountdown()
     setInterval(updateCountdown, 1000)
 
     return {
@@ -150,7 +138,7 @@ export default {
             below.
             <span class="fw-medium d-block mt-1 text-heading">******1234</span>
           </p>
-          <p :class="`alert timecountdoun bg-label-${countdownColor} mb-3`">
+          <p :class="`alert timecountdoun .bg-label-${countdownColor} mb-3`">
             {{ countdown }}
           </p>
           <div v-if="message" :class="`text-center alert alert-${messageType} mb-3`" role="alert">

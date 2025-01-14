@@ -34,7 +34,7 @@ export default {
           },
         )
         if (response.data.success) {
-          localStorage.removeItem('endTime')
+          localStorage.clear()
           router.push('/')
         } else {
           alert('Invalid OTP')

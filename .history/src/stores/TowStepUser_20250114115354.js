@@ -10,10 +10,10 @@ export const useUserStore = defineStore('user', {
     setEmail(email) {
       this.email = email
     },
-    setStartTime(startTime) {
+    setstartTime(startTime) {
       this.startTime = startTime
     },
-    setEndTime(endTime) {
+    setendTime(endTime) {
       this.endTime = endTime
     },
   },

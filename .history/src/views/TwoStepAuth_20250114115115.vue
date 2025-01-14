@@ -17,8 +17,6 @@ export default {
     const userStore = useUserStore()
     const message = ref('')
     const messageType = ref('')
-    const countdown = ref('')
-    const countdownColor = ref('')
 
     const verifyOtp = async () => {
       const otpCode = otp.value.join('')
@@ -34,7 +32,6 @@ export default {
           },
         )
         if (response.data.success) {
-          localStorage.removeItem('endTime')
           router.push('/')
         } else {
           alert('Invalid OTP')
@@ -55,23 +52,28 @@ export default {
     }
 
     const handleInput = (index) => {
-      const value = event.target.value
-      if (/^\d$/.test(value)) {
-        otp.value[index] = value
-        if (index < 5) {
-          document.getElementById(`otp-${index + 1}`).focus()
+      console.log('nanan')
+      return (event) => {
+        const value = event.target.value
+        console.log(index)
+        if (/^\d$/.test(value)) {
+          otp.value[index] = value
+          if (index < 5) {
+            document.getElementById(`otp-${index + 1}`).focus()
+          }
+        } else if (event.inputType === 'deleteContentBackward') {
+          otp.value[index] = ''
+          if (index > 0) {
+            document.getElementById(`otp-${index - 1}`).focus()
+          }
+        } else {
+          otp.value[index] = ''
         }
-      } else if (event.inputType === 'deleteContentBackward') {
-        otp.value[index] = ''
-        if (index > 0) {
-          document.getElementById(`otp-${index - 1}`).focus()
-        }
-      } else {
-        otp.value[index] = ''
       }
     }
 
     const handleKeydown = (index) => {
+      console.log('gdef')
       return (event) => {
         if (event.key === 'Backspace' && otp.value[index] === '') {
           if (index > 0) {
@@ -81,44 +83,6 @@ export default {
       }
     }
 
-    const updateCountdown = () => {
-      const now = new Date()
-      const endTime = new Date(userStore.endTime || localStorage.getItem('endTime'))
-      const timeDiff = endTime - now
-
-      if (timeDiff > 0) {
-        const minutes = Math.floor(timeDiff / 60000)
-        const seconds = Math.floor((timeDiff % 60000) / 1000)
-        countdown.value = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-
-        if (timeDiff <= 5 * 60000) {
-          // less than or equal to 5 minutes
-          countdownColor.value = 'danger'
-        } else if (timeDiff <= 10 * 60000) {
-          // less than or equal to 10 minutes
-          countdownColor.value = 'warning'
-        } else {
-          countdownColor.value = 'success'
-        }
-      } else {
-        countdown.value = 'Expired'
-        countdownColor.value = 'danger'
-      }
-    }
-
-    if (!userStore.endTime) {
-      userStore.endTime = localStorage.getItem('endTime')
-    } else {
-      localStorage.setItem('endTime', userStore.endTime)
-    }
-
-    if (!localStorage.getItem('endTime')) {
-      router.push('/')
-    }
-
-    updateCountdown()
-    setInterval(updateCountdown, 1000)
-
     return {
       otp,
       verifyOtp,
@@ -127,8 +91,6 @@ export default {
       handleKeydown,
       message,
       messageType,
-      countdown,
-      countdownColor,
     }
   },
 }
@@ -150,10 +112,7 @@ export default {
             below.
             <span class="fw-medium d-block mt-1 text-heading">******1234</span>
           </p>
-          <p :class="`alert timecountdoun bg-label-${countdownColor} mb-3`">
-            {{ countdown }}
-          </p>
-          <div v-if="message" :class="`text-center alert alert-${messageType} mb-3`" role="alert">
+          <div v-if="message" :class="`alert alert-${messageType} mb-3`" role="alert">
             {{ message }}
           </div>
           <p class="mb-0">Type your 6 digit security code</p>

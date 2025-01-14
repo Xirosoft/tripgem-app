@@ -37,11 +37,8 @@ const handleRegister = async () => {
       message.value = response.data.message
       messageType.value = 'success'
       userStore.setEmail(email.value)
-      const currentTime = new Date()
-      userStore.setStartTime(currentTime)
-      const endTime = new Date(currentTime.getTime() + 30 * 60000) // 30 minutes from now
-      userStore.setEndTime(endTime)
-      localStorage.setItem('endTime', endTime)
+      userStore.setStartTime()
+      userStore.setEndTime()
       setTimeout(() => {
         router.push({ name: 'TwoStepAuth' })
       }, 2000)

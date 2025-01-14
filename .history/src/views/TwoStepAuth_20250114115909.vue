@@ -18,7 +18,6 @@ export default {
     const message = ref('')
     const messageType = ref('')
     const countdown = ref('')
-    const countdownColor = ref('')
 
     const verifyOtp = async () => {
       const otpCode = otp.value.join('')
@@ -34,7 +33,6 @@ export default {
           },
         )
         if (response.data.success) {
-          localStorage.removeItem('endTime')
           router.push('/')
         } else {
           alert('Invalid OTP')
@@ -83,40 +81,18 @@ export default {
 
     const updateCountdown = () => {
       const now = new Date()
-      const endTime = new Date(userStore.endTime || localStorage.getItem('endTime'))
+      const endTime = new Date(userStore.endTime)
       const timeDiff = endTime - now
 
       if (timeDiff > 0) {
         const minutes = Math.floor(timeDiff / 60000)
         const seconds = Math.floor((timeDiff % 60000) / 1000)
         countdown.value = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-
-        if (timeDiff <= 5 * 60000) {
-          // less than or equal to 5 minutes
-          countdownColor.value = 'danger'
-        } else if (timeDiff <= 10 * 60000) {
-          // less than or equal to 10 minutes
-          countdownColor.value = 'warning'
-        } else {
-          countdownColor.value = 'success'
-        }
       } else {
         countdown.value = 'Expired'
-        countdownColor.value = 'danger'
       }
     }
 
-    if (!userStore.endTime) {
-      userStore.endTime = localStorage.getItem('endTime')
-    } else {
-      localStorage.setItem('endTime', userStore.endTime)
-    }
-
-    if (!localStorage.getItem('endTime')) {
-      router.push('/')
-    }
-
-    updateCountdown()
     setInterval(updateCountdown, 1000)
 
     return {
@@ -128,7 +104,6 @@ export default {
       message,
       messageType,
       countdown,
-      countdownColor,
     }
   },
 }
@@ -150,10 +125,8 @@ export default {
             below.
             <span class="fw-medium d-block mt-1 text-heading">******1234</span>
           </p>
-          <p :class="`alert timecountdoun bg-label-${countdownColor} mb-3`">
-            {{ countdown }}
-          </p>
-          <div v-if="message" :class="`text-center alert alert-${messageType} mb-3`" role="alert">
+          <p class="timecountdoun">{{ countdown }}</p>
+          <div v-if="message" :class="`alert alert-${messageType} mb-3`" role="alert">
             {{ message }}
           </div>
           <p class="mb-0">Type your 6 digit security code</p>

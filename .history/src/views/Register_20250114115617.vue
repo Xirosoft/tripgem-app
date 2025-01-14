@@ -41,7 +41,6 @@ const handleRegister = async () => {
       userStore.setStartTime(currentTime)
       const endTime = new Date(currentTime.getTime() + 30 * 60000) // 30 minutes from now
       userStore.setEndTime(endTime)
-      localStorage.setItem('endTime', endTime)
       setTimeout(() => {
         router.push({ name: 'TwoStepAuth' })
       }, 2000)
