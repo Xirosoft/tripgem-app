@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import TwoStepAuth from '../views/TwoStepAuth.vue'
 import MerchantsList from '@/views/MerchantsList.vue'
 
 const routes = [
@@ -22,9 +21,9 @@ const routes = [
     component: Register,
   },
   {
-    path: '/auth-two-steps',
-    name: 'TwoStepAuth',
-    component: TwoStepAuth,
+    path: '/register',
+    name: 'tripgemregister',
+    component: Register,
   },
   {
     path: '/merchants',
