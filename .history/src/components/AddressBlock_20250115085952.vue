@@ -406,8 +406,8 @@ export default {
 
 .loader {
   position: absolute;
-  top: 10px;
-  right: 15px;
+  top: 50%;
+  right: 10px;
   transform: translateY(-50%);
   border: 4px solid #f3f3f3;
   border-radius: 50%;

@@ -1,16 +1,41 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../../config/config'
-import { merchantDataStructure } from '../../config/merchantFields'
 
-export const useMerchantsStore = defineStore('addmerchants', {
+export const useMerchantsStore = defineStore('merchants', {
   state: () => ({
     merchants: [],
     loading: false,
     error: null,
     message: null,
     messageType: null,
-    newMerchant: { ...merchantDataStructure },
+    newMerchant: {
+      user_id: 10,
+      company_name: '',
+      logo_url: '',
+      slogan: '',
+      registration_number: '',
+      established_year: null,
+      headquarters_location: '',
+      branch_locations: [],
+      business_type: '',
+      address: '',
+      phone_number: '',
+      email_address: '',
+      website: '',
+      social_media_links: {
+        facebook: '',
+        twitter: '',
+      },
+      contact_person_name: '',
+      position_designation: '',
+      emergency_contact_number: '',
+      tourism_license_number: '',
+      tin: '',
+      business_permits: [],
+      membership_certificates: [],
+      documents: [],
+    },
     validationErrors: {},
   }),
 

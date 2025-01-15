@@ -8,7 +8,7 @@ import flatpickr from 'flatpickr'
 import Quill from 'quill'
 import { useToast } from 'vue-toastification'
 import config from '../config/config'
-import { merchantDataStructure } from '../config/merchantFields'
+import { merchantDataStructure } from '../config/merchantData'
 
 import jQuery from 'jquery'
 import select2 from 'select2'
@@ -687,10 +687,6 @@ export default {
                 type="url"
                 class="form-control"
               />
-            </div>
-            <div class="mb-4">
-              <label class="form-label">Line</label>
-              <input v-model="formData.social_media_links.line" type="url" class="form-control" />
             </div>
           </div>
         </div>

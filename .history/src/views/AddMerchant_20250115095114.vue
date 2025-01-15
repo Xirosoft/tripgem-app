@@ -349,10 +349,10 @@ export default {
 
     async submitForm() {
       try {
-        // if (!this.merchantStore.validateMerchantData(this.formData)) {
-        //   this.toast.error('Please fill in all required fields')
-        //   return
-        // }
+        if (!this.merchantStore.validateMerchantData(this.formData)) {
+          this.toast.error('Please fill in all required fields')
+          return
+        }
 
         if (!this.formData.logo_url) {
           this.toast.error('Please upload company logo')

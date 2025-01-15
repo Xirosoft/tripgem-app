@@ -31,7 +31,7 @@ const handleRouteChange = () => {
 }
 
 onMounted(() => {
-  // handleRouteChange()
+  handleRouteChange()
 })
 
 watch(route, () => {

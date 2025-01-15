@@ -170,7 +170,7 @@ export default {
       })
 
       // Add filters
-      // this.$refs.filterComponent.addFilters(this.table)
+      this.$refs.filterComponent.addFilters(this.table)
     },
   },
   watch: {
@@ -185,7 +185,7 @@ export default {
               this.table.clear()
               this.table.rows.add(newVal)
               this.table.draw()
-              this.$refs.filterComponent.addFilters(this.table) // Ensure filters are added after data is loaded
+              // this.$refs.filterComponent.addFilters(this.table) // Ensure filters are added after data is loaded
             }
           })
         }

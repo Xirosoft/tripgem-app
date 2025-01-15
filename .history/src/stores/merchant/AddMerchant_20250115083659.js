@@ -1,16 +1,41 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../../config/config'
-import { merchantDataStructure } from '../../config/merchantFields'
 
-export const useMerchantsStore = defineStore('addmerchants', {
+export const useMerchantsStore = defineStore('merchants', {
   state: () => ({
     merchants: [],
     loading: false,
     error: null,
     message: null,
     messageType: null,
-    newMerchant: { ...merchantDataStructure },
+    newMerchant: {
+      user_id: 10,
+      company_name: '',
+      logo_url: '',
+      slogan: '',
+      registration_number: '',
+      established_year: null,
+      headquarters_location: '',
+      branch_locations: [],
+      business_type: '',
+      address: '',
+      phone_number: '',
+      email_address: '',
+      website: '',
+      social_media_links: {
+        facebook: '',
+        twitter: '',
+      },
+      contact_person_name: '',
+      position_designation: '',
+      emergency_contact_number: '',
+      tourism_license_number: '',
+      tin: '',
+      business_permits: [],
+      membership_certificates: [],
+      documents: [],
+    },
     validationErrors: {},
   }),
 
@@ -24,14 +49,15 @@ export const useMerchantsStore = defineStore('addmerchants', {
       this.loading = true
       this.error = null
       try {
-        const response = await axios.get(`${config.apiUrl}/merchant/add`, {
+        const response = await axios.get(`${config.apiUrl}/merchants`, {
           headers: config.getHeaders(),
         })
-        this.merchants = Array.isArray(response.data) ? response.data : response.data.data
+        this.merchants = response.data
         console.log('Merchants:', this.merchants)
 
         this.loading = false
         this.setMessage('Merchants loaded successfully', 'success')
+        return this.merchants
       } catch (error) {
         console.error('Error fetching merchants:', error)
         this.error = error.message || 'Failed to fetch merchants'
@@ -56,6 +82,7 @@ export const useMerchantsStore = defineStore('addmerchants', {
           throw new Error('Failed to create merchant')
         }
 
+        this.merchants.push(response.data)
         this.loading = false
         return response.data
       } catch (error) {

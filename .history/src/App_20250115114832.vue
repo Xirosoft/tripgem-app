@@ -18,20 +18,20 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 
 const handleRouteChange = () => {
   console.log('Route changed')
-  // console.log('isAuthPage:', isAuthPage.value)
+  console.log('isAuthPage:', isAuthPage.value)
 
   if (isLoggedIn.value) {
     if (isAuthPage.value) {
       router.push({ name: 'AdminDashboard' })
     }
-  } else if (isAuthPage.value === false) {
+  } else if () {
     console.log('Redirecting to login page')
     router.push({ name: 'tripgemlogin' })
   }
 }
 
 onMounted(() => {
-  // handleRouteChange()
+  handleRouteChange()
 })
 
 watch(route, () => {

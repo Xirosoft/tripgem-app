@@ -37,7 +37,7 @@ export default {
         )
         if (response.data.success) {
           userStore.setOtpVerify(false) // Set otpVerify to false after successful verification
-          router.push('/login')
+          router.push('/')
         } else {
           alert('Invalid OTP')
         }
@@ -109,7 +109,7 @@ export default {
     }
 
     if (!userStore.otpVerify) {
-      router.push('/register')
+      router.push('/')
     }
 
     updateCountdown()

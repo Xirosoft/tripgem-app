@@ -8,7 +8,6 @@ import flatpickr from 'flatpickr'
 import Quill from 'quill'
 import { useToast } from 'vue-toastification'
 import config from '../config/config'
-import { merchantDataStructure } from '../config/merchantFields'
 
 import jQuery from 'jquery'
 import select2 from 'select2'
@@ -46,7 +45,41 @@ export default {
       editor: null,
       dropzone: null,
       tagify: null,
-      formData: { ...merchantDataStructure },
+      formData: {
+        user_id: '', // Changed from 10 to empty string
+        company_name: '',
+        logo_url: '',
+        slogan: '',
+        registration_number: '',
+        established_year: null,
+        headquarters_location: '',
+        branch_locations: [], // Keep as array
+        business_type: '',
+        phone_number: '',
+        email_address: '',
+        website: '',
+        social_media_links: {
+          facebook: '',
+          twitter: '',
+          instagram: '',
+          youtube: '',
+        },
+        contact_person_name: '',
+        position_designation: '',
+        emergency_contact_number: '',
+        tourism_license_number: '',
+        tin: '',
+        business_permits: [],
+        membership_certificates: [],
+        documents: [],
+        addressDetails: {
+          country: '',
+          province: '',
+          city: '',
+          zip_code: '',
+          address_details: '',
+        },
+      },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
         { value: 'Travel', label: 'Travel' },
@@ -687,10 +720,6 @@ export default {
                 type="url"
                 class="form-control"
               />
-            </div>
-            <div class="mb-4">
-              <label class="form-label">Line</label>
-              <input v-model="formData.social_media_links.line" type="url" class="form-control" />
             </div>
           </div>
         </div>

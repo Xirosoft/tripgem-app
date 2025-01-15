@@ -3,7 +3,7 @@ import FooterSection from '@/components/FooterSection.vue'
 import HeaderSection from '@/components/HeaderSection.vue'
 import SideBar from '@/components/Sidebar.vue'
 import { useAuthStore } from '@/stores/auth'
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -16,26 +16,19 @@ const isAuthPage = computed(() => {
 
 const isLoggedIn = computed(() => authStore.isLoggedIn)
 
-const handleRouteChange = () => {
-  console.log('Route changed')
-  // console.log('isAuthPage:', isAuthPage.value)
-
+onMounted(() => {
   if (isLoggedIn.value) {
     if (isAuthPage.value) {
       router.push({ name: 'AdminDashboard' })
     }
-  } else if (isAuthPage.value === false) {
-    console.log('Redirecting to login page')
-    router.push({ name: 'tripgemlogin' })
+  } else if (
+    route.path !== '/login' ||
+    route.path !== '/register' ||
+    route.path !== '/auth-two-steps'
+  ) {
+    // router.push({ name: 'tripgemlogin' })
+    console.log('Not logged in')
   }
-}
-
-onMounted(() => {
-  // handleRouteChange()
-})
-
-watch(route, () => {
-  handleRouteChange()
 })
 </script>
 

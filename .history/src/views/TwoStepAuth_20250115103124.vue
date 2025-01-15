@@ -109,7 +109,7 @@ export default {
     }
 
     if (!userStore.otpVerify) {
-      router.push('/register')
+      router.push('/')
     }
 
     updateCountdown()

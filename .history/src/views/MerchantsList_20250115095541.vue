@@ -170,7 +170,7 @@ export default {
       })
 
       // Add filters
-      // this.$refs.filterComponent.addFilters(this.table)
+      this.$refs.filterComponent.addFilters(this.table)
     },
   },
   watch: {

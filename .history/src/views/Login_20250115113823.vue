@@ -2,7 +2,7 @@
 <script setup>
 import TripgemLogo from '@/components/Logo.vue'
 import { useAuthStore } from '@/stores/auth'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 const email = ref('')
@@ -10,17 +10,12 @@ const password = ref('')
 const router = useRouter()
 const authStore = useAuthStore()
 
-const message = ref('')
-const messageType = ref('')
-
 const handleLogin = async () => {
   console.log('Login form submitted')
 
   // Basic validation
   if (!email.value || !password.value) {
     authStore.setMessage('Email and password are required', 'danger')
-    message.value = authStore.message
-    messageType.value = authStore.messageType
     return
   }
 
@@ -33,9 +28,9 @@ const handleLogin = async () => {
     console.error('Login failed:', error)
   }
 
-  // Update message and messageType
-  message.value = authStore.message
-  messageType.value = authStore.messageType
+  // Move message and messageType computations here
+  const message = computed(() => authStore.message)
+  const messageType = computed(() => authStore.messageType)
 }
 </script>
 

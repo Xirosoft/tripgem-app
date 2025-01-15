@@ -2,7 +2,7 @@
 <script setup>
 import TripgemLogo from '@/components/Logo.vue'
 import { useAuthStore } from '@/stores/auth'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 const email = ref('')
@@ -10,8 +10,8 @@ const password = ref('')
 const router = useRouter()
 const authStore = useAuthStore()
 
-const message = ref('')
-const messageType = ref('')
+const message = computed(() => authStore.message)
+const messageType = computed(() => authStore.messageType)
 
 const handleLogin = async () => {
   console.log('Login form submitted')
@@ -19,8 +19,6 @@ const handleLogin = async () => {
   // Basic validation
   if (!email.value || !password.value) {
     authStore.setMessage('Email and password are required', 'danger')
-    message.value = authStore.message
-    messageType.value = authStore.messageType
     return
   }
 
@@ -32,10 +30,6 @@ const handleLogin = async () => {
   } catch (error) {
     console.error('Login failed:', error)
   }
-
-  // Update message and messageType
-  message.value = authStore.message
-  messageType.value = authStore.messageType
 }
 </script>
 
@@ -51,7 +45,7 @@ const handleLogin = async () => {
               <TripgemLogo />
             </div>
             <!-- /Logo -->
-            <h4 class="mb-1">Welcome to Tripgem! 👋</h4>
+            <h4 class="mb-1">Welcome to Tgip! 👋</h4>
             <p class="mb-6">Please sign-in to your account and start the adventure</p>
 
             <!-- Error/Success Message -->

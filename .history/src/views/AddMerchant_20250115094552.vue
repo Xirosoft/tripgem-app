@@ -8,7 +8,7 @@ import flatpickr from 'flatpickr'
 import Quill from 'quill'
 import { useToast } from 'vue-toastification'
 import config from '../config/config'
-import { merchantDataStructure } from '../config/merchantFields'
+import { merchantDataStructure } from '../config/merchantData'
 
 import jQuery from 'jquery'
 import select2 from 'select2'

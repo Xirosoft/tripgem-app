@@ -1,5 +1,4 @@
 <script>
-import FilterComponent from '@/components/FilterComponent.vue'
 import 'datatables.net-bs5'
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import $ from 'jquery'
@@ -7,9 +6,6 @@ import { useMerchantsStore } from '../stores/merchant/MerchantsList.js'
 
 export default {
   name: 'MerchantsList',
-  components: {
-    FilterComponent,
-  },
   data() {
     return {
       table: null,
@@ -35,7 +31,28 @@ export default {
       this.initializeDataTable()
     })
   },
-  onBeforeUnmount() {
+  watch: {
+    'merchantStore.merchants': {
+      immediate: true, // This ensures the watcher runs immediately
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.$nextTick(() => {
+            if (!this.table) {
+              this.initializeDataTable()
+            } else {
+              this.table.clear()
+              this.table.rows.add(newVal)
+              this.table.draw()
+              this.addFilters() // Ensure filters are added after data is loaded
+            }
+          })
+        }
+      },
+      deep: true,
+    },
+  },
+  unmounted() {
+    // Destroy DataTable when component is unmounted
     if (this.table) {
       this.table.destroy()
     }
@@ -168,36 +185,70 @@ export default {
           .find('tbody input[type="checkbox"]:checked').length
         $('.select-all').prop('checked', totalCheckboxes === selectedCheckboxes)
       })
-
-      // Add filters
-      // this.$refs.filterComponent.addFilters(this.table)
     },
-  },
-  watch: {
-    'merchantStore.merchants': {
-      immediate: true, // This ensures the watcher runs immediately
-      handler(newVal) {
-        if (newVal && newVal.length > 0) {
-          this.$nextTick(() => {
-            if (!this.table) {
-              this.initializeDataTable()
-            } else {
-              this.table.clear()
-              this.table.rows.add(newVal)
-              this.table.draw()
-              this.$refs.filterComponent.addFilters(this.table) // Ensure filters are added after data is loaded
+    addFilters() {
+      // Adding status filter
+      this.table.columns(-2).every(function () {
+        var column = this
+        var select = $(
+          '<select class="form-select text-capitalize"><option value="">Status</option></select>',
+        )
+          .appendTo('.product_status')
+          .on('change', function () {
+            column.search($(this).val()).draw()
+          })
+
+        column
+          .data()
+          .unique()
+          .sort()
+          .each(function (d) {
+            select.append(`<option value="${d}">${d}</option>`)
+          })
+      })
+
+      // Adding business type filter
+      this.table.columns(4).every(function () {
+        var column = this
+        var select = $(
+          '<select class="form-select text-capitalize"><option value="">Business Type</option></select>',
+        )
+          .appendTo('.product_category')
+          .on('change', function () {
+            column.search($(this).val()).draw()
+          })
+
+        column
+          .data()
+          .unique()
+          .sort()
+          .each(function (d) {
+            select.append(`<option value="${d}">${d}</option>`)
+          })
+      })
+
+      // Adding location filter
+      this.table.columns(5).every(function () {
+        var column = this
+        var select = $(
+          '<select class="form-select text-capitalize"><option value="">Location</option></select>',
+        )
+          .appendTo('.product_location')
+          .on('change', function () {
+            column.search($(this).val()).draw()
+          })
+
+        column
+          .data()
+          .unique()
+          .sort()
+          .each(function (d) {
+            if (d) {
+              select.append(`<option value="${d}">${d}</option>`)
             }
           })
-        }
-      },
-      deep: true,
+      })
     },
-  },
-  unmounted() {
-    // Destroy DataTable when component is unmounted
-    if (this.table) {
-      this.table.destroy()
-    }
   },
 }
 </script>
@@ -209,7 +260,19 @@ export default {
   <div class="card">
     <div class="card-header border-bottom">
       <h5 class="card-title mb-3">Search Filter</h5>
-      <FilterComponent ref="filterComponent" @add-merchant="$router.push('/merchant/add')" />
+      <div class="d-flex justify-content-between align-items-center row pb-2 gap-3 gap-md-0">
+        <div class="col-md-3 product_status"></div>
+        <div class="col-md-3 product_category"></div>
+        <div class="col-md-3 product_location"></div>
+        <div class="col-md-3 d-flex align-items-center justify-content-md-end">
+          <button class="dt-button add-new btn btn-primary" @click="$router.push('/merchant/add')">
+            <span
+              ><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i
+              ><span class="d-none d-sm-inline-block">Add Merchant</span></span
+            >
+          </button>
+        </div>
+      </div>
     </div>
     <div class="card-datatable table-responsive">
       <table ref="merchantsTable" class="datatables-products table">

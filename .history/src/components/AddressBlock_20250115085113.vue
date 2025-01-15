@@ -16,6 +16,7 @@ export default {
   setup(props, { emit }) {
     const isMounted = ref(false)
     const abortController = ref(new AbortController())
+    const isLoading = ref(false)
 
     const API_URLs = {
       countries: 'https://restcountries.com/v3.1/all',
@@ -37,9 +38,6 @@ export default {
       address_details: '',
     })
 
-    const isLoadingStates = ref(false)
-    const isLoadingCities = ref(false)
-
     // Watch for changes and emit updates
     watch(
       addressData,
@@ -53,7 +51,9 @@ export default {
     onMounted(async () => {
       isMounted.value = true
       addressData.value = { ...props.modelValue }
+      isLoading.value = true
       await loadCountries()
+      isLoading.value = false
     })
 
     const loadCountries = async () => {
@@ -91,7 +91,7 @@ export default {
       if (!addressData.value.country) return
 
       try {
-        isLoadingStates.value = true
+        isLoading.value = true
         const selectedCountry = locationData.value.countries.find(
           (c) => c.id === addressData.value.country,
         )
@@ -128,7 +128,7 @@ export default {
       } catch (error) {
         console.error('Failed to load provinces:', error)
       } finally {
-        isLoadingStates.value = false
+        isLoading.value = false
       }
     }
 
@@ -136,7 +136,7 @@ export default {
       if (!isMounted.value) return
 
       try {
-        isLoadingCities.value = true
+        isLoading.value = true
         const selectedCountry = locationData.value.countries.find(
           (c) => c.id === addressData.value.country,
         )
@@ -192,7 +192,7 @@ export default {
         console.error('Failed to load cities:', error.response || error)
         locationData.value.cities = []
       } finally {
-        isLoadingCities.value = false
+        isLoading.value = false
       }
     }
 
@@ -315,8 +315,7 @@ export default {
       loadProvinces,
       loadCities,
       updateZipCode,
-      isLoadingStates,
-      isLoadingCities,
+      isLoading,
     }
   },
 }
@@ -324,24 +323,25 @@ export default {
 
 <template>
   <div class="row">
-    <div class="col-md-6 mb-4">
-      <label class="form-label">Country*</label>
-      <select id="country-select" v-model="addressData.country" class="form-select" required>
-        <option value="">Select Country</option>
-        <option
-          v-for="country in locationData.countries"
-          :key="country.id"
-          :value="country.id"
-          :data-flag="country.flag"
-        >
-          {{ country.name }}
-        </option>
-      </select>
-    </div>
+    <div v-if="isLoading" class="loader">Loading...</div>
+    <div v-else>
+      <div class="col-md-6 mb-4">
+        <label class="form-label">Country*</label>
+        <select id="country-select" v-model="addressData.country" class="form-select" required>
+          <option value="">Select Country</option>
+          <option
+            v-for="country in locationData.countries"
+            :key="country.id"
+            :value="country.id"
+            :data-flag="country.flag"
+          >
+            {{ country.name }}
+          </option>
+        </select>
+      </div>
 
-    <div class="col-md-6 mb-4">
-      <label class="form-label">Province*</label>
-      <div class="position-relative">
+      <div class="col-md-6 mb-4">
+        <label class="form-label">Province*</label>
         <select
           id="province-select"
           v-model="addressData.province"
@@ -358,13 +358,10 @@ export default {
             {{ province.name }}
           </option>
         </select>
-        <div v-if="isLoadingStates" class="loader"></div>
       </div>
-    </div>
 
-    <div class="col-md-6 mb-4">
-      <label class="form-label">City*</label>
-      <div class="position-relative">
+      <div class="col-md-6 mb-4">
+        <label class="form-label">City*</label>
         <select
           id="city-select"
           v-model="addressData.city"
@@ -377,24 +374,23 @@ export default {
             {{ city.name }}
           </option>
         </select>
-        <div v-if="isLoadingCities" class="loader"></div>
       </div>
-    </div>
 
-    <div class="col-md-6 mb-4">
-      <label class="form-label">ZIP Code</label>
-      <input v-model="addressData.zip_code" type="text" class="form-control" />
-    </div>
+      <div class="col-md-6 mb-4">
+        <label class="form-label">ZIP Code</label>
+        <input v-model="addressData.zip_code" type="text" class="form-control" />
+      </div>
 
-    <div class="col-md-12 mb-4">
-      <label class="form-label">Detailed Address*</label>
-      <input
-        v-model="addressData.address_details"
-        type="text"
-        class="form-control"
-        required
-        placeholder="Street address, building name, etc."
-      />
+      <div class="col-md-12 mb-4">
+        <label class="form-label">Detailed Address*</label>
+        <input
+          v-model="addressData.address_details"
+          type="text"
+          class="form-control"
+          required
+          placeholder="Street address, building name, etc."
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -403,36 +399,9 @@ export default {
 .select2-container {
   width: 100% !important;
 }
-
 .loader {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  transform: translateY(-50%);
-  border: 4px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 4px solid #3498db;
-  width: 20px;
-  height: 20px;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-}
-
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  text-align: center;
+  font-size: 1.5em;
+  color: #999;
 }
 </style>

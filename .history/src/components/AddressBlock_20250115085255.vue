@@ -37,9 +37,6 @@ export default {
       address_details: '',
     })
 
-    const isLoadingStates = ref(false)
-    const isLoadingCities = ref(false)
-
     // Watch for changes and emit updates
     watch(
       addressData,
@@ -91,7 +88,6 @@ export default {
       if (!addressData.value.country) return
 
       try {
-        isLoadingStates.value = true
         const selectedCountry = locationData.value.countries.find(
           (c) => c.id === addressData.value.country,
         )
@@ -127,8 +123,6 @@ export default {
         }
       } catch (error) {
         console.error('Failed to load provinces:', error)
-      } finally {
-        isLoadingStates.value = false
       }
     }
 
@@ -136,7 +130,6 @@ export default {
       if (!isMounted.value) return
 
       try {
-        isLoadingCities.value = true
         const selectedCountry = locationData.value.countries.find(
           (c) => c.id === addressData.value.country,
         )
@@ -191,8 +184,6 @@ export default {
       } catch (error) {
         console.error('Failed to load cities:', error.response || error)
         locationData.value.cities = []
-      } finally {
-        isLoadingCities.value = false
       }
     }
 
@@ -315,8 +306,6 @@ export default {
       loadProvinces,
       loadCities,
       updateZipCode,
-      isLoadingStates,
-      isLoadingCities,
     }
   },
 }
@@ -341,44 +330,38 @@ export default {
 
     <div class="col-md-6 mb-4">
       <label class="form-label">Province*</label>
-      <div class="position-relative">
-        <select
-          id="province-select"
-          v-model="addressData.province"
-          class="form-select"
-          required
-          :disabled="!addressData.country"
+      <select
+        id="province-select"
+        v-model="addressData.province"
+        class="form-select"
+        required
+        :disabled="!addressData.country"
+      >
+        <option value="">Select Province</option>
+        <option
+          v-for="province in locationData.provinces"
+          :key="province.id"
+          :value="province.name"
         >
-          <option value="">Select Province</option>
-          <option
-            v-for="province in locationData.provinces"
-            :key="province.id"
-            :value="province.name"
-          >
-            {{ province.name }}
-          </option>
-        </select>
-        <div v-if="isLoadingStates" class="loader"></div>
-      </div>
+          {{ province.name }}
+        </option>
+      </select>
     </div>
 
     <div class="col-md-6 mb-4">
       <label class="form-label">City*</label>
-      <div class="position-relative">
-        <select
-          id="city-select"
-          v-model="addressData.city"
-          class="form-select"
-          required
-          :disabled="!addressData.province"
-        >
-          <option value="">Select City</option>
-          <option v-for="city in locationData.cities" :key="city.id" :value="city.name">
-            {{ city.name }}
-          </option>
-        </select>
-        <div v-if="isLoadingCities" class="loader"></div>
-      </div>
+      <select
+        id="city-select"
+        v-model="addressData.city"
+        class="form-select"
+        required
+        :disabled="!addressData.province"
+      >
+        <option value="">Select City</option>
+        <option v-for="city in locationData.cities" :key="city.id" :value="city.name">
+          {{ city.name }}
+        </option>
+      </select>
     </div>
 
     <div class="col-md-6 mb-4">
@@ -402,37 +385,5 @@ export default {
 <style scoped>
 .select2-container {
   width: 100% !important;
-}
-
-.loader {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  transform: translateY(-50%);
-  border: 4px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 4px solid #3498db;
-  width: 20px;
-  height: 20px;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-}
-
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 </style>

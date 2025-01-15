@@ -17,9 +17,9 @@ const messageType = ref('')
 const router = useRouter()
 const userStore = useUserStore()
 
-// if (!userStore.otpVerify) {
-//   router.push('/')
-// }
+if (!userStore.otpVerify) {
+  router.push('/')
+}
 
 const handleRegister = async () => {
   try {

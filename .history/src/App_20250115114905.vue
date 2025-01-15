@@ -18,7 +18,7 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 
 const handleRouteChange = () => {
   console.log('Route changed')
-  // console.log('isAuthPage:', isAuthPage.value)
+  console.log('isAuthPage:', isAuthPage.value)
 
   if (isLoggedIn.value) {
     if (isAuthPage.value) {
@@ -31,7 +31,7 @@ const handleRouteChange = () => {
 }
 
 onMounted(() => {
-  // handleRouteChange()
+  handleRouteChange()
 })
 
 watch(route, () => {
