@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
+import axios from 'axios'
 import config from '../config/config'
 
 export const useUsersStore = defineStore('users', {
@@ -26,7 +26,7 @@ export const useUsersStore = defineStore('users', {
       }
     },
   },
-
+src/stores/TowStepUser.js
   getters: {
     getVerifiedUsers: (state) => state.users,
     getUserFullName: (state) => (userId) => {

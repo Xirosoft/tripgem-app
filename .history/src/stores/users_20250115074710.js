@@ -16,10 +16,13 @@ export const useUsersStore = defineStore('users', {
         const response = await axios.get(`${config.apiUrl}/users/verified`, {
           headers: config.getHeaders(),
         })
+        console.log('API response:', response.data) // Debugging statement
         this.users = response.data
+        console.log('Users state:', this.users) // Debugging statement
         return this.users
       } catch (error) {
         this.error = error.message
+        console.error('Failed to fetch verified users:', error)
         throw error
       } finally {
         this.loading = false
@@ -28,7 +31,7 @@ export const useUsersStore = defineStore('users', {
   },
 
   getters: {
-    getVerifiedUsers: (state) => state.users,
+    getVerifiedUsers: (state) => state.users.filter((user) => user.verified),
     getUserFullName: (state) => (userId) => {
       const user = state.users.find((u) => u.user_id === userId)
       return user ? `${user.first_name} ${user.last_name}` : ''

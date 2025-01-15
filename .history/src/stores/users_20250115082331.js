@@ -2,7 +2,7 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../config/config'
 
-export const useUsersStore = defineStore('users', {
+export const useUsersStore = defineStore('userss', {
   state: () => ({
     users: [],
     loading: false,
@@ -11,6 +11,8 @@ export const useUsersStore = defineStore('users', {
 
   actions: {
     async fetchVerifiedUsers() {
+      console.log('fetching verified')
+
       this.loading = true
       try {
         const response = await axios.get(`${config.apiUrl}/users/verified`, {

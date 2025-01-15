@@ -26,7 +26,7 @@ export const useUsersStore = defineStore('users', {
       }
     },
   },
-
+  persist: true,
   getters: {
     getVerifiedUsers: (state) => state.users,
     getUserFullName: (state) => (userId) => {

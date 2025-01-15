@@ -101,8 +101,8 @@ export default {
   },
   async created() {
     try {
-      await this.usersStore.fetchVerifiedUsers() // Correct method name
-      this.users = this.usersStore.getVerifiedUsers // Ensure getter is used correctly
+      await this.usersStore.fetchVerifiedUsers()
+      this.users = this.usersStore.getVerifiedUsers
     } catch (error) {
       console.error('Failed to load users:', error)
       this.toast.error('Failed to load users list')

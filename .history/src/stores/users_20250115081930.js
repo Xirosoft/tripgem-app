@@ -11,6 +11,8 @@ export const useUsersStore = defineStore('users', {
 
   actions: {
     async fetchVerifiedUsers() {
+      console.log('fetching verified);
+
       this.loading = true
       try {
         const response = await axios.get(`${config.apiUrl}/users/verified`, {

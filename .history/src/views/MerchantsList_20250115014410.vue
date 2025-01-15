@@ -140,6 +140,75 @@ export default {
             },
           },
         ],
+        initComplete: function () {
+          // Adding status filter
+          this.api()
+            .columns(-2)
+            .every(function () {
+              var column = this
+              var select = $(
+                '<select class="form-select text-capitalize"><option value="">Status</option></select>',
+              )
+                .appendTo('.product_status')
+                .on('change', function () {
+                  column.search($(this).val()).draw()
+                })
+
+              column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d) {
+                  select.append(`<option value="${d}">${d}</option>`)
+                })
+            })
+
+          // Adding business type filter
+          this.api()
+            .columns(4)
+            .every(function () {
+              var column = this
+              var select = $(
+                '<select class="form-select text-capitalize"><option value="">Business Type</option></select>',
+              )
+                .appendTo('.product_category')
+                .on('change', function () {
+                  column.search($(this).val()).draw()
+                })
+
+              column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d) {
+                  select.append(`<option value="${d}">${d}</option>`)
+                })
+            })
+
+          // Adding location filter
+          this.api()
+            .columns(5)
+            .every(function () {
+              var column = this
+              var select = $(
+                '<select class="form-select text-capitalize"><option value="">Location</option></select>',
+              )
+                .appendTo('.product_location')
+                .on('change', function () {
+                  column.search($(this).val()).draw()
+                })
+
+              column
+                .data()
+                .unique()
+                .sort()
+                .each(function (d) {
+                  if (d) {
+                    select.append(`<option value="${d}">${d}</option>`)
+                  }
+                })
+            })
+        },
       })
 
       // Add select all checkbox handler
@@ -166,69 +235,6 @@ export default {
         $('.select-all').prop('checked', totalCheckboxes === selectedCheckboxes)
       })
     },
-    addFilters() {
-      // Adding status filter
-      this.table.columns(-2).every(function () {
-        var column = this
-        var select = $(
-          '<select class="form-select text-capitalize"><option value="">Status</option></select>',
-        )
-          .appendTo('.product_status')
-          .on('change', function () {
-            column.search($(this).val()).draw()
-          })
-
-        column
-          .data()
-          .unique()
-          .sort()
-          .each(function (d) {
-            select.append(`<option value="${d}">${d}</option>`)
-          })
-      })
-
-      // Adding business type filter
-      this.table.columns(4).every(function () {
-        var column = this
-        var select = $(
-          '<select class="form-select text-capitalize"><option value="">Business Type</option></select>',
-        )
-          .appendTo('.product_category')
-          .on('change', function () {
-            column.search($(this).val()).draw()
-          })
-
-        column
-          .data()
-          .unique()
-          .sort()
-          .each(function (d) {
-            select.append(`<option value="${d}">${d}</option>`)
-          })
-      })
-
-      // Adding location filter
-      this.table.columns(5).every(function () {
-        var column = this
-        var select = $(
-          '<select class="form-select text-capitalize"><option value="">Location</option></select>',
-        )
-          .appendTo('.product_location')
-          .on('change', function () {
-            column.search($(this).val()).draw()
-          })
-
-        column
-          .data()
-          .unique()
-          .sort()
-          .each(function (d) {
-            if (d) {
-              select.append(`<option value="${d}">${d}</option>`)
-            }
-          })
-      })
-    },
   },
   watch: {
     'merchantStore.merchants': {
@@ -242,7 +248,6 @@ export default {
               this.table.clear()
               this.table.rows.add(newVal)
               this.table.draw()
-              this.addFilters() // Ensure filters are added after data is loaded
             }
           })
         }

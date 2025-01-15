@@ -3,7 +3,7 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../config/config'
 
-export const useUsersStore = defineStore('user', {
+export const useUsersStore = defineStore('users', {
   state: () => ({
     user: null,
     role: null,

@@ -34,4 +34,5 @@ export const useUsersStore = defineStore('users', {
       return user ? `${user.first_name} ${user.last_name}` : ''
     },
   },
+  persist: true,
 })

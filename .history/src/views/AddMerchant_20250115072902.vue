@@ -6,6 +6,7 @@ import Tagify from '@yaireo/tagify'
 import Dropzone from 'dropzone'
 import flatpickr from 'flatpickr'
 import Quill from 'quill'
+import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import config from '../config/config'
 
@@ -38,7 +39,8 @@ export default {
     const toast = useToast()
     const merchantStore = useMerchantsStore()
     const usersStore = useUsersStore()
-    return { toast, merchantStore, usersStore }
+    const router = useRouter() // Add this line to use the router
+    return { toast, merchantStore, usersStore, router }
   },
   data() {
     return {
@@ -97,12 +99,17 @@ export default {
         documents: [],
       },
       users: [],
+      isSubmitting: false, // Add this line
     }
   },
   async created() {
     try {
+      console.log('Fetching users...')
+
       await this.usersStore.fetchVerifiedUsers() // Correct method name
-      this.users = this.usersStore.getVerifiedUsers // Ensure getter is used correctly
+      console.log('Users fetched:', this.usersStore)
+
+      this.users = this.usersStore.getVerifiedUsers()
     } catch (error) {
       console.error('Failed to load users:', error)
       this.toast.error('Failed to load users list')
@@ -381,6 +388,8 @@ export default {
     },
 
     async submitForm() {
+      console.log('Form data:', this.formData)
+      this.isSubmitting = true // Show progress bar
       try {
         // if (!this.merchantStore.validateMerchantData(this.formData)) {
         //   this.toast.error('Please fill in all required fields')
@@ -389,8 +398,10 @@ export default {
 
         if (!this.formData.logo_url) {
           this.toast.error('Please upload company logo')
+          this.isSubmitting = false // Hide progress bar
           return
         }
+        console.log('Submitting form start...')
 
         // Prepare submission data
         const submitData = {
@@ -405,17 +416,24 @@ export default {
         // Submit to store
         const result = await this.merchantStore.createMerchant(submitData)
 
+        console.log('Submission result:', result)
+
         if (result) {
           this.toast.success('Merchant created successfully')
           await this.$nextTick()
           this.cleanupComponents()
+          console.log('Redirecting to merchants page...')
 
           // Use the route path instead of name
-          await this.$router.push('/merchants')
+          await this.router.push('/')
         }
       } catch (error) {
         console.error('Submission error:', error)
         this.toast.error(error.message || 'Failed to create merchant')
+
+        console.log('Submitting form end...')
+      } finally {
+        this.isSubmitting = false // Hide progress bar
       }
     },
 
@@ -487,8 +505,24 @@ export default {
           <button class="btn btn-label-secondary">Discard</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
-        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">Submit</button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          @click.prevent="submitForm"
+          :disabled="isSubmitting"
+        >
+          Submit
+        </button>
       </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div v-if="isSubmitting" class="progress mb-4">
+      <div
+        class="progress-bar progress-bar-striped progress-bar-animated"
+        role="progressbar"
+        style="width: 100%"
+      ></div>
     </div>
 
     <div class="row">
@@ -648,7 +682,7 @@ export default {
                   </div>
                 </div>
               </div>
-              <small class="text-danger" v-if="!formData.logo_url">Company logo is required</small>
+              <!-- <small class="text-danger" v-if="!formData.logo_url">Company logo is required</small> -->
             </div>
           </div>
         </div>
