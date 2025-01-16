@@ -1,0 +1,95 @@
+<script>
+import { usePermissionStore } from '../../stores/permission/PermissionStore.js'
+
+export default {
+  name: 'AddPermissionModal',
+  data() {
+    return {
+      permissionName: '',
+      permissionDescription: '',
+      isCorePermission: false,
+    }
+  },
+  methods: {
+    async addPermission() {
+      const payload = {
+        permission_name: this.permissionName,
+        description: this.permissionDescription,
+        core: this.isCorePermission,
+      }
+      const permissionStore = usePermissionStore()
+      try {
+        await permissionStore.addPermission(payload)
+        if (!permissionStore.error) {
+          // Handle success (e.g., close modal, show success message)
+        } else {
+          // Handle error (e.g., show error message)
+        }
+      } catch (error) {
+        // Handle network error
+        console.error('Error adding permission:', error)
+      }
+    },
+  },
+}
+</script>
+
+<template>
+  <div class="modal fade" id="addPermissionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-simple">
+      <div class="modal-content">
+        <div class="modal-body">
+          <button
+            type="button"
+            class="btn-close btn-pinned"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+          <div class="text-center mb-6">
+            <h4 class="mb-2">Add New Permission</h4>
+            <p>Permissions you may use and assign to your users.</p>
+          </div>
+          <form id="addPermissionForm" class="row" @submit.prevent="addPermission">
+            <div class="col-12 mb-4">
+              <label class="form-label" for="modalPermissionName">Permission Name</label>
+              <input
+                type="text"
+                id="modalPermissionName"
+                name="modalPermissionName"
+                class="form-control"
+                v-model="permissionName"
+                placeholder="Permission Name"
+                autofocus
+              />
+            </div>
+            <div class="col-12 mb-4">
+              <label class="form-label" for="modalPermissionDescription">Description</label>
+              <textarea
+                id="modalPermissionDescription"
+                name="modalPermissionDescription"
+                class="form-control"
+                v-model="permissionDescription"
+                placeholder="Permission Description"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div class="col-12 text-center demo-vertical-spacing">
+              <button type="submit" class="btn btn-primary me-4">Create Permission</button>
+              <button
+                type="reset"
+                class="btn btn-label-secondary"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                Discard
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style lang="postcss" scoped></style>
