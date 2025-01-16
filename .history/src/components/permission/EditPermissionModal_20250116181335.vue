@@ -38,9 +38,9 @@ export default {
           this.message = 'Permission updated successfully'
           this.messageType = 'success'
           // Optionally, close the modal
-          // const modalElement = document.getElementById('editPermissionModal')
-          // const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement)
-          // modalInstance.hide()
+          const modalElement = document.getElementById('editPermissionModal')
+          const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement)
+          modalInstance.hide()
           // Update the permission list
           await permissionStore.fetchPermissions()
         } else {

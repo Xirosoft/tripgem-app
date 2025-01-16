@@ -67,19 +67,18 @@ export default {
           { data: 'created_at' }, // Created date field
           {
             data: null,
-            render: function () {
-              return `
-                <button
-                class="btn rounded-pill btn-label-primary waves-effect edit-permission"
-                 tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editPermissionModal"
-                ><i class="ti ti-edit ti-md"></i> Edit</button>
-                <button class="btn rounded-pill btn-label-danger waves-effect delete-permission"><i class="ti ti-trash ti-md"></i> Delete</button>
-              `
-            },
+            defaultContent: `
+              <div class="d-inline-block">
+                <a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="ti ti-dots-vertical"></i>
+                </a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item edit-permission" href="javascript:void(0);"><i class="ti ti-pencil me-1"></i>Edit</a>
+                  <a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-eye me-1"></i>View</a>
+                  <a class="dropdown-item text-danger delete-permission" href="javascript:void(0);"><i class="ti ti-trash me-1"></i>Delete</a>
+                </div>
+              </div>
+            `,
           },
         ],
         order: [[1, 'desc']], // Change order to descending

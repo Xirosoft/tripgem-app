@@ -2,45 +2,38 @@
 import { usePermissionStore } from '../../stores/permission/PermissionStore.js'
 
 export default {
-  name: 'EditPermissionModal',
-  props: {
-    permission: Object,
-  },
+  name: 'AddPermissionModal',
   data() {
     return {
-      permissionName: this.permission ? this.permission.permission_name : '',
-      permissionDescription: this.permission ? this.permission.description : '',
+      permissionName: '',
+      permissionDescription: '',
+      isCorePermission: false,
       isLoading: false,
       message: '',
       messageType: '',
     }
   },
-  watch: {
-    permission(newVal) {
-      if (newVal) {
-        this.permissionName = newVal.permission_name
-        this.permissionDescription = newVal.description
-      }
-    },
-  },
   methods: {
-    async editPermission() {
+    async addPermission() {
       this.isLoading = true
       this.message = ''
       const payload = {
         permission_name: this.permissionName,
         description: this.permissionDescription,
+        core: this.isCorePermission,
       }
       const permissionStore = usePermissionStore()
       try {
-        await permissionStore.editPermission(this.permission.permission_id, payload)
+        await permissionStore.addPermission(payload)
         if (!permissionStore.error) {
-          this.message = 'Permission updated successfully'
+          this.message = 'Permission created successfully'
           this.messageType = 'success'
+          // Clear the form fields
+          this.permissionName = ''
+          this.permissionDescription = ''
+          this.isCorePermission = false
           // Optionally, close the modal
-          // const modalElement = document.getElementById('editPermissionModal')
-          // const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement)
-          // modalInstance.hide()
+          // this.$refs.addPermissionModal.hide()
           // Update the permission list
           await permissionStore.fetchPermissions()
         } else {
@@ -48,9 +41,9 @@ export default {
           this.messageType = 'danger'
         }
       } catch (error) {
-        this.message = 'Error updating permission'
+        this.message = 'Error adding permission'
         this.messageType = 'danger'
-        console.error('Error updating permission:', error)
+        console.error('Error adding permission:', error)
       } finally {
         this.isLoading = false
       }
@@ -62,10 +55,10 @@ export default {
 <template>
   <div
     class="modal fade"
-    id="editPermissionModal"
+    id="addPermissionModal"
     tabindex="-1"
     aria-hidden="true"
-    ref="editPermissionModal"
+    ref="addPermissionModal"
   >
     <div class="modal-dialog modal-dialog-centered modal-simple">
       <div class="modal-content">
@@ -77,36 +70,20 @@ export default {
             aria-label="Close"
           ></button>
           <div class="text-center mb-6">
-            <h4 class="mb-2">Edit Permission</h4>
-            <p>Edit permission as per your requirements.</p>
+            <h4 class="mb-2">Add New Permission</h4>
+            <p>Permissions you may use and assign to your users.</p>
           </div>
-          <div class="alert alert-warning d-flex align-items-start" role="alert">
-            <span class="alert-icon me-4 rounded-2"
-              ><i class="ti ti-alert-triangle ti-md"></i
-            ></span>
-            <span>
-              <span class="alert-heading mb-1 h5">Warning</span><br />
-              <span class="mb-0 p"
-                >By editing the permission name, you might break the system permissions
-                functionality. Please ensure you're absolutely certain before proceeding.</span
-              >
-            </span>
-          </div>
-          <form
-            id="editPermissionForm"
-            class="row pt-2 row-gap-2 gx-4"
-            @submit.prevent="editPermission"
-          >
-            <div class="col-sm-12">
-              <label class="form-label" for="editPermissionName">Permission Name</label>
+          <form id="addPermissionForm" class="row" @submit.prevent="addPermission">
+            <div class="col-12 mb-4">
+              <label class="form-label" for="modalPermissionName">Permission Name</label>
               <input
                 type="text"
-                id="editPermissionName"
-                name="editPermissionName"
+                id="modalPermissionName"
+                name="modalPermissionName"
                 class="form-control"
                 v-model="permissionName"
                 placeholder="Permission Name"
-                tabindex="-1"
+                autofocus
               />
             </div>
             <div class="col-12 mb-4">
@@ -120,16 +97,23 @@ export default {
                 rows="3"
               ></textarea>
             </div>
-            <div class="col-sm-3 mb-4">
-              <label class="form-label invisible d-none d-sm-inline-block">Button</label>
-              <button type="submit" class="btn btn-primary mt-1 mt-sm-0" :disabled="isLoading">
+            <div class="col-12 text-center demo-vertical-spacing">
+              <button type="submit" class="btn btn-primary me-4" :disabled="isLoading">
                 <span
                   v-if="isLoading"
                   class="spinner-border spinner-border-sm"
                   role="status"
                   aria-hidden="true"
                 ></span>
-                Update
+                Create Permission
+              </button>
+              <button
+                type="reset"
+                class="btn btn-label-secondary"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                Discard
               </button>
             </div>
           </form>
@@ -142,4 +126,4 @@ export default {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="postcss" scoped></style>

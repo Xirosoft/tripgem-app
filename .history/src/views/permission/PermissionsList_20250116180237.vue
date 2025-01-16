@@ -1,7 +1,6 @@
 <script>
 import AddPermissionModal from '@/components/permission/AddPermissionModal.vue'
 import EditPermissionModal from '@/components/permission/EditPermissionModal.vue'
-import { Modal } from 'bootstrap'
 import 'datatables.net-bs5'
 import $ from 'jquery'
 import { usePermissionStore } from '../../stores/permission/PermissionStore.js'
@@ -75,7 +74,7 @@ export default {
                   aria-controls="DataTables_Table_0"
                   type="button"
                   data-bs-toggle="modal"
-                  data-bs-target="#editPermissionModal"
+                  data-bs-target="#EditPermissionModal"
                 ><i class="ti ti-edit ti-md"></i> Edit</button>
                 <button class="btn rounded-pill btn-label-danger waves-effect delete-permission"><i class="ti ti-trash ti-md"></i> Delete</button>
               `
@@ -124,9 +123,7 @@ export default {
             text: '<i class="ti ti-plus me-0 me-sm-1 ti-xs"></i><span class="d-none d-sm-inline-block">Add Permission</span>',
             className: 'add-new btn btn-primary ms-2 ms-sm-0',
             action: () => {
-              const modalElement = document.getElementById('addPermissionModal')
-              const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement)
-              modalInstance.show()
+              $('#addPermissionModal').modal('show')
             },
           },
         ],
@@ -164,9 +161,7 @@ export default {
         this.selectedPermission = this.permissionStore.permissions.find(
           (permission) => permission.permission_id === id,
         )
-        const modalElement = document.getElementById('editPermissionModal')
-        const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement)
-        modalInstance.show()
+        $('#editPermissionModal').modal('show')
       })
 
       // Bind delete event
@@ -250,7 +245,7 @@ export default {
       </div>
     </div>
     <AddPermissionModal />
-    <EditPermissionModal :permission="selectedPermission" />
+    <EditPermissionModal />
   </div>
 </template>
 

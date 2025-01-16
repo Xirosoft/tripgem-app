@@ -1,8 +1,8 @@
 <script>
 import AddPermissionModal from '@/components/permission/AddPermissionModal.vue'
 import EditPermissionModal from '@/components/permission/EditPermissionModal.vue'
-import { Modal } from 'bootstrap'
 import 'datatables.net-bs5'
+import { Modal } from 'bootstrap'
 import $ from 'jquery'
 import { usePermissionStore } from '../../stores/permission/PermissionStore.js'
 
@@ -69,14 +69,7 @@ export default {
             data: null,
             render: function () {
               return `
-                <button
-                class="btn rounded-pill btn-label-primary waves-effect edit-permission"
-                 tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editPermissionModal"
-                ><i class="ti ti-edit ti-md"></i> Edit</button>
+                <button class="btn rounded-pill btn-label-primary waves-effect edit-permission"><i class="ti ti-edit ti-md"></i> Edit</button>
                 <button class="btn rounded-pill btn-label-danger waves-effect delete-permission"><i class="ti ti-trash ti-md"></i> Delete</button>
               `
             },

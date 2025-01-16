@@ -69,14 +69,7 @@ export default {
             data: null,
             render: function () {
               return `
-                <button
-                class="btn rounded-pill btn-label-primary waves-effect edit-permission"
-                 tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editPermissionModal"
-                ><i class="ti ti-edit ti-md"></i> Edit</button>
+                <button class="btn rounded-pill btn-label-primary waves-effect edit-permission"><i class="ti ti-edit ti-md"></i> Edit</button>
                 <button class="btn rounded-pill btn-label-danger waves-effect delete-permission"><i class="ti ti-trash ti-md"></i> Delete</button>
               `
             },
