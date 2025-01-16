@@ -16,7 +16,6 @@ export default {
       table: null,
       permissionStore: null,
       isLoading: false,
-      selectedPermission: null,
     }
   },
   async created() {
@@ -72,7 +71,7 @@ export default {
                   <i class="ti ti-dots-vertical"></i>
                 </a>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item edit-permission" href="javascript:void(0);"><i class="ti ti-pencil me-1"></i>Edit</a>
+                  <a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-pencil me-1"></i>Edit</a>
                   <a class="dropdown-item" href="javascript:void(0);"><i class="ti ti-eye me-1"></i>View</a>
                   <a class="dropdown-item text-danger delete-permission" href="javascript:void(0);"><i class="ti ti-trash me-1"></i>Delete</a>
                 </div>
@@ -152,13 +151,6 @@ export default {
           .closest('table')
           .find('tbody input[type="checkbox"]:checked').length
         $('.select-all').prop('checked', totalCheckboxes === selectedCheckboxes)
-      })
-
-      // Bind edit event
-      $(this.$refs.permissionsTable).on('click', '.edit-permission', (e) => {
-        const id = $(e.currentTarget).closest('tr').find('td').eq(1).text()
-        this.selectedPermission = this.permissionStore.permissions.find(permission => permission.permission_id === id)
-        $('#editPermissionModal').modal('show')
       })
 
       // Bind delete event
@@ -243,7 +235,7 @@ export default {
       </div>
     </div>
     <AddPermissionModal />
-    <EditPermissionModal :permission="selectedPermission" />
+    <EditPermissionModal />
   </div>
 </template>
 

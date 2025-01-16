@@ -66,33 +66,6 @@ export const usePermissionStore = defineStore('PermissionsList', {
       }
     },
 
-    async editPermission(id, payload) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await axios.put(`${config.apiUrl}/permissions/edit/${id}`, payload, {
-          headers: config.getHeaders(),
-        })
-        if (response.data.success) {
-          const index = this.permissions.findIndex((permission) => permission.permission_id === id)
-          if (index !== -1) {
-            this.permissions[index] = response.data.data
-          }
-          this.setMessage('Permission updated successfully', 'success')
-        } else {
-          this.error = response.data.message || 'Failed to update permission'
-          this.setMessage(this.error, 'danger')
-        }
-        this.loading = false
-      } catch (error) {
-        console.error('Error updating permission:', error)
-        this.error = error.message || 'Failed to update permission'
-        this.loading = false
-        this.setMessage(this.error, 'danger')
-        throw error
-      }
-    },
-
     async deletePermission(id) {
       this.loading = true
       this.error = null

@@ -2,6 +2,7 @@
 import AddPermissionModal from '@/components/permission/AddPermissionModal.vue'
 import EditPermissionModal from '@/components/permission/EditPermissionModal.vue'
 import 'datatables.net-bs5'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import $ from 'jquery'
 import { usePermissionStore } from '../../stores/permission/PermissionStore.js'
 
