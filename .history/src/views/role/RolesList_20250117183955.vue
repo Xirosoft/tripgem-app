@@ -2,9 +2,7 @@
 import AddRoleModal from '@/components/role/AddRoleModal.vue'
 import EditRoleModal from '@/components/role/EditRoleModal.vue'
 import { Modal } from 'bootstrap'
-import { useToast } from 'vue-toastification'
 import { useRolesListStore } from '../../stores/role/RoleStore.js'
-
 export default {
   name: 'RolesList',
   components: {
@@ -18,10 +16,9 @@ export default {
   },
   setup() {
     const rolesListStore = useRolesListStore()
-    const toast = useToast()
     rolesListStore.fetchRoles()
 
-    return { rolesListStore, toast }
+    return { rolesListStore }
   },
   methods: {
     openEditModal(roleId) {
@@ -37,9 +34,9 @@ export default {
         const rolesListStore = useRolesListStore()
         try {
           await rolesListStore.deleteRole(roleId)
-          this.toast.success('Role deleted successfully')
+          alert('Role deleted successfully')
         } catch (error) {
-          this.toast.error('Error deleting role')
+          alert('Error deleting role')
           console.error('Error deleting role:', error)
         }
       }
@@ -155,7 +152,6 @@ export default {
   position: absolute;
   font-size: 50px;
   top: 0;
-  right: 10px;
-  opacity: 0.1;
+  right: 0;
 }
 </style>
