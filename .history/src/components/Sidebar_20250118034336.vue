@@ -49,6 +49,11 @@ export default {
               path: '/user/add',
               active: false,
             },
+            // {
+            //   title: 'Add user',
+            //   path: '/user/add',
+            //   active: false,
+            // },
           ],
         },
         {
@@ -79,14 +84,9 @@ export default {
       ],
     }
   },
-  mounted() {
-    // const permissionsStore = usePermissionsStore()
-    // permissionsStore.fetchPermissions()
-    // console.log('permissions', permissionsStore.permissions)
-    // console.log(uCan('read | write | create', 'manage_users'))
-  },
+
   methods: {
-    menuToggle(event) {
+    menuToggle() {
       const menuItem = event.target.closest('.menu-item')
       if (menuItem) {
         menuItem.classList.toggle('active')

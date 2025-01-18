@@ -19,11 +19,6 @@ const routes = [
     path: '/users',
     name: 'UserList',
     component: UserList,
-    meta: {
-      requiresAuth: true,
-      permissions: 'read | write | create',
-      permissionName: 'manage_dashboard',
-    },
   },
   {
     path: '/login',

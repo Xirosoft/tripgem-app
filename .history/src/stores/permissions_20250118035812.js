@@ -15,15 +15,11 @@ export const usePermissionsStore = defineStore('permissions', {
         const response = await axios.get(`${config.apiUrl}/permissions/user/${userId}`, {
           headers: config.getHeaders(),
         }) // Replace with your API URL
-        console.log('Response:', response.data)
+        console.log('Response:', response)
 
         if (response.data.success) {
-          this.permissions = response.data.data.map((permission) => ({
-            name: permission.name,
-            can_read: permission.can_read === '1',
-            can_write: permission.can_write === '1',
-            can_create: permission.can_create === '1',
-          }))
+          this.permissions = response.data
+          console.log('Permissions fetched:', this.permissions)
         } else {
           console.error('Error fetching permissions: Unsuccessful response')
         }

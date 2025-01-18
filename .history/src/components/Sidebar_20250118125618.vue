@@ -83,7 +83,7 @@ export default {
     // const permissionsStore = usePermissionsStore()
     // permissionsStore.fetchPermissions()
     // console.log('permissions', permissionsStore.permissions)
-    // console.log(uCan('read | write | create', 'manage_users'))
+    console.log(uCan('read | write | create', 'manage_users'))
   },
   methods: {
     menuToggle(event) {

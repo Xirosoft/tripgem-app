@@ -1,4 +1,5 @@
 <script>
+import { usePermissionsStore } from '@/stores/permissions.js'
 import TripgemLogo from './Logo.vue'
 
 export default {
@@ -15,39 +16,45 @@ export default {
           icon: 'ti ti-home',
           path: '/',
           active: true,
+          permission: 'view_dashboard',
         },
         {
           title: 'Merchant',
           icon: 'ti ti-calendar',
           active: false,
+          permission: 'manage_merchants',
           submenu: [
             {
               title: 'All Merchants',
               path: '/merchants',
               active: false,
+              permission: 'view_merchants',
             },
             {
               title: 'Add Merchant',
               path: '/merchant/add',
               active: false,
+              permission: 'add_merchants',
             },
           ],
         },
-
         {
           title: 'Users',
           icon: 'menu-icon tf-icons ti ti-users',
           active: false,
+          permission: 'manage_users',
           submenu: [
             {
               title: 'All Users',
               path: '/users',
               active: false,
+              permission: 'view_users',
             },
             {
               title: 'Add user',
               path: '/user/add',
               active: false,
+              permission: 'add_users',
             },
           ],
         },
@@ -55,16 +62,19 @@ export default {
           title: 'Roles & Permissions',
           icon: 'menu-icon tf-icons ti ti-settings',
           active: false,
+          permission: 'manage_roles_permissions',
           submenu: [
             {
               title: 'Roles',
               path: '/roles',
               active: false,
+              permission: 'view_roles',
             },
             {
               title: 'Permissions',
               path: '/permissions',
               active: false,
+              permission: 'view_permissions',
             },
           ],
         },
@@ -75,15 +85,23 @@ export default {
           badge: '5',
           badgeClass: 'bg-danger',
           active: false,
+          permission: 'view_notifications',
         },
       ],
     }
   },
+  computed: {
+    filteredMenuItems() {
+      const permissionsStore = usePermissionsStore()
+      return this.menuItems.filter((item) => {
+        const permission = permissionsStore.getPermission(item.permission)
+        return permission.can_read === '1'
+      })
+    },
+  },
   mounted() {
-    // const permissionsStore = usePermissionsStore()
-    // permissionsStore.fetchPermissions()
-    // console.log('permissions', permissionsStore.permissions)
-    // console.log(uCan('read | write | create', 'manage_users'))
+    const permissionsStore = usePermissionsStore()
+    permissionsStore.fetchPermissions()
   },
   methods: {
     menuToggle(event) {
@@ -111,7 +129,7 @@ export default {
 
     <ul class="menu-inner py-1">
       <li
-        v-for="(item, index) in menuItems"
+        v-for="(item, index) in filteredMenuItems"
         :key="index"
         class="menu-item"
         :class="{ 'active open': item.active }"
@@ -137,6 +155,7 @@ export default {
             :key="subIndex"
             class="menu-item"
             :class="{ active: subitem.active }"
+            v-if="permissionsStore.getPermission(subitem.permission).can_read === '1'"
           >
             <router-link :to="subitem.path" class="menu-link">
               <div>{{ subitem.title }}</div>

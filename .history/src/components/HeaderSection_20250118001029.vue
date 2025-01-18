@@ -1,6 +1,5 @@
 <script>
 import UserProfileDropdown from '@/components/user/UserProfileDropdown.vue'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 export default {
   name: 'HeaderSection',
@@ -11,7 +10,6 @@ export default {
     // Ensure Bootstrap dropdowns are initialized
     const dropdownElements = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
     dropdownElements.map(function (dropdownToggleEl) {
-      // eslint-disable-next-line no-undef
       return new bootstrap.Dropdown(dropdownToggleEl)
     })
   },

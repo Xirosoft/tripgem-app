@@ -1,5 +1,6 @@
 <script>
 import TripgemLogo from './Logo.vue'
+import usePermissionsStore from '@/stores/permission/PermissionStore.js'
 
 export default {
   name: 'SideBar',
@@ -49,6 +50,11 @@ export default {
               path: '/user/add',
               active: false,
             },
+            // {
+            //   title: 'Add user',
+            //   path: '/user/add',
+            //   active: false,
+            // },
           ],
         },
         {
@@ -79,14 +85,10 @@ export default {
       ],
     }
   },
-  mounted() {
-    // const permissionsStore = usePermissionsStore()
-    // permissionsStore.fetchPermissions()
-    // console.log('permissions', permissionsStore.permissions)
-    // console.log(uCan('read | write | create', 'manage_users'))
-  },
+
   methods: {
-    menuToggle(event) {
+    manageUsersPermission = usePermissionsStore.fetchPermissions();
+    menuToggle() {
       const menuItem = event.target.closest('.menu-item')
       if (menuItem) {
         menuItem.classList.toggle('active')

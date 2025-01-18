@@ -5,12 +5,16 @@ export default {
   components: {
     RouterLink,
   },
-  methods: {},
+  methods: {
+    // logout() {
+    //   usePermissionsStore().logout()
+    // },
+  },
 }
 </script>
 
 <template>
-  <RouterLink to="/" class="app-brand-link" v-if="uCan('read', 'brand_logo')">
+  <RouterLink to="/" class="app-brand-link">
     <span class="app-brand-logo demo"><img src="/favicon.png" alt /></span>
     <span class="app-brand-text demo menu-text fw-bold">Tripgem</span>
   </RouterLink>

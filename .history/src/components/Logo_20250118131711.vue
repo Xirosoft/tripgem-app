@@ -5,7 +5,9 @@ export default {
   components: {
     RouterLink,
   },
-  methods: {},
+  methods: {
+    console.log(uCan('read | write | create', 'brand_logo'))
+  },
 }
 </script>
 

@@ -38,3 +38,10 @@ export const usePermissionsStore = defineStore('permissions', {
     },
   },
 })
+
+export default {
+  async created() {
+    const permissionStore = usePermissionsStore()
+    await permissionStore.fetchPermissions()
+  },
+}

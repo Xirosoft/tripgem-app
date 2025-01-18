@@ -14,7 +14,6 @@ pinia.use(piniaPluginPersistedstate)
 
 app.use(pinia)
 app.use(router)
-app.mixin(permissionMixin)
 app.use(Toast, {
   position: 'top-right',
   timeout: 3000,
@@ -29,5 +28,5 @@ app.use(Toast, {
   icon: true,
   rtl: false,
 })
-
+app.mixin(permissionMixin)
 app.mount('#app')

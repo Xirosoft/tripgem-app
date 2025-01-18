@@ -31,3 +31,7 @@ app.use(Toast, {
 })
 
 app.mount('#app')
+
+// Initialize permissions once
+app.config.globalProperties.$initializePermissions = permissionMixin.methods.initializePermissions
+app.config.globalProperties.$initializePermissions()

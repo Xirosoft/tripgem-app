@@ -1,4 +1,5 @@
 <script>
+import { usePermissionsStore } from '@/stores/permissions.js'
 import TripgemLogo from './Logo.vue'
 
 export default {
@@ -49,6 +50,11 @@ export default {
               path: '/user/add',
               active: false,
             },
+            // {
+            //   title: 'Add user',
+            //   path: '/user/add',
+            //   active: false,
+            // },
           ],
         },
         {
@@ -80,10 +86,8 @@ export default {
     }
   },
   mounted() {
-    // const permissionsStore = usePermissionsStore()
-    // permissionsStore.fetchPermissions()
-    // console.log('permissions', permissionsStore.permissions)
-    // console.log(uCan('read | write | create', 'manage_users'))
+    const permissionsStore = usePermissionsStore()
+    permissionsStore.fetchPermissions()
   },
   methods: {
     menuToggle(event) {
