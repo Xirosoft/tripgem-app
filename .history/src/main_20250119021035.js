@@ -35,5 +35,4 @@ app.mount('#app')
 
 // Initialize permissions once
 const permissionStore = usePermissionsStore()
-console.log('Fetching initial permissions in main.js...')
 permissionStore.fetchPermissions()

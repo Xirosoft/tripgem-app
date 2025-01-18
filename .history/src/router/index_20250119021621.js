@@ -71,7 +71,6 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const permissionStore = usePermissionsStore()
   if (!permissionStore.permissionsFetched) {
-    console.log('Fetching permissions in router...')
     await permissionStore.fetchPermissions()
   }
 

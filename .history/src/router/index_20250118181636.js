@@ -1,4 +1,3 @@
-import { usePermissionsStore } from '@/stores/permissions' // Import usePermissionsStore
 import AddMerchant from '@/views/AddMerchant.vue'
 import MerchantsList from '@/views/MerchantsList.vue'
 import PermissionsList from '@/views/permission/PermissionsList.vue'
@@ -66,33 +65,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-})
-
-router.beforeEach(async (to, from, next) => {
-  const permissionStore = usePermissionsStore()
-  if (!permissionStore.permissionsFetched) {
-    console.log('Fetching permissions in router...')
-    await permissionStore.fetchPermissions()
-  }
-
-  if (to.meta.requiresAuth) {
-    const permissions = to.meta.permissions.split('|').map((perm) => perm.trim())
-    const permissionName = to.meta.permissionName
-    const permission = permissionStore.permissions.find((perm) => perm.name === permissionName)
-
-    const hasPermission = permissions.some((perm) => {
-      if (perm === 'read') return permission.can_read
-      if (perm === 'write') return permission.can_write
-      if (perm === 'create') return permission.can_create
-      return false
-    })
-
-    if (!hasPermission) {
-      return next('/login')
-    }
-  }
-
-  next()
 })
 
 export default router

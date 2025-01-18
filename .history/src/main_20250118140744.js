@@ -7,7 +7,6 @@ import App from './App.vue'
 import './assets/main.css'
 import router from './router'
 import permissionMixin from './stores/mixins/permissionMixin' // Corrected import path
-import { usePermissionsStore } from './stores/permissions' // Import usePermissionsStore
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -32,8 +31,3 @@ app.use(Toast, {
 })
 
 app.mount('#app')
-
-// Initialize permissions once
-const permissionStore = usePermissionsStore()
-console.log('Fetching initial permissions in main.js...')
-permissionStore.fetchPermissions()

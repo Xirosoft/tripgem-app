@@ -71,14 +71,18 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const permissionStore = usePermissionsStore()
   if (!permissionStore.permissionsFetched) {
-    console.log('Fetching permissions in router...')
     await permissionStore.fetchPermissions()
   }
 
   if (to.meta.requiresAuth) {
     const permissions = to.meta.permissions.split('|').map((perm) => perm.trim())
+    console.log(permissions)
     const permissionName = to.meta.permissionName
     const permission = permissionStore.permissions.find((perm) => perm.name === permissionName)
+
+    if (!permission) {
+      return next('/login')
+    }
 
     const hasPermission = permissions.some((perm) => {
       if (perm === 'read') return permission.can_read

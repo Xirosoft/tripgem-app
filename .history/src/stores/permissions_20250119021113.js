@@ -9,12 +9,13 @@ export const usePermissionsStore = defineStore('permissions', {
   state: () => ({
     permissions: [],
     permissionsFetched: false,
-    pusherInitialized: false, // Track if Pusher is initialized
   }),
   actions: {
     // Fetch the permissions from the API
     async fetchPermissions() {
       console.log('Fetching permissions...')
+
+      if (this.permissionsFetched) return
 
       try {
         const userId = useAuthStore().userId
@@ -31,7 +32,6 @@ export const usePermissionsStore = defineStore('permissions', {
             can_create: permission.can_create === '1',
           }))
           this.permissionsFetched = true
-          console.log('Permissions fetched:', this.permissions)
         } else {
           console.error('Error fetching permissions: Unsuccessful response')
         }
@@ -55,8 +55,6 @@ export const usePermissionsStore = defineStore('permissions', {
 
     // Initialize Pusher for real-time updates
     initializePusher() {
-      if (this.pusherInitialized) return // Ensure Pusher is initialized only once
-
       console.log('Initializing Pusher...')
 
       const pusher = new Pusher('21a8e898a0d7e6578c45', {
@@ -73,7 +71,7 @@ export const usePermissionsStore = defineStore('permissions', {
         console.log('Pusher subscription succeeded')
       })
 
-      // Bind to 'update' event using an arrow function to maintain the correct `this` context
+      // Bind to 'update' event
       channel.bind('update', (data) => {
         console.log('Pusher update event received')
         this.handlePermissionUpdate(data) // Call the update handler
@@ -83,8 +81,6 @@ export const usePermissionsStore = defineStore('permissions', {
       channel.bind('pusher:subscription_error', (status) => {
         console.error('Pusher subscription error:', status)
       })
-
-      this.pusherInitialized = true // Mark Pusher as initialized
     },
   },
   getters: {
@@ -92,5 +88,5 @@ export const usePermissionsStore = defineStore('permissions', {
       return state.permissions.find((perm) => perm.name === name) || {}
     },
   },
-  persist: true, // Enable persisted state
+  // persist: true, // Enable persisted state
 })

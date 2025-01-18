@@ -16,6 +16,8 @@ export const usePermissionsStore = defineStore('permissions', {
     async fetchPermissions() {
       console.log('Fetching permissions...')
 
+      if (this.permissionsFetched) return
+
       try {
         const userId = useAuthStore().userId
         const response = await axios.get(`${config.apiUrl}/permissions/user/${userId}`, {
@@ -31,7 +33,6 @@ export const usePermissionsStore = defineStore('permissions', {
             can_create: permission.can_create === '1',
           }))
           this.permissionsFetched = true
-          console.log('Permissions fetched:', this.permissions)
         } else {
           console.error('Error fetching permissions: Unsuccessful response')
         }
@@ -73,7 +74,7 @@ export const usePermissionsStore = defineStore('permissions', {
         console.log('Pusher subscription succeeded')
       })
 
-      // Bind to 'update' event using an arrow function to maintain the correct `this` context
+      // Bind to 'update' event
       channel.bind('update', (data) => {
         console.log('Pusher update event received')
         this.handlePermissionUpdate(data) // Call the update handler

@@ -95,4 +95,11 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
+// Watch for permission updates and re-evaluate routes
+const permissionStore = usePermissionsStore()
+permissionStore.$subscribe(() => {
+  console.log('Permissions updated, re-evaluating routes...')
+  router.replace(router.currentRoute.value.fullPath)
+})
+
 export default router

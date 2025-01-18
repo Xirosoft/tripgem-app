@@ -16,6 +16,8 @@ export const usePermissionsStore = defineStore('permissions', {
     async fetchPermissions() {
       console.log('Fetching permissions...')
 
+      if (this.permissionsFetched) return
+
       try {
         const userId = useAuthStore().userId
         const response = await axios.get(`${config.apiUrl}/permissions/user/${userId}`, {

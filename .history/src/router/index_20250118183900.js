@@ -21,7 +21,7 @@ const routes = [
     name: 'UserList',
     component: UserList,
     meta: {
-      requiresAuth: true,
+      requiresAuth: false,
       permissions: 'read | write | create',
       permissionName: 'manage_users',
     },
@@ -71,7 +71,6 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const permissionStore = usePermissionsStore()
   if (!permissionStore.permissionsFetched) {
-    console.log('Fetching permissions in router...')
     await permissionStore.fetchPermissions()
   }
 
@@ -79,6 +78,11 @@ router.beforeEach(async (to, from, next) => {
     const permissions = to.meta.permissions.split('|').map((perm) => perm.trim())
     const permissionName = to.meta.permissionName
     const permission = permissionStore.permissions.find((perm) => perm.name === permissionName)
+
+    console.log(permission)
+    if (!permission) {
+      return next('/login')
+    }
 
     const hasPermission = permissions.some((perm) => {
       if (perm === 'read') return permission.can_read

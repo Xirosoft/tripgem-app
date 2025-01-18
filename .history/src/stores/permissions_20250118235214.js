@@ -9,12 +9,13 @@ export const usePermissionsStore = defineStore('permissions', {
   state: () => ({
     permissions: [],
     permissionsFetched: false,
-    pusherInitialized: false, // Track if Pusher is initialized
   }),
   actions: {
     // Fetch the permissions from the API
     async fetchPermissions() {
       console.log('Fetching permissions...')
+
+      if (this.permissionsFetched) return
 
       try {
         const userId = useAuthStore().userId
@@ -31,7 +32,6 @@ export const usePermissionsStore = defineStore('permissions', {
             can_create: permission.can_create === '1',
           }))
           this.permissionsFetched = true
-          console.log('Permissions fetched:', this.permissions)
         } else {
           console.error('Error fetching permissions: Unsuccessful response')
         }
@@ -43,24 +43,13 @@ export const usePermissionsStore = defineStore('permissions', {
     // Method to handle real-time updates from Pusher
     handlePermissionUpdate(data) {
       console.log('Received permission update:', data)
-      this.permissions = data.permissions.map((permission) => ({
-        name: permission.name,
-        can_read: permission.can_read === '1',
-        can_write: permission.can_write === '1',
-        can_create: permission.can_create === '1',
-      }))
+      this.permissions = data.permissions
       this.permissionsFetched = true
-      console.log('Permissions updated:', this.permissions)
     },
 
     // Initialize Pusher for real-time updates
     initializePusher() {
-      if (this.pusherInitialized) return // Ensure Pusher is initialized only once
-
-      console.log('Initializing Pusher...')
-
       const pusher = new Pusher('21a8e898a0d7e6578c45', {
-        // Replace with your Pusher app key
         cluster: 'ap1', // Ensure this matches your Pusher cluster
         forceTLS: true,
         enabledTransports: ['ws', 'wss', 'xhr_streaming', 'xhr_polling'], // Enable HTTP fallback
@@ -68,23 +57,10 @@ export const usePermissionsStore = defineStore('permissions', {
 
       const channel = pusher.subscribe('permissions-updates') // Channel name to listen to
 
-      // Bind to 'pusher:subscription_succeeded' event
-      channel.bind('pusher:subscription_succeeded', () => {
-        console.log('Pusher subscription succeeded')
-      })
-
-      // Bind to 'update' event using an arrow function to maintain the correct `this` context
+      // Bind to 'update' event
       channel.bind('update', (data) => {
-        console.log('Pusher update event received')
         this.handlePermissionUpdate(data) // Call the update handler
       })
-
-      // Bind to 'pusher:subscription_error' event
-      channel.bind('pusher:subscription_error', (status) => {
-        console.error('Pusher subscription error:', status)
-      })
-
-      this.pusherInitialized = true // Mark Pusher as initialized
     },
   },
   getters: {

@@ -7,12 +7,10 @@ export default {
 
     // Fetch initial permissions if not already fetched
     if (!permissionStore.permissionsFetched) {
-      console.log('Fetching initial permissions...')
       await permissionStore.fetchPermissions()
     }
 
     // Initialize Pusher to listen for permission updates
-    console.log('Initializing Pusher in mixin...')
     permissionStore.initializePusher()
   },
 

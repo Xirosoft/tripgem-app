@@ -71,7 +71,6 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const permissionStore = usePermissionsStore()
   if (!permissionStore.permissionsFetched) {
-    console.log('Fetching permissions in router...')
     await permissionStore.fetchPermissions()
   }
 
@@ -80,6 +79,11 @@ router.beforeEach(async (to, from, next) => {
     const permissionName = to.meta.permissionName
     const permission = permissionStore.permissions.find((perm) => perm.name === permissionName)
 
+    // console.log(permission)
+    // if (!permission) {
+    //   return next('/login')
+    // }
+
     const hasPermission = permissions.some((perm) => {
       if (perm === 'read') return permission.can_read
       if (perm === 'write') return permission.can_write
@@ -87,6 +91,7 @@ router.beforeEach(async (to, from, next) => {
       return false
     })
 
+    console.log('Has permission:', hasPermission)
     if (!hasPermission) {
       return next('/login')
     }

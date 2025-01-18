@@ -4,28 +4,24 @@ import { usePermissionsStore } from '@/stores/permissions'
 export default {
   async created() {
     const permissionStore = usePermissionsStore()
-
-    // Fetch initial permissions if not already fetched
     if (!permissionStore.permissionsFetched) {
-      console.log('Fetching initial permissions...')
       await permissionStore.fetchPermissions()
     }
-
-    // Initialize Pusher to listen for permission updates
-    console.log('Initializing Pusher in mixin...')
-    permissionStore.initializePusher()
   },
-
   methods: {
-    // Check if the user has the specific permission action (read, write, create)
-    uCan(action, permissionName) {
+    async uCan(action, permissionName) {
       const permissionStore = usePermissionsStore()
+
+      // Ensure permissions are loaded
+      if (!permissionStore.permissionsFetched) {
+        await permissionStore.fetchPermissions()
+      }
 
       // Find the specific permission
       const permission = permissionStore.getPermission(permissionName)
       if (!permission) return false
 
-      // Check actions (read, write, create)
+      // Check actions
       const actions = action.split('|').map((act) => act.trim())
       return actions.some((act) => {
         return act === 'read'
