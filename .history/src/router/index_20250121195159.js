@@ -71,46 +71,23 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const permissionStore = usePermissionsStore()
   if (!permissionStore.permissionsFetched) {
+    console.log('Fetching permissions in router...')
     await permissionStore.fetchPermissions()
   }
 
   if (to.meta.requiresAuth) {
+    console.log('Checking auth...', to.meta.requiresAuth)
+    console.log('Checking auth...', to.meta.requiresAuth)
+
     const permissions = to.meta.permissions.split('|').map((perm) => perm.trim())
     const permissionName = to.meta.permissionName
     const permission = permissionStore.permissions.find((perm) => perm.name === permissionName)
 
-    const hasPermission = permissions.some((act) => {
-      switch (act) {
-        case 'read':
-          if (parseInt(permission.can_read) === 1 || permission.can_read === true) {
-            // console.log('Read permission granted: User has read, write, or create access')
-            return true
-          } else {
-            // console.log('Read permission denied: User lacks required access')
-            return false
-          }
-        case 'write':
-          // console.log('Checking write permission:', permission.can_write)
-
-          if (parseInt(permission.can_write) === 1 || permission.can_write === true) {
-            // console.log('write permission granted: User has read, write, or create access')
-            return true
-          } else {
-            // console.log('write permission denied: User lacks required access')
-            return false
-          }
-        case 'create':
-          if (parseInt(permission.can_create) === 1 || permission.can_create === true) {
-            // console.log('createß permission granted: User has read, write, or create access')
-            return true
-          } else {
-            // console.log('createß permission denied: User lacks required access')
-            return false
-          }
-        default:
-          // console.log('Unknown permission action:', act)
-          return true
-      }
+    const hasPermission = permissions.some((perm) => {
+      if (perm === 'read') return permission.can_read
+      if (perm === 'write') return permission.can_write
+      if (perm === 'create') return permission.can_create
+      return false
     })
 
     if (!hasPermission) {

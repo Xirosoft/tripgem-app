@@ -19,7 +19,7 @@ export default {
       const permissionStore = usePermissionsStore()
       const permission = permissionStore.getPermission(permissionName)
 
-      // console.log(permission)
+      console.log()
 
       if (!permission) {
         return false
@@ -35,32 +35,32 @@ export default {
         switch (act) {
           case 'read':
             if (parseInt(permission.can_read) === 1 || permission.can_read === true) {
-              // console.log('Read permission granted: User has read, write, or create access')
+              console.log('Read permission granted: User has read, write, or create access')
               return true
             } else {
-              // console.log('Read permission denied: User lacks required access')
+              console.log('Read permission denied: User lacks required access')
               return false
             }
           case 'write':
-            // console.log('Checking write permission:', permission.can_write)
+            console.log('Checking write permission:', permission.can_write)
 
             if (parseInt(permission.can_write) === 1 || permission.can_write === true) {
-              // console.log('write permission granted: User has read, write, or create access')
+              console.log('write permission granted: User has read, write, or create access')
               return true
             } else {
-              // console.log('write permission denied: User lacks required access')
+              console.log('write permission denied: User lacks required access')
               return false
             }
           case 'create':
             if (parseInt(permission.can_create) === 1 || permission.can_create === true) {
-              // console.log('createß permission granted: User has read, write, or create access')
+              console.log('createß permission granted: User has read, write, or create access')
               return true
             } else {
-              // console.log('createß permission denied: User lacks required access')
+              console.log('createß permission denied: User lacks required access')
               return false
             }
           default:
-            // console.log('Unknown permission action:', act)
+            console.log('Unknown permission action:', act)
             return true
         }
       })

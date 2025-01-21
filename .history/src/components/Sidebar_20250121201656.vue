@@ -1,6 +1,6 @@
 <script>
-import { usePermissionsStore } from '@/stores/permissions.js'
 import TripgemLogo from './Logo.vue'
+// import PermissionMixin from '@/stores/mixins/permissionMixin'
 
 export default {
   name: 'SideBar',
@@ -16,28 +16,27 @@ export default {
           icon: 'ti ti-home',
           path: '/',
           active: true,
-          permission: 'view_dashboard',
+          permission: 'dashboard',
         },
         {
           title: 'Merchant',
           icon: 'ti ti-calendar',
           active: false,
-          permission: 'manage_merchants',
+          permission: 'merchant',
           submenu: [
             {
               title: 'All Merchants',
               path: '/merchants',
               active: false,
-              permission: 'view_merchants',
             },
             {
               title: 'Add Merchant',
               path: '/merchant/add',
               active: false,
-              permission: 'add_merchants',
             },
           ],
         },
+
         {
           title: 'Users',
           icon: 'menu-icon tf-icons ti ti-users',
@@ -48,13 +47,11 @@ export default {
               title: 'All Users',
               path: '/users',
               active: false,
-              permission: 'view_users',
             },
             {
               title: 'Add user',
               path: '/user/add',
               active: false,
-              permission: 'add_users',
             },
           ],
         },
@@ -62,19 +59,17 @@ export default {
           title: 'Roles & Permissions',
           icon: 'menu-icon tf-icons ti ti-settings',
           active: false,
-          permission: 'manage_roles_permissions',
+          permission: 'roles_permissions',
           submenu: [
             {
               title: 'Roles',
               path: '/roles',
               active: false,
-              permission: 'view_roles',
             },
             {
               title: 'Permissions',
               path: '/permissions',
               active: false,
-              permission: 'view_permissions',
             },
           ],
         },
@@ -85,32 +80,16 @@ export default {
           badge: '5',
           badgeClass: 'bg-danger',
           active: false,
-          permission: 'view_notifications',
+          permission: 'notifications',
         },
       ],
     }
   },
+  mounted() {},
   computed: {
     filteredMenuItems() {
-      const permissionsStore = usePermissionsStore()
-      return this.menuItems.filter((item) => {
-        const permission = permissionsStore.getPermission(item.permission)
-        return permission.can_read === '1'
-      })
+      return this.menuItems.filter((item) => this.uCan('read', item.permission))
     },
-    getFilteredSubmenu() {
-      return (submenuItems) => {
-        const permissionsStore = usePermissionsStore()
-        return submenuItems.filter((item) => {
-          const permission = permissionsStore.getPermission(item.permission)
-          return permission.can_read === '1'
-        })
-      }
-    },
-  },
-  mounted() {
-    const permissionsStore = usePermissionsStore()
-    permissionsStore.fetchPermissions()
   },
   methods: {
     menuToggle(event) {
@@ -151,9 +130,16 @@ export default {
             {{ item.badge }}
           </div>
         </router-link>
+        <a v-else href="javascript:void(0);" class="menu-link menu-toggle">
+          <i :class="`menu-icon tf-icons ${item.icon}`"></i>
+          <div>{{ item.title }}</div>
+          <div v-if="item.badge" :class="`badge ${item.badgeClass} rounded-pill ms-auto`">
+            {{ item.badge }}
+          </div>
+        </a>
         <ul v-if="item.submenu" class="menu-sub">
           <li
-            v-for="(subitem, subIndex) in getFilteredSubmenu(item.submenu)"
+            v-for="(subitem, subIndex) in item.submenu"
             :key="subIndex"
             class="menu-item"
             :class="{ active: subitem.active }"

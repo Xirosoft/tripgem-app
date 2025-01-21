@@ -33,7 +33,6 @@ export default {
               title: 'Add Merchant',
               path: '/merchant/add',
               active: false,
-              permission: 'add_merchant',
             },
           ],
         },
@@ -53,7 +52,6 @@ export default {
               title: 'Add user',
               path: '/user/add',
               active: false,
-              permission: 'add_user',
             },
           ],
         },
@@ -101,11 +99,6 @@ export default {
         menuItem.classList.toggle('open')
       }
     },
-    filteredSubmenuItems(submenu) {
-      return submenu.filter(
-        (subitem) => !subitem.permission || this.uCan('create', subitem.permission),
-      )
-    },
   },
 }
 </script>
@@ -146,7 +139,7 @@ export default {
         </a>
         <ul v-if="item.submenu" class="menu-sub">
           <li
-            v-for="(subitem, subIndex) in filteredSubmenuItems(item.submenu)"
+            v-for="(subitem, subIndex) in item.submenu"
             :key="subIndex"
             class="menu-item"
             :class="{ active: subitem.active }"

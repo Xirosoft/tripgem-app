@@ -16,7 +16,7 @@ export default {
           icon: 'ti ti-home',
           path: '/',
           active: true,
-          permission: 'user_panel',
+          permission: 'dashboard',
         },
         {
           title: 'Merchant',
@@ -33,7 +33,6 @@ export default {
               title: 'Add Merchant',
               path: '/merchant/add',
               active: false,
-              permission: 'add_merchant',
             },
           ],
         },
@@ -53,7 +52,6 @@ export default {
               title: 'Add user',
               path: '/user/add',
               active: false,
-              permission: 'add_user',
             },
           ],
         },
@@ -61,7 +59,7 @@ export default {
           title: 'Roles & Permissions',
           icon: 'menu-icon tf-icons ti ti-settings',
           active: false,
-          permission: 'add_new_permission',
+          permission: 'roles_permissions',
           submenu: [
             {
               title: 'Roles',
@@ -82,7 +80,7 @@ export default {
           badge: '5',
           badgeClass: 'bg-danger',
           active: false,
-          permission: 'notification_modules',
+          permission: 'notifications',
         },
       ],
     }
@@ -100,11 +98,6 @@ export default {
         menuItem.classList.toggle('active')
         menuItem.classList.toggle('open')
       }
-    },
-    filteredSubmenuItems(submenu) {
-      return submenu.filter(
-        (subitem) => !subitem.permission || this.uCan('create', subitem.permission),
-      )
     },
   },
 }
@@ -146,7 +139,7 @@ export default {
         </a>
         <ul v-if="item.submenu" class="menu-sub">
           <li
-            v-for="(subitem, subIndex) in filteredSubmenuItems(item.submenu)"
+            v-for="(subitem, subIndex) in item.submenu"
             :key="subIndex"
             class="menu-item"
             :class="{ active: subitem.active }"

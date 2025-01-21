@@ -120,7 +120,6 @@ export default defineComponent({
     async editRole() {
       this.isLoading = true
       this.message = ''
-
       const payload = {
         role_name: this.modalRoleName,
         parent_id: this.parentRole,
@@ -132,22 +131,16 @@ export default defineComponent({
           create: document.getElementById(`edit_${permission.permission_name}_create`).checked,
         })),
       }
-
       const rolesListStore = useRolesListStore()
-
       try {
         await rolesListStore.editRole(this.roleId, payload)
-
         if (!rolesListStore.error) {
           await this.mapRolePermissions(this.roleId, this.permissions)
-
           this.toast.success('Role updated successfully')
-
-          // Update router or reload permissions dynamically
+          this.$emit('modal-open', 'editRoleModal', 'hide')
           const response = await axios.get(`${config.apiUrl}/permissions/user/${this.userId}`, {
             headers: config.getHeaders(),
           })
-
           const formattedResponse = {
             user_id: this.userId,
             permissions: response.data.data.map((permission) => ({
@@ -157,12 +150,7 @@ export default defineComponent({
               can_create: permission.can_create,
             })),
           }
-
-          // Update permissions globally
           handlePermissionUpdateMixin(formattedResponse)
-
-          // Notify router of changes
-          this.$router.replace(this.$router.currentRoute.fullPath)
 
           await rolesListStore.fetchRoles()
         } else {

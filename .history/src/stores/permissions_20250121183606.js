@@ -26,7 +26,7 @@ export const usePermissionsStore = defineStore('permissions', {
             can_create: permission.can_create === '1',
           }))
           this.permissionsFetched = true
-          // console.log('Permissions fetched:', this.permissions)
+          console.log('Permissions fetched:', this.permissions)
         } else {
           console.error('Error fetching permissions: Unsuccessful response')
         }
@@ -38,11 +38,6 @@ export const usePermissionsStore = defineStore('permissions', {
     // Method to update permissions
     updatePermissions(updatedPermissions) {
       this.permissions = [...updatedPermissions]
-      this.notifyPermissionChange()
-    },
-
-    notifyPermissionChange() {
-      this.$patch({ permissions: [...this.permissions] })
     },
   },
   getters: {

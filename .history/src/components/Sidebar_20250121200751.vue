@@ -1,6 +1,5 @@
 <script>
 import TripgemLogo from './Logo.vue'
-// import PermissionMixin from '@/stores/mixins/permissionMixin'
 
 export default {
   name: 'SideBar',
@@ -16,13 +15,11 @@ export default {
           icon: 'ti ti-home',
           path: '/',
           active: true,
-          permission: 'user_panel',
         },
         {
           title: 'Merchant',
           icon: 'ti ti-calendar',
           active: false,
-          permission: 'merchant_module',
           submenu: [
             {
               title: 'All Merchants',
@@ -33,7 +30,6 @@ export default {
               title: 'Add Merchant',
               path: '/merchant/add',
               active: false,
-              permission: 'add_merchant',
             },
           ],
         },
@@ -42,7 +38,6 @@ export default {
           title: 'Users',
           icon: 'menu-icon tf-icons ti ti-users',
           active: false,
-          permission: 'manage_users',
           submenu: [
             {
               title: 'All Users',
@@ -53,7 +48,6 @@ export default {
               title: 'Add user',
               path: '/user/add',
               active: false,
-              permission: 'add_user',
             },
           ],
         },
@@ -61,7 +55,6 @@ export default {
           title: 'Roles & Permissions',
           icon: 'menu-icon tf-icons ti ti-settings',
           active: false,
-          permission: 'add_new_permission',
           submenu: [
             {
               title: 'Roles',
@@ -82,16 +75,15 @@ export default {
           badge: '5',
           badgeClass: 'bg-danger',
           active: false,
-          permission: 'notification_modules',
         },
       ],
     }
   },
-  mounted() {},
-  computed: {
-    filteredMenuItems() {
-      return this.menuItems.filter((item) => this.uCan('read', item.permission))
-    },
+  mounted() {
+    const permissionsStore = usePermissionsStore()
+    permissionsStore.fetchPermissions()
+    console.log('permissions', permissionsStore.permissions)
+    console.log(uCan('read | write | create', 'manage_users'))
   },
   methods: {
     menuToggle(event) {
@@ -100,11 +92,6 @@ export default {
         menuItem.classList.toggle('active')
         menuItem.classList.toggle('open')
       }
-    },
-    filteredSubmenuItems(submenu) {
-      return submenu.filter(
-        (subitem) => !subitem.permission || this.uCan('create', subitem.permission),
-      )
     },
   },
 }
@@ -124,7 +111,7 @@ export default {
 
     <ul class="menu-inner py-1">
       <li
-        v-for="(item, index) in filteredMenuItems"
+        v-for="(item, index) in menuItems"
         :key="index"
         class="menu-item"
         :class="{ 'active open': item.active }"
@@ -146,7 +133,7 @@ export default {
         </a>
         <ul v-if="item.submenu" class="menu-sub">
           <li
-            v-for="(subitem, subIndex) in filteredSubmenuItems(item.submenu)"
+            v-for="(subitem, subIndex) in item.submenu"
             :key="subIndex"
             class="menu-item"
             :class="{ active: subitem.active }"

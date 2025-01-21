@@ -19,7 +19,7 @@ export default {
       const permissionStore = usePermissionsStore()
       const permission = permissionStore.getPermission(permissionName)
 
-      // console.log(permission)
+      console.log(permission)
 
       if (!permission) {
         return false

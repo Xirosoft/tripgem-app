@@ -80,6 +80,8 @@ router.beforeEach(async (to, from, next) => {
     const permission = permissionStore.permissions.find((perm) => perm.name === permissionName)
 
     const hasPermission = permissions.some((act) => {
+      // console.log('Checking action:', act)
+
       switch (act) {
         case 'read':
           if (parseInt(permission.can_read) === 1 || permission.can_read === true) {
