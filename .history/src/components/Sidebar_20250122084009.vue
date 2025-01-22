@@ -175,8 +175,8 @@ export default {
   box-shadow: 0px 2px 6px 0px rgba(115, 103, 240, 0.3);
   color: #444050;
 }
-.bg-menu-theme .menu-inner .menu-sub .menu-item:not(.active) > .menu-link.router-link-active:hover::before {
-    color: #6d6b77 !important;
+.bg-menu-theme .menu-inner .menu-sub .menu-item:not(.active) > .menu-link.router-link-active::before:hover {
+    color: #444050 !important;
 }
 
 </style>

@@ -14,7 +14,7 @@ export const useUsersStore = defineStore('user', {
   actions: {
     async fetchUserDetails() {
       const userId = useAuthStore().userId
-      // console.log(userId)
+      console.log(userId)
 
       this.loading = true
       try {
