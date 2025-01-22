@@ -2,7 +2,7 @@
 import FooterSection from '@/components/FooterSection.vue'
 import HeaderSection from '@/components/HeaderSection.vue'
 import SideBar from '@/components/Sidebar.vue'
-
+import { usePermissionsStore } from './stores/permissions' // Import usePermissionsStore
 import { useAuthStore } from '@/stores/auth'
 import { computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -23,6 +23,11 @@ const handleRouteChange = () => {
 
   if (isLoggedIn.value) {
     if (isAuthPage.value) {
+      // Initialize permissions once
+      const permissionStore = usePermissionsStore()
+      console.log('Fetching initial permissions in main.js...')
+      permissionStore.fetchPermissions()
+
       router.push({ name: 'AdminDashboard' })
     }
   } else if (isAuthPage.value === false) {
@@ -32,7 +37,7 @@ const handleRouteChange = () => {
 }
 
 onMounted(() => {
-  handleRouteChange() // Ensure route change handler is called on mount
+  // handleRouteChange()
 })
 
 watch(route, () => {

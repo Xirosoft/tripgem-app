@@ -2,7 +2,7 @@
 import FooterSection from '@/components/FooterSection.vue'
 import HeaderSection from '@/components/HeaderSection.vue'
 import SideBar from '@/components/Sidebar.vue'
-
+import { usePermissionsStore } from './stores/permissions' // Import usePermissionsStore
 import { useAuthStore } from '@/stores/auth'
 import { computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -17,13 +17,18 @@ const isAuthPage = computed(() => {
 
 const isLoggedIn = computed(() => authStore.isLoggedIn)
 
-const handleRouteChange = () => {
+const handleRouteChange = async () => {
   console.log('Route changed')
   // console.log('isAuthPage:', isAuthPage.value)
 
   if (isLoggedIn.value) {
     if (isAuthPage.value) {
-      router.push({ name: 'AdminDashboard' })
+      const permissionStore = usePermissionsStore()
+      await permissionStore.fetchPermissions()
+      // Initialize permissions once
+      router.push({ name: 'AdminDashboard' }).then(() => {
+        location.reload()
+      })
     }
   } else if (isAuthPage.value === false) {
     console.log('Redirecting to login page')
@@ -32,7 +37,7 @@ const handleRouteChange = () => {
 }
 
 onMounted(() => {
-  handleRouteChange() // Ensure route change handler is called on mount
+  // handleRouteChange()
 })
 
 watch(route, () => {

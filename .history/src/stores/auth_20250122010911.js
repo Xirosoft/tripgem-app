@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../config/config'
-import { usePermissionsStore } from './permissions' // Import permissions store
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -45,12 +44,7 @@ export const useAuthStore = defineStore('auth', {
           this.setToken(response.data.token) // Set the token
           this.setMessage(response.data.message || 'Login successful', 'success')
           this.setIsLoggedIn(true) // Set isLoggedIn to true if token is set
-          this.setEmailId(response.data.user_email, response.data.user_id) // Set user email and ID
-
-          // Fetch permissions after setting user ID
-          const permissionsStore = usePermissionsStore()
-          await permissionsStore.fetchPermissions()
-
+          this.setEmailId(response.data.user_email, response.data.user_id) // Set isLoggedIn to true if token is set
           return response
         } else {
           throw new Error('Invalid response from server')
@@ -69,8 +63,10 @@ export const useAuthStore = defineStore('auth', {
       this.isLoggedIn = false
       this.message = null
       this.messageType = null
-      this.userEmail = ''
-      this.userId = ''
+      setEmailId(email, id) {
+        this.userEmail = ''
+        this.userId = ''
+      },
     },
 
     clearMessage() {

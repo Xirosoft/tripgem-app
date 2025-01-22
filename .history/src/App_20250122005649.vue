@@ -32,7 +32,7 @@ const handleRouteChange = () => {
 }
 
 onMounted(() => {
-  handleRouteChange() // Ensure route change handler is called on mount
+  // handleRouteChange()
 })
 
 watch(route, () => {

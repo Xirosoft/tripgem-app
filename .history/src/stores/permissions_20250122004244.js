@@ -54,5 +54,5 @@ export const usePermissionsStore = defineStore('permissions', {
       return state.permissions.find((perm) => perm.name === name) || {}
     },
   },
-  persist: true, // Enable persisted state
+  // persist: true, // Enable persisted state
 })
