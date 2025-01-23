@@ -1,15 +1,14 @@
 import { usePermissionsStore } from '@/stores/permissions' // Import usePermissionsStore
 import AddMerchant from '@/views/AddMerchant.vue'
+import ForgetPassWord from '@/views/ForgetPassWord.vue'
 import MerchantsList from '@/views/MerchantsList.vue'
 import PermissionsList from '@/views/permission/PermissionsList.vue'
 import RolesList from '@/views/role/RolesList.vue'
 import UserList from '@/views/users/UserList.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import AdminDashboard from '../views/AdminDashboard.vue'
-import ForgetPassWord from '../views/ForgetPassWord.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import RestPassWord from '../views/RestPassWord.vue'
 import TwoStepAuth from '../views/TwoStepAuth.vue'
 
 const routes = [
@@ -47,11 +46,6 @@ const routes = [
     path: '/forget-password',
     name: 'ForgetPassWord',
     component: ForgetPassWord,
-  },
-  {
-    path: '/reset-password',
-    name: 'RestPassWord',
-    component: RestPassWord,
   },
   {
     path: '/merchants',

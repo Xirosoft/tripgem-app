@@ -31,10 +31,10 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 const handleRouteChange = () => {
   // console.log('Route changed to:', route.path)
   console.log('isAuthPage:', isAuthPage.value)
-  console.log('isLoggedIn:', isLoggedIn.value)
+  // console.log('isLoggedIn:', isLoggedIn.value)
 
   if (isLoggedIn.value) {
-    if (!isAuthPage.value) {
+    if (isAuthPage.value) {
       router.push({ name: 'AdminDashboard' })
     }
   } else if (!isAuthPage.value) {
@@ -57,7 +57,7 @@ watch(
   () => route.path,
   (newPath, oldPath) => {
     console.log(`Route changed from ${oldPath} to ${newPath}`)
-    // handleRouteChange()
+    handleRouteChange()
   },
 )
 </script>

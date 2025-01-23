@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
 import TripgemLogo from '@/components/Logo.vue'
 import { useUserStore } from '@/stores/TowStepUser'
@@ -42,6 +41,7 @@ const handleRegister = async () => {
       const endTime = new Date(currentTime.getTime() + 30 * 60000) // 30 minutes from now
       userStore.setEndTime(endTime)
       userStore.setOtpVerify(true)
+      // localStorage.setItem('endTime', endTime)
       setTimeout(() => {
         router.push({ name: 'TwoStepAuth' })
       }, 2000)

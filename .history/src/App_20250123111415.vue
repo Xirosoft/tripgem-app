@@ -20,9 +20,9 @@ const isAuthPage = computed(() => {
 })
 
 // Debugging to ensure the value of route.path and isAuthPage
-// console.log('Initial route.path:', route.path)
-// console.log('Initial isAuthPage:', isAuthPage.value)
-// console.log('route.path === "/login":', route.path.trim().toLowerCase() === '/login')
+console.log('Initial route.path:', route.path)
+console.log('Initial isAuthPage:', isAuthPage.value)
+console.log('route.path === "/login":', route.path.trim().toLowerCase() === '/login')
 
 // Computed property to check if the user is logged in
 const isLoggedIn = computed(() => authStore.isLoggedIn)
@@ -31,18 +31,16 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 const handleRouteChange = () => {
   // console.log('Route changed to:', route.path)
   console.log('isAuthPage:', isAuthPage.value)
-  console.log('isLoggedIn:', isLoggedIn.value)
+  // console.log('isLoggedIn:', isLoggedIn.value)
 
   if (isLoggedIn.value) {
-    if (!isAuthPage.value) {
+    if (isAuthPage.value) {
       router.push({ name: 'AdminDashboard' })
     }
   } else if (!isAuthPage.value) {
-    console.log('User is not logged in and is not on an auth page........')
+    console.log('Redirecting to login page')
   } else {
-    console.log('User is not logged in and is on an auth page')
-
-    // router.push({ name: 'tripgemlogin' }) // Uncomment this when ready
+    router.push({ name: 'tripgemlogin' }) // Uncomment this when ready
   }
 }
 
@@ -57,7 +55,7 @@ watch(
   () => route.path,
   (newPath, oldPath) => {
     console.log(`Route changed from ${oldPath} to ${newPath}`)
-    // handleRouteChange()
+    handleRouteChange()
   },
 )
 </script>

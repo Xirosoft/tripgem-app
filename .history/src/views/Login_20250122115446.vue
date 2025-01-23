@@ -91,7 +91,7 @@ const handleLogin = async () => {
                     <input class="form-check-input" type="checkbox" id="remember-me" />
                     <label class="form-check-label" for="remember-me"> Remember Me </label>
                   </div>
-                  <RouterLink to="/forget-password">
+                  <RouterLink to="/forgot-password">
                     <p class="mb-0">Forgot Password?</p>
                   </RouterLink>
                 </div>

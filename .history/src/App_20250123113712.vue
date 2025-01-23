@@ -34,7 +34,7 @@ const handleRouteChange = () => {
   console.log('isLoggedIn:', isLoggedIn.value)
 
   if (isLoggedIn.value) {
-    if (!isAuthPage.value) {
+    if (isAuthPage.value) {
       router.push({ name: 'AdminDashboard' })
     }
   } else if (!isAuthPage.value) {

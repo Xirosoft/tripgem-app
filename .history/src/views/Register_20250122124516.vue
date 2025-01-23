@@ -42,6 +42,7 @@ const handleRegister = async () => {
       const endTime = new Date(currentTime.getTime() + 30 * 60000) // 30 minutes from now
       userStore.setEndTime(endTime)
       userStore.setOtpVerify(true)
+      // localStorage.setItem('endTime', endTime)
       setTimeout(() => {
         router.push({ name: 'TwoStepAuth' })
       }, 2000)

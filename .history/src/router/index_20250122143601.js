@@ -9,7 +9,6 @@ import AdminDashboard from '../views/AdminDashboard.vue'
 import ForgetPassWord from '../views/ForgetPassWord.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import RestPassWord from '../views/RestPassWord.vue'
 import TwoStepAuth from '../views/TwoStepAuth.vue'
 
 const routes = [
