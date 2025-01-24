@@ -129,21 +129,9 @@ export default {
                 company.company_name ||
                 company.merchant_name ||
                 company.agency_name ||
-                company.name ||
-                company.b2b_name
+                company.affiliate_name
               }}
             </option>
-          </select>
-        </div>
-        <div class="mb-6">
-          <label class="form-label" for="user-status">Status</label>
-          <select id="user-status" class="form-select">
-            <option value="pending">Pending</option>
-            <option value="reject">Reject</option>
-            <option value="approved">Approved</option>
-            <option value="hold">Hold</option>
-            <option value="warning">Warning</option>
-            <option value="suspend">Suspend</option>
           </select>
         </div>
 

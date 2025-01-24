@@ -1,26 +1,11 @@
 <script>
-import { useNewUserModal } from '../../stores/users/NewUserModal.js'
-
 export default {
   name: 'NewUserModal',
-  setup() {
-    const newUserModalStore = useNewUserModal()
-
-    newUserModalStore.fetchRoles()
-
-    return {
-      newUserModalStore,
-    }
-  },
-  methods: {
-    async onParentRoleChange(event) {
-      const parentRoleId = event.target.value
-      console.log('Parent Role ID:', parentRoleId)
-      this.newUserModalStore.filterUserRoles(parentRoleId)
-      await this.newUserModalStore.fetchCompanies(parentRoleId)
-      console.log('Filtered User Roles:', this.newUserModalStore.filteredUserRoles)
-      console.log('Fetched Companies:', this.newUserModalStore.companies)
-    },
+  mounted() {
+    // Initialize offcanvas
+    // eslint-disable-next-line no-undef
+    const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasAddUser'))
+    offcanvas.hide()
   },
 }
 </script>
@@ -88,65 +73,47 @@ export default {
           />
         </div>
         <div class="mb-6">
-          <label class="form-label" for="parent-role">Parent Role</label>
-          <select id="parent-role" class="form-select" @change="onParentRoleChange">
-            <option value="">Select Parent Role</option>
-            <option
-              v-for="role in newUserModalStore.parentRoles"
-              :key="role.role_id"
-              :value="role.role_id"
-            >
-              {{ role.role_name }}
-            </option>
+          <label class="form-label" for="user-role">User Type</label>
+          <select id="user-role" class="form-select">
+            <option value="subscriber">Subscriber</option>
+            <option value="1">Super Admin</option>
+            <option value="6">Merchant Owner</option>
+            <option value="12">Agency</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
         <div class="mb-6">
           <label class="form-label" for="user-role">User Role</label>
           <select id="user-role" class="form-select">
-            <option value="" disabled selected>Select User Role</option>
-            <option
-              v-for="role in newUserModalStore.filteredUserRoles"
-              :key="role.role_id"
-              :value="role.role_id"
-            >
-              {{ role.role_name }}
-            </option>
-          </select>
-        </div>
-        <div
-          class="mb-6"
-          v-if="newUserModalStore.companies && newUserModalStore.companies.length > 0"
-        >
-          <label class="form-label" for="add-user-company">Company</label>
-          <select id="add-user-company" class="form-select">
-            <option value="">Select Company</option>
-            <option
-              v-for="company in newUserModalStore.companies"
-              :key="company.id"
-              :value="company.id"
-            >
-              {{
-                company.company_name ||
-                company.merchant_name ||
-                company.agency_name ||
-                company.name ||
-                company.b2b_name
-              }}
-            </option>
+            <option value="subscriber">Subscriber</option>
+            <option value="editor">Super Admin</option>
+            <option value="maintainer">Maintainer</option>
+            <option value="author">Author</option>
+            <option value="admin">Admin</option>
           </select>
         </div>
         <div class="mb-6">
-          <label class="form-label" for="user-status">Status</label>
-          <select id="user-status" class="form-select">
-            <option value="pending">Pending</option>
-            <option value="reject">Reject</option>
-            <option value="approved">Approved</option>
-            <option value="hold">Hold</option>
-            <option value="warning">Warning</option>
-            <option value="suspend">Suspend</option>
+          <label class="form-label" for="add-user-company">Company</label>
+          <select id="user-role" class="form-select"></select>
+        </div>
+
+        <div class="mb-6">
+          <label class="form-label" for="country">Country</label>
+          <select id="country" class="select2 form-select">
+            <option value="">Select</option>
+            <option value="Australia">Australia</option>
           </select>
         </div>
 
+        <div class="mb-6">
+          <label class="form-label" for="user-plan">Select Plan</label>
+          <select id="user-plan" class="form-select">
+            <option value="basic">Basic</option>
+            <option value="enterprise">Enterprise</option>
+            <option value="company">Company</option>
+            <option value="team">Team</option>
+          </select>
+        </div>
         <button type="submit" class="btn btn-primary me-3 data-submit">Add User</button>
         <button type="reset" class="btn btn-label-danger" data-bs-dismiss="offcanvas">
           Cancel

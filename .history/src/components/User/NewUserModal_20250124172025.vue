@@ -135,17 +135,6 @@ export default {
             </option>
           </select>
         </div>
-        <div class="mb-6">
-          <label class="form-label" for="user-status">Status</label>
-          <select id="user-status" class="form-select">
-            <option value="pending">Pending</option>
-            <option value="reject">Reject</option>
-            <option value="approved">Approved</option>
-            <option value="hold">Hold</option>
-            <option value="warning">Warning</option>
-            <option value="suspend">Suspend</option>
-          </select>
-        </div>
 
         <button type="submit" class="btn btn-primary me-3 data-submit">Add User</button>
         <button type="reset" class="btn btn-label-danger" data-bs-dismiss="offcanvas">

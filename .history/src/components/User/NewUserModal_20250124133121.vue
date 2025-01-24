@@ -13,13 +13,8 @@ export default {
     }
   },
   methods: {
-    async onParentRoleChange(event) {
-      const parentRoleId = event.target.value
-      console.log('Parent Role ID:', parentRoleId)
-      this.newUserModalStore.filterUserRoles(parentRoleId)
-      await this.newUserModalStore.fetchCompanies(parentRoleId)
-      console.log('Filtered User Roles:', this.newUserModalStore.filteredUserRoles)
-      console.log('Fetched Companies:', this.newUserModalStore.companies)
+    onParentRoleChange(event) {
+      this.newUserModalStore.filterUserRoles(event.target.value)
     },
   },
 }
@@ -113,38 +108,9 @@ export default {
             </option>
           </select>
         </div>
-        <div
-          class="mb-6"
-          v-if="newUserModalStore.companies && newUserModalStore.companies.length > 0"
-        >
-          <label class="form-label" for="add-user-company">Company</label>
-          <select id="add-user-company" class="form-select">
-            <option value="">Select Company</option>
-            <option
-              v-for="company in newUserModalStore.companies"
-              :key="company.id"
-              :value="company.id"
-            >
-              {{
-                company.company_name ||
-                company.merchant_name ||
-                company.agency_name ||
-                company.name ||
-                company.b2b_name
-              }}
-            </option>
-          </select>
-        </div>
         <div class="mb-6">
-          <label class="form-label" for="user-status">Status</label>
-          <select id="user-status" class="form-select">
-            <option value="pending">Pending</option>
-            <option value="reject">Reject</option>
-            <option value="approved">Approved</option>
-            <option value="hold">Hold</option>
-            <option value="warning">Warning</option>
-            <option value="suspend">Suspend</option>
-          </select>
+          <label class="form-label" for="add-user-company">Company</label>
+          <select id="user-role" class="form-select"></select>
         </div>
 
         <button type="submit" class="btn btn-primary me-3 data-submit">Add User</button>

@@ -13,13 +13,13 @@ export default {
     }
   },
   methods: {
-    async onParentRoleChange(event) {
+    onParentRoleChange(event) {
       const parentRoleId = event.target.value
-      console.log('Parent Role ID:', parentRoleId)
       this.newUserModalStore.filterUserRoles(parentRoleId)
-      await this.newUserModalStore.fetchCompanies(parentRoleId)
+      this.newUserModalStore.fetchCompanies(parentRoleId)
+      console.log('Parent Role ID:', parentRoleId)
       console.log('Filtered User Roles:', this.newUserModalStore.filteredUserRoles)
-      console.log('Fetched Companies:', this.newUserModalStore.companies)
+      console.log('Filtered User Roles:', this.newUserModalStore.companies)
     },
   },
 }
@@ -113,10 +113,7 @@ export default {
             </option>
           </select>
         </div>
-        <div
-          class="mb-6"
-          v-if="newUserModalStore.companies && newUserModalStore.companies.length > 0"
-        >
+        <div class="mb-6" v-if="newUserModalStore.companies.length > 0">
           <label class="form-label" for="add-user-company">Company</label>
           <select id="add-user-company" class="form-select">
             <option value="">Select Company</option>
@@ -125,25 +122,8 @@ export default {
               :key="company.id"
               :value="company.id"
             >
-              {{
-                company.company_name ||
-                company.merchant_name ||
-                company.agency_name ||
-                company.name ||
-                company.b2b_name
-              }}
+              {{ company.name }}
             </option>
-          </select>
-        </div>
-        <div class="mb-6">
-          <label class="form-label" for="user-status">Status</label>
-          <select id="user-status" class="form-select">
-            <option value="pending">Pending</option>
-            <option value="reject">Reject</option>
-            <option value="approved">Approved</option>
-            <option value="hold">Hold</option>
-            <option value="warning">Warning</option>
-            <option value="suspend">Suspend</option>
           </select>
         </div>
 
