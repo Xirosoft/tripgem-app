@@ -2,7 +2,7 @@
 import 'datatables.net-bs5'
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import $ from 'jquery'
-import NewUserModal from '../../components/User/NewUserModal.vue'
+import NewUserCanvas from '../../components/User/NewUserCanvas.vue'
 import UserFilterComponent from '../../components/User/UserFilterComponent.vue'
 import { useUsersListStore } from '../../stores/users/UsersList.js'
 
@@ -10,7 +10,7 @@ export default {
   name: 'UsersList',
   components: {
     UserFilterComponent,
-    NewUserModal,
+    NewUserCanvas,
   },
   data() {
     return {
