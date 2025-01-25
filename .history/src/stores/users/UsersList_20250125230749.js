@@ -48,7 +48,7 @@ export const useUsersListStore = defineStore('usersList', {
         })
         return response.data.message
       } catch (error) {
-        throw new Error('Failed to delete user', error)
+        throw new Error('Failed to delete user')
       }
     },
 

@@ -21,7 +21,6 @@ export default {
         approved: { title: 'Active', class: 'bg-label-success' },
         inactive: { title: 'Inactive', class: 'bg-label-danger' },
       },
-      isLoading: false,
     }
   },
   async created() {
@@ -186,17 +185,14 @@ export default {
       // this.$refs.filterComponent.addFilters(this.table)
     },
     async deleteUser(userId) {
-      this.isLoading = true
       try {
-        const message = await this.usersListStore.deleteUser(userId)
-        const row = this.table.row((idx, data) => data.user_id === userId)
-        row.remove().draw()
-        alert(message)
+        await this.usersListStore.deleteUser(userId)
+        this.table
+          .row($(`tr[data-id="${userId}"]`))
+          .remove()
+          .draw()
       } catch (error) {
         console.error('Failed to delete user:', error)
-        alert('Failed to delete user')
-      } finally {
-        this.isLoading = false
       }
     },
   },
@@ -254,7 +250,6 @@ export default {
       </table>
     </div>
     <NewUserModal />
-    <div v-if="isLoading" class="loading-spinner"></div>
   </div>
 </template>
 
@@ -267,28 +262,5 @@ table.table.dataTable span.badge {
 
 .selected {
   background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
-}
-
-.loading-spinner {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 </style>

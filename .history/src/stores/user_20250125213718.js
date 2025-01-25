@@ -21,7 +21,7 @@ export const useUsersStore = defineStore('user', {
         const response = await axios.get(`${config.apiUrl}/users/details/${userId}`, {
           headers: config.getHeaders(),
         })
-        this.user = response.data.data.user
+        this.user = response.data.user
         // console.log(this.user.user_id)
         await this.fetchUserRole(this.user.user_id)
         // console.log(response.data)

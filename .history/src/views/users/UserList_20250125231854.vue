@@ -189,7 +189,7 @@ export default {
       this.isLoading = true
       try {
         const message = await this.usersListStore.deleteUser(userId)
-        const row = this.table.row((idx, data) => data.user_id === userId)
+        const row = this.table.row($(`tr[data-id="${userId}"]`))
         row.remove().draw()
         alert(message)
       } catch (error) {

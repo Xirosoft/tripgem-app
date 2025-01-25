@@ -189,8 +189,10 @@ export default {
       this.isLoading = true
       try {
         const message = await this.usersListStore.deleteUser(userId)
-        const row = this.table.row((idx, data) => data.user_id === userId)
-        row.remove().draw()
+        this.table
+          .row($(`tr[data-id="${userId}"]`))
+          .remove()
+          .draw()
         alert(message)
       } catch (error) {
         console.error('Failed to delete user:', error)
@@ -254,7 +256,7 @@ export default {
       </table>
     </div>
     <NewUserModal />
-    <div v-if="isLoading" class="loading-spinner"></div>
+    <div v-if="isLoading" class="loading-spinner">Loading...</div>
   </div>
 </template>
 
