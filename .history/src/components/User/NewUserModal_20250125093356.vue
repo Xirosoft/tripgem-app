@@ -31,19 +31,18 @@ export default {
         first_name: form.userfirstname.value,
         last_name: form.userlastname.value,
         role_id: form.userRole.value,
-        status: form.userStatus.value || 'pending',
-        is_verified: true,
+        status: form.userStatus.value,
       }
 
       try {
         const registerResponse = await this.newUserModalStore.registerUser(userData)
-        const userId = registerResponse ? registerResponse.user_id : null
+        const userId = registerResponse.data ? registerResponse.data.user_id : null
         if (!userId) {
           throw new Error('User ID not found in registration response')
         }
-        const companyId = form.addUserCompany ? form.addUserCompany.value : null
+        const companyId = form.addUserCompany.value
         const roleId = form.userRole.value
-        const status = form.userStatus.value || 'pending'
+        const status = form.userStatus.value
         const parentRoleId = form.parentRole.value
 
         await this.newUserModalStore.assignUserToRole(
@@ -87,9 +86,9 @@ export default {
             type="text"
             class="form-control"
             id="add-user-firstname"
-            placeholder="John"
+            placeholder="John Doe"
             name="userfirstname"
-            aria-label="John"
+            aria-label="John Doe"
           />
         </div>
         <div class="mb-6">
@@ -98,9 +97,9 @@ export default {
             type="text"
             class="form-control"
             id="add-user-lastname"
-            placeholder="Doe"
+            placeholder="John Doe"
             name="userlastname"
-            aria-label="Doe"
+            aria-label="John Doe"
           />
         </div>
         <div class="mb-6">
@@ -137,12 +136,7 @@ export default {
         </div>
         <div class="mb-6">
           <label class="form-label" for="parent-role">Parent Role</label>
-          <select
-            id="parent-role"
-            class="form-select"
-            name="parentRole"
-            @change="onParentRoleChange"
-          >
+          <select id="parent-role" class="form-select" @change="onParentRoleChange">
             <option value="">Select Parent Role</option>
             <option
               v-for="role in newUserModalStore.parentRoles"

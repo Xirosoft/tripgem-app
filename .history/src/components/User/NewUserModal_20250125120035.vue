@@ -32,7 +32,7 @@ export default {
         last_name: form.userlastname.value,
         role_id: form.userRole.value,
         status: form.userStatus.value || 'pending',
-        is_verified: true,
+        is_verified: false,
       }
 
       try {

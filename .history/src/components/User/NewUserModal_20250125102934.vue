@@ -31,19 +31,18 @@ export default {
         first_name: form.userfirstname.value,
         last_name: form.userlastname.value,
         role_id: form.userRole.value,
-        status: form.userStatus.value || 'pending',
-        is_verified: true,
+        status: form.userStatus.value,
       }
 
       try {
         const registerResponse = await this.newUserModalStore.registerUser(userData)
-        const userId = registerResponse ? registerResponse.user_id : null
+        const userId = registerResponse.data ? registerResponse.data.user_id : null
         if (!userId) {
           throw new Error('User ID not found in registration response')
         }
         const companyId = form.addUserCompany ? form.addUserCompany.value : null
         const roleId = form.userRole.value
-        const status = form.userStatus.value || 'pending'
+        const status = form.userStatus.value
         const parentRoleId = form.parentRole.value
 
         await this.newUserModalStore.assignUserToRole(

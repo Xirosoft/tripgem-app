@@ -31,8 +31,7 @@ export default {
         first_name: form.userfirstname.value,
         last_name: form.userlastname.value,
         role_id: form.userRole.value,
-        status: form.userStatus.value || 'pending',
-        is_verified: true,
+        status: form.userStatus.value,
       }
 
       try {
@@ -43,7 +42,7 @@ export default {
         }
         const companyId = form.addUserCompany ? form.addUserCompany.value : null
         const roleId = form.userRole.value
-        const status = form.userStatus.value || 'pending'
+        const status = form.userStatus.value
         const parentRoleId = form.parentRole.value
 
         await this.newUserModalStore.assignUserToRole(
