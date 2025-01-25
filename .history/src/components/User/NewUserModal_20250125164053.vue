@@ -47,7 +47,7 @@ export default {
 
       try {
         const registerResponse = await this.newUserModalStore.registerUser(userData)
-        const userId = registerResponse ? registerResponse.user_id : null
+        const userId = registerResponse.data ? registerResponse.data.user_id : null
         if (!userId) {
           throw new Error('User ID not found in registration response')
         }

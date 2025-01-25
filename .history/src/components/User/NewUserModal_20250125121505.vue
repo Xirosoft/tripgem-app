@@ -63,15 +63,11 @@ export default {
           status,
           parentRoleId,
         )
-        this.message = 'User added successfully. Verify email and phone with OTP.'
+        this.message = 'User added successfully'
         this.messageType = 'success'
       } catch (error) {
         console.error('Error adding user:', error)
-        if (error.response && error.response.data) {
-          this.message = error.response.data.message || 'Error adding user'
-        } else {
-          this.message = 'Error adding user'
-        }
+        this.message = 'Error adding user'
         this.messageType = 'error'
       } finally {
         this.loading = false
@@ -225,7 +221,7 @@ export default {
             role="status"
             aria-hidden="true"
           ></span>
-          <span>Add User</span>
+          <span v-if="!loading">Add User</span>
         </button>
         <button
           type="reset"
@@ -236,7 +232,6 @@ export default {
           Cancel
         </button>
       </form>
-      <br />
       <div
         v-if="message"
         :class="['alert', messageType === 'success' ? 'alert-success' : 'alert-danger']"
