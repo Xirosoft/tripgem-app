@@ -42,7 +42,7 @@ const handleRouteChange = () => {
   } else {
     console.log('User is not logged in and is on an auth page')
 
-    router.push({ name: 'tripgemlogin' }) // Uncomment this when ready
+    // router.push({ name: 'tripgemlogin' }) // Uncomment this when ready
   }
 }
 

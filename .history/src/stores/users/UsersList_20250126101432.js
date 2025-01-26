@@ -6,9 +6,6 @@ export const useUsersListStore = defineStore('usersList', {
   state: () => ({
     users: [],
     roles: [],
-    parentRoles: [],
-    userRoles: [],
-    filteredUserRoles: [],
     companies: [],
     loading: false,
     error: null,
@@ -45,6 +42,50 @@ export const useUsersListStore = defineStore('usersList', {
         throw error
       }
     },
+
+    async fetchRoles() {
+      try {
+        const response = await axios.get(`${config.apiUrl}/roles/list`, {
+          headers: config.getHeaders(),
+        })
+        this.roles = response.data
+      } catch (error) {
+        console.error('Failed to fetch roles:', error)
+        throw new Error('Failed to fetch roles')
+      }
+    },
+
+    async fetchCompanies(roleId) {
+      let endpoint = ''
+      switch (roleId) {
+        case 1:
+          endpoint = '/agencies/view'
+          break
+        case 20:
+          endpoint = '/merchants/view'
+          break
+        case 3:
+          endpoint = '/affiliates/view'
+          break
+        case 4:
+          endpoint = '/agency/b2b/view'
+          break
+        default:
+          this.companies = []
+          return
+      }
+
+      try {
+        const response = await axios.get(`${config.apiUrl}${endpoint}`, {
+          headers: config.getHeaders(),
+        })
+        this.companies = response.data
+      } catch (error) {
+        console.error('Failed to fetch companies:', error)
+        throw new Error('Failed to fetch companies')
+      }
+    },
+
     async deleteUser(userId) {
       try {
         const response = await axios.delete(`${config.apiUrl}/users/delete/${userId}`, {
@@ -53,6 +94,16 @@ export const useUsersListStore = defineStore('usersList', {
         return response.data.message
       } catch (error) {
         throw new Error('Failed to delete user', error)
+      }
+    },
+
+    async editUser(userId, userData) {
+      try {
+        const response = await axios.put(`/api/users/edit/${userId}`, userData)
+        return response.data.message || 'User updated successfully'
+      } catch (error) {
+        console.error('Failed to update user:', error)
+        throw new Error(error.response?.data?.message || 'Failed to update user')
       }
     },
 
@@ -68,9 +119,6 @@ export const useUsersListStore = defineStore('usersList', {
     },
     getAllUsers: (state) => state.users,
     getRoles: (state) => state.roles,
-    getParentRoles: (state) => state.parentRoles,
-    getUserRoles: (state) => state.userRoles,
-    getFilteredUserRoles: (state) => state.filteredUserRoles,
     getCompanies: (state) => state.companies,
   },
 })

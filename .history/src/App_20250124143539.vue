@@ -35,14 +35,14 @@ const handleRouteChange = () => {
 
   if (isLoggedIn.value) {
     if (!isAuthPage.value) {
-      router.push({ name: 'AdminDashboard' })
+      // router.push({ name: 'AdminDashboard' })
     }
   } else if (!isAuthPage.value) {
     console.log('User is not logged in and is not on an auth page........')
   } else {
     console.log('User is not logged in and is on an auth page')
 
-    router.push({ name: 'tripgemlogin' }) // Uncomment this when ready
+    // router.push({ name: 'tripgemlogin' }) // Uncomment this when ready
   }
 }
 

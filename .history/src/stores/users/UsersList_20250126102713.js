@@ -45,6 +45,26 @@ export const useUsersListStore = defineStore('usersList', {
         throw error
       }
     },
+
+    async fetchRoles() {
+      try {
+        const response = await axios.get(`${config.apiUrl}/roles/view`, {
+          headers: config.getHeaders(),
+        })
+        if (response.data.success) {
+          this.roles = response.data.data
+          this.parentRoles = this.roles.filter((role) => role.parent_id === null)
+          this.userRoles = this.roles.filter((role) => role.parent_id !== null)
+        }
+      } catch (error) {
+        console.error('Error fetching roles:', error)
+      }
+    },
+
+    filterUserRoles(parentRoleId) {
+      this.filteredUserRoles = this.userRoles.filter((role) => role.parent_id === parentRoleId)
+    },
+
     async deleteUser(userId) {
       try {
         const response = await axios.delete(`${config.apiUrl}/users/delete/${userId}`, {

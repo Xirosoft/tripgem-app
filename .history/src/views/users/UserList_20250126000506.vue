@@ -162,15 +162,7 @@ export default {
       $(this.$refs.usersTable).on('click', '.edit-user', (e) => {
         const row = $(e.currentTarget).closest('tr')
         const userData = this.table.row(row).data()
-        if (userData) {
-          this.$router.push({
-            name: 'EditUser',
-            params: { userId: userData.user_id },
-            query: { userData: encodeURIComponent(JSON.stringify(userData)) },
-          })
-        } else {
-          console.error('User data is undefined')
-        }
+        this.$router.push({ name: 'EditUser', params: { userId: userData.user_id, userData } })
       })
 
       // Add select all checkbox handler

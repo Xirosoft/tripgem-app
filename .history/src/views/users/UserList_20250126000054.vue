@@ -162,15 +162,7 @@ export default {
       $(this.$refs.usersTable).on('click', '.edit-user', (e) => {
         const row = $(e.currentTarget).closest('tr')
         const userData = this.table.row(row).data()
-        if (userData) {
-          this.$router.push({
-            name: 'EditUser',
-            params: { userId: userData.user_id },
-            query: { userData: encodeURIComponent(JSON.stringify(userData)) },
-          })
-        } else {
-          console.error('User data is undefined')
-        }
+        this.$router.push({ name: 'EditUser', params: { userId: userData.user_id, userData } })
       })
 
       // Add select all checkbox handler
@@ -217,10 +209,21 @@ export default {
     async editUser(userId, userData) {
       this.isLoading = true
       try {
-        const message = await this.usersListStore.editUser(userId, userData)
-        const row = this.table.row((idx, data) => data.user_id === userId)
-        row.data(userData).draw()
-        alert(message)
+        const response = await fetch(`/api/users/edit/${userId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        })
+        const result = await response.json()
+        if (response.ok) {
+          const row = this.table.row((idx, data) => data.user_id === userId)
+          row.data(result).draw()
+          alert('User updated successfully')
+        } else {
+          throw new Error(result.message || 'Failed to update user')
+        }
       } catch (error) {
         console.error('Failed to update user:', error)
         alert('Failed to update user')
