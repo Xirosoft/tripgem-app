@@ -165,7 +165,7 @@ export default {
         const message = await this.userEditStore.editUser(this.userId, this.userData)
         this.message = message
         this.messageType = 'success'
-        this.$router.push('/users')
+        // this.$router.push('/users')
       } catch (error) {
         console.error('Failed to update user:', error)
         this.message = 'Failed to update user'
@@ -194,10 +194,9 @@ export default {
     async initializeData() {
       this.userEditStore = useUserEditStore()
       try {
-        await this.userEditStore.fetchUserDetails(this.userId)
-        this.userData = this.userEditStore.userData
+        this.userData = JSON.parse(decodeURIComponent(this.$route.query.userData))
       } catch (error) {
-        console.error('Failed to fetch user details:', error)
+        console.error('Failed to parse user data:', error)
         alert('Failed to load user data')
         this.$router.push('/users')
       }

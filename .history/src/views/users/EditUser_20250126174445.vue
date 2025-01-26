@@ -165,7 +165,7 @@ export default {
         const message = await this.userEditStore.editUser(this.userId, this.userData)
         this.message = message
         this.messageType = 'success'
-        this.$router.push('/users')
+        // this.$router.push('/users')
       } catch (error) {
         console.error('Failed to update user:', error)
         this.message = 'Failed to update user'
@@ -191,33 +191,29 @@ export default {
         this.companies = []
       }
     },
-    async initializeData() {
-      this.userEditStore = useUserEditStore()
-      try {
-        await this.userEditStore.fetchUserDetails(this.userId)
-        this.userData = this.userEditStore.userData
-      } catch (error) {
-        console.error('Failed to fetch user details:', error)
-        alert('Failed to load user data')
-        this.$router.push('/users')
-      }
-      // Fetch roles from the store or API
-      await this.userEditStore.fetchRoles()
-      this.parentRoles = this.userEditStore.getParentRoles
-      // Fetch user roles if parent role is already selected
-      if (this.userData.parent_role_id) {
-        this.userEditStore.filterUserRoles(this.userData.parent_role_id)
-        this.filteredUserRoles = this.userEditStore.getFilteredUserRoles
-      }
-      // Fetch companies if role is already selected
-      if (['19', '6', '16', '12'].includes(this.userData.parent_role_id)) {
-        await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
-        this.companies = this.userEditStore.getCompanies
-      }
-    },
   },
   async created() {
-    await this.initializeData()
+    this.userEditStore = useUserEditStore()
+    try {
+      this.userData = JSON.parse(decodeURIComponent(this.$route.query.userData))
+    } catch (error) {
+      console.error('Failed to parse user data:', error)
+      alert('Failed to load user data')
+      this.$router.push('/users')
+    }
+    // Fetch roles from the store or API
+    await this.userEditStore.fetchRoles()
+    this.parentRoles = this.userEditStore.getParentRoles
+    // Fetch user roles if parent role is already selected
+    if (this.userData.parent_role_id) {
+      this.userEditStore.filterUserRoles(this.userData.parent_role_id)
+      this.filteredUserRoles = this.userEditStore.getFilteredUserRoles
+    }
+    // Fetch companies if role is already selected
+    if (['19', '6', '16', '12'].includes(this.userData.parent_role_id)) {
+      await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
+      this.companies = this.userEditStore.getCompanies
+    }
   },
 }
 </script>
