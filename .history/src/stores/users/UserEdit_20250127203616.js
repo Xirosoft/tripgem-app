@@ -73,15 +73,8 @@ export const useUserEditStore = defineStore('userEdit', {
         const response = await axios.get(`${config.apiUrl}/users/details/${userId}`, {
           headers: config.getHeaders(),
         })
-
         if (response.data.success) {
           this.userData = response.data.data.user
-          this.userData.meta = response.data.data.usermeta || {}
-          this.userData.meta.location = this.userData.meta.location || ''
-          this.userData.meta.profile_picture = this.userData.meta.profile_picture || ''
-          this.userData.meta.cover_photo = this.userData.meta.cover_photo || ''
-          this.userData.meta.language = this.userData.meta.language || ''
-
           if (response.data.data.affiliate_data) {
             this.userData.company_id = response.data.data.affiliate_data.affiliate_user_id
             this.userData.parent_role_id = '16'
@@ -110,12 +103,6 @@ export const useUserEditStore = defineStore('userEdit', {
         last_name: userData.last_name,
         role_id: userData.role_id,
         status: userData.status,
-        meta: {
-          location: userData.meta.location,
-          profile_picture: userData.meta.profile_picture,
-          cover_photo: userData.meta.cover_photo,
-          language: userData.meta.language,
-        },
       }
 
       if (userData.parent_role_id === '16') {

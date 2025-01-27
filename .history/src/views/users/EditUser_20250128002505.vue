@@ -243,28 +243,38 @@ export default {
         />
       </div>
       <div class="mb-6">
-        <label class="form-label" for="edit-user-profile-picture">Profile Picture</label>
-        <img
-          :src="userData.meta.profile_picture.value"
-          alt="Profile Picture"
-          class="img-thumbnail mb-2"
-          v-if="userData.meta.profile_picture.value"
+        <label class="form-label" for="edit-user-profile-picture">Profile Picture URL</label>
+        <input
+          type="text"
+          class="form-control"
+          id="edit-user-profile-picture"
+          v-model="userData.meta.profile_picture.value"
+          placeholder="https://example.com/path/to/profile-picture.jpg"
+          name="userProfilePicture"
+          aria-label="https://example.com/path/to/profile-picture.jpg"
         />
         <input
           type="file"
-          class="form-control"
+          class="form-control mt-2"
           @change="handleFileUpload($event, 'profile_picture')"
         />
       </div>
       <div class="mb-6">
-        <label class="form-label" for="edit-user-cover-photo">Cover Photo</label>
-        <img
-          :src="userData.meta.cover_photo.value"
-          alt="Cover Photo"
-          class="img-thumbnail mb-2"
-          v-if="userData.meta.cover_photo.value"
+        <label class="form-label" for="edit-user-cover-photo">Cover Photo URL</label>
+        <input
+          type="text"
+          class="form-control"
+          id="edit-user-cover-photo"
+          v-model="userData.meta.cover_photo.value"
+          placeholder="https://example.com/path/to/cover-photo.jpg"
+          name="userCoverPhoto"
+          aria-label="https://example.com/path/to/cover-photo.jpg"
         />
-        <input type="file" class="form-control" @change="handleFileUpload($event, 'cover_photo')" />
+        <input
+          type="file"
+          class="form-control mt-2"
+          @change="handleFileUpload($event, 'cover_photo')"
+        />
       </div>
       <div class="mb-6">
         <label class="form-label" for="edit-user-language">Preferred Language</label>

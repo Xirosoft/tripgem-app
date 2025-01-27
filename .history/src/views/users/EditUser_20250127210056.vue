@@ -27,18 +27,7 @@ export default {
     async submitForm() {
       this.isLoading = true
       try {
-        const submitData = {
-          ...this.userData,
-          meta: {
-            location: this.userData.meta.location.value,
-            profile_picture: this.userData.meta.profile_picture.value,
-            cover_photo: this.userData.meta.cover_photo.value,
-            language: this.userData.meta.language.value,
-          },
-        }
-        console.log('submitData:', submitData)
-
-        const message = await this.userEditStore.editUser(this.userId, submitData)
+        const message = await this.userEditStore.editUser(this.userId, this.userData)
         this.message = message
         this.messageType = 'success'
         // this.$router.push('/users')
@@ -73,17 +62,15 @@ export default {
         await this.userEditStore.fetchUserDetails(this.userId)
         this.userData = this.userEditStore.userData
         // Ensure meta properties are initialized
-        console.log('userData:', this.userData)
-
         this.userData.meta = this.userData.meta || {}
-        this.userData.meta.location = { value: this.userData.meta.location || '' }
-        this.userData.meta.profile_picture = { value: this.userData.meta.profile_picture || '' }
-        this.userData.meta.cover_photo = { value: this.userData.meta.cover_photo || '' }
-        this.userData.meta.language = { value: this.userData.meta.language || '' }
+        this.userData.meta.location = this.userData.meta.location || { value: '' }
+        this.userData.meta.profile_picture = this.userData.meta.profile_picture || { value: '' }
+        this.userData.meta.cover_photo = this.userData.meta.cover_photo || { value: '' }
+        this.userData.meta.language = this.userData.meta.language || { value: '' }
       } catch (error) {
         console.error('Failed to fetch user details:', error)
         alert('Failed to load user data')
-        // this.$router.push('/users')
+        this.$router.push('/users')
       }
       // Fetch roles from the store or API
       await this.userEditStore.fetchRoles()
@@ -243,28 +230,38 @@ export default {
         />
       </div>
       <div class="mb-6">
-        <label class="form-label" for="edit-user-profile-picture">Profile Picture</label>
-        <img
-          :src="userData.meta.profile_picture.value"
-          alt="Profile Picture"
-          class="img-thumbnail mb-2"
-          v-if="userData.meta.profile_picture.value"
+        <label class="form-label" for="edit-user-profile-picture">Profile Picture URL</label>
+        <input
+          type="text"
+          class="form-control"
+          id="edit-user-profile-picture"
+          v-model="userData.meta.profile_picture.value"
+          placeholder="https://example.com/path/to/profile-picture.jpg"
+          name="userProfilePicture"
+          aria-label="https://example.com/path/to/profile-picture.jpg"
         />
         <input
           type="file"
-          class="form-control"
+          class="form-control mt-2"
           @change="handleFileUpload($event, 'profile_picture')"
         />
       </div>
       <div class="mb-6">
-        <label class="form-label" for="edit-user-cover-photo">Cover Photo</label>
-        <img
-          :src="userData.meta.cover_photo.value"
-          alt="Cover Photo"
-          class="img-thumbnail mb-2"
-          v-if="userData.meta.cover_photo.value"
+        <label class="form-label" for="edit-user-cover-photo">Cover Photo URL</label>
+        <input
+          type="text"
+          class="form-control"
+          id="edit-user-cover-photo"
+          v-model="userData.meta.cover_photo.value"
+          placeholder="https://example.com/path/to/cover-photo.jpg"
+          name="userCoverPhoto"
+          aria-label="https://example.com/path/to/cover-photo.jpg"
         />
-        <input type="file" class="form-control" @change="handleFileUpload($event, 'cover_photo')" />
+        <input
+          type="file"
+          class="form-control mt-2"
+          @change="handleFileUpload($event, 'cover_photo')"
+        />
       </div>
       <div class="mb-6">
         <label class="form-label" for="edit-user-language">Preferred Language</label>
