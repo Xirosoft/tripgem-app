@@ -2,7 +2,6 @@
 import AddressBlock from '@/components/AddressBlock.vue'
 import { useMerchantsStore } from '@/stores/merchant/AddMerchant'
 import { useUsersStore } from '@/stores/users'
-import { handleFileUpload, handleLogoUpload } from '@/utils/handleFileUpload'
 import Tagify from '@yaireo/tagify'
 import Dropzone from 'dropzone'
 import flatpickr from 'flatpickr'
@@ -254,9 +253,98 @@ export default {
       }
     },
 
-    handleFileUpload,
     handleLogoUpload(file) {
-      handleLogoUpload(file, this.formData, this.dropzone, this.toast)
+      if (!file) return
+
+      this.uploadedLogo = file
+      this.formData.logo_url = ''
+
+      // Create a promise to handle the upload
+      return new Promise((resolve, reject) => {
+        this.uploadFile(file, 'logo')
+          .then((url) => {
+            if (url) {
+              this.formData.logo_url = url
+              this.toast.success('Logo uploaded successfully')
+              resolve(url)
+            } else {
+              throw new Error('No valid URL received from server')
+            }
+          })
+          .catch((error) => {
+            console.error('Logo upload failed:', error)
+            this.uploadedLogo = null
+            if (this.dropzone) {
+              this.dropzone.removeFile(file)
+            }
+            this.toast.error(`Logo upload failed: ${error.message}`)
+            reject(error)
+          })
+      })
+    },
+
+    async handleFileUpload(event, type) {
+      const files = Array.from(event.target.files)
+      this.uploadedFiles[type] = files
+
+      const formatType = (type) => {
+        return type
+          .split('_') // Split the string into an array by underscores
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+          .join(' ') // Join the array back into a string with spaces
+      }
+      try {
+        const uploadPromises = files.map((file) => this.uploadFile(file, type))
+        const urls = await Promise.all(uploadPromises)
+        this.formData[type] = urls
+
+        const formattedType = formatType(type)
+        this.toast.success(`${formattedType} uploaded successfully`)
+      } catch (error) {
+        const formattedType = formatType(type)
+        console.error(`${formattedType} upload failed:`, error)
+        this.uploadedFiles[type] = []
+        this.formData[type] = []
+        this.toast.error(`Failed to upload ${formattedType}: ${error.message}`)
+      }
+    },
+
+    async uploadFile(file, type = 'general') {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('type', type) // Add file type for backend processing
+
+      try {
+        const headers = config.getHeaders()
+        delete headers['Content-Type']
+
+        const response = await fetch(`${config.apiUrl}/upload`, {
+          method: 'POST',
+          body: formData,
+          headers,
+        })
+
+        const result = await response.json()
+        console.log('Upload response:', result) // Debug response
+
+        if (!response.ok) {
+          throw new Error(result.message || `Upload failed: ${response.status}`)
+        }
+
+        // Check all possible URL fields in response
+        const fileUrl = result.file_url || result.url || result.data?.url || result.data?.file_url
+
+        if (!fileUrl) {
+          console.error('Invalid server response:', result)
+          throw new Error('Server did not return a valid file URL')
+        }
+
+        return fileUrl
+      } catch (error) {
+        console.error(`Upload error (${type}):`, error)
+        this.toast.error(`Failed to upload ${type}: ${error.message}`)
+        throw error
+      }
     },
 
     async submitForm() {

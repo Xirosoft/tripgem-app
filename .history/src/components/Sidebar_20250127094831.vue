@@ -1,7 +1,7 @@
 <script>
 import { useAuthStore } from '@/stores/auth'
 import TripgemLogo from './Logo.vue'
-
+const userId = useAuthStore().userId
 export default {
   name: 'SideBar',
   components: {
@@ -9,10 +9,7 @@ export default {
   },
 
   data() {
-    const authStore = useAuthStore()
-    const userId = authStore.userId
     return {
-      userId,
       menuItems: [
         {
           title: 'Dashboard',

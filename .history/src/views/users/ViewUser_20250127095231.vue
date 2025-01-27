@@ -1,46 +1,3 @@
-<script>
-import { useUserEditStore } from '../../stores/users/UserEdit.js'
-
-export default {
-  name: 'ViewUser',
-  props: ['userId'],
-  data() {
-    return {
-      userData: null,
-      companyData: null,
-    }
-  },
-  methods: {
-    async fetchUserDetails() {
-      const userEditStore = useUserEditStore()
-      try {
-        await userEditStore.fetchUserDetails(this.userId)
-        this.userData = userEditStore.userData
-        if (userEditStore.userData.parent_role_id === '16') {
-          this.companyData = userEditStore.userData.affiliate_data
-        } else if (userEditStore.userData.parent_role_id === '12') {
-          this.companyData = userEditStore.userData.agency_data
-        } else if (userEditStore.userData.parent_role_id === '19') {
-          this.companyData = userEditStore.userData.b2b_data
-        } else if (userEditStore.userData.parent_role_id === '6') {
-          this.companyData = userEditStore.userData.merchant_data
-        }
-      } catch (error) {
-        console.error('Failed to fetch user details:', error)
-        alert('Failed to load user data')
-        this.$router.push('/users')
-      }
-    },
-    goBack() {
-      this.$router.push('/users')
-    },
-  },
-  async created() {
-    await this.fetchUserDetails()
-  },
-}
-</script>
-
 <template>
   <!-- Header -->
   <div class="row">
@@ -321,6 +278,50 @@ export default {
   </div>
   <!--/ User Profile Content -->
 </template>
+
+<script>
+import { useUserEditStore } from '../../stores/users/UserEdit.js'
+
+export default {
+  name: 'ViewUser',
+  props: ['userId'],
+  data() {
+    return {
+      userData: null,
+      companyData: null,
+    }
+  },
+  methods: {
+    async fetchUserDetails() {
+      const userEditStore = useUserEditStore()
+      try {
+        await userEditStore.fetchUserDetails(this.userId)
+        this.userData = userEditStore.userData
+        if (userEditStore.userData.parent_role_id === '16') {
+          this.companyData = userEditStore.userData.affiliate_data
+        } else if (userEditStore.userData.parent_role_id === '12') {
+          this.companyData = userEditStore.userData.agency_data
+        } else if (userEditStore.userData.parent_role_id === '19') {
+          this.companyData = userEditStore.userData.b2b_data
+        } else if (userEditStore.userData.parent_role_id === '6') {
+          this.companyData = userEditStore.userData.merchant_data
+        }
+      } catch (error) {
+        console.error('Failed to fetch user details:', error)
+        alert('Failed to load user data')
+        this.$router.push('/users')
+      }
+    },
+    goBack() {
+      this.$router.push('/users')
+    },
+  },
+  async created() {
+    await this.fetchUserDetails()
+  },
+}
+</script>
+
 <style scoped>
 .container {
   max-width: 1200px;

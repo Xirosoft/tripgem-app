@@ -1,5 +1,4 @@
 <script>
-import { handleFileUpload } from '@/utils/handleFileUpload'
 import { useUserEditStore } from '../../stores/users/UserEdit.js'
 
 export default {
@@ -7,14 +6,7 @@ export default {
   props: ['userId'],
   data() {
     return {
-      userData: {
-        meta: {
-          location: { value: '' },
-          profile_picture: { value: '' },
-          cover_photo: { value: '' },
-          language: { value: '' },
-        },
-      },
+      userData: null,
       isLoading: false,
       message: null,
       messageType: null,
@@ -61,12 +53,6 @@ export default {
       try {
         await this.userEditStore.fetchUserDetails(this.userId)
         this.userData = this.userEditStore.userData
-        // Ensure meta properties are initialized
-        this.userData.meta = this.userData.meta || {}
-        this.userData.meta.location = this.userData.meta.location || { value: '' }
-        this.userData.meta.profile_picture = this.userData.meta.profile_picture || { value: '' }
-        this.userData.meta.cover_photo = this.userData.meta.cover_photo || { value: '' }
-        this.userData.meta.language = this.userData.meta.language || { value: '' }
       } catch (error) {
         console.error('Failed to fetch user details:', error)
         alert('Failed to load user data')
@@ -84,12 +70,6 @@ export default {
       if (['19', '6', '16', '12'].includes(this.userData.parent_role_id)) {
         await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
         this.companies = this.userEditStore.getCompanies
-      }
-    },
-    async handleFileUpload(event, key) {
-      const files = await handleFileUpload(event, key)
-      if (files.length > 0) {
-        this.userData.meta[key].value = files[0]
       }
     },
   },
@@ -217,64 +197,7 @@ export default {
           <option value="suspend">Suspend</option>
         </select>
       </div>
-      <div class="mb-6">
-        <label class="form-label" for="edit-user-location">Location</label>
-        <input
-          type="text"
-          class="form-control"
-          id="edit-user-location"
-          v-model="userData.meta.location.value"
-          placeholder="New York, USA"
-          name="userLocation"
-          aria-label="New York, USA"
-        />
-      </div>
-      <div class="mb-6">
-        <label class="form-label" for="edit-user-profile-picture">Profile Picture URL</label>
-        <input
-          type="text"
-          class="form-control"
-          id="edit-user-profile-picture"
-          v-model="userData.meta.profile_picture.value"
-          placeholder="https://example.com/path/to/profile-picture.jpg"
-          name="userProfilePicture"
-          aria-label="https://example.com/path/to/profile-picture.jpg"
-        />
-        <input
-          type="file"
-          class="form-control mt-2"
-          @change="handleFileUpload($event, 'profile_picture')"
-        />
-      </div>
-      <div class="mb-6">
-        <label class="form-label" for="edit-user-cover-photo">Cover Photo URL</label>
-        <input
-          type="text"
-          class="form-control"
-          id="edit-user-cover-photo"
-          v-model="userData.meta.cover_photo.value"
-          placeholder="https://example.com/path/to/cover-photo.jpg"
-          name="userCoverPhoto"
-          aria-label="https://example.com/path/to/cover-photo.jpg"
-        />
-        <input
-          type="file"
-          class="form-control mt-2"
-          @change="handleFileUpload($event, 'cover_photo')"
-        />
-      </div>
-      <div class="mb-6">
-        <label class="form-label" for="edit-user-language">Preferred Language</label>
-        <input
-          type="text"
-          class="form-control"
-          id="edit-user-language"
-          v-model="userData.meta.language.value"
-          placeholder="English"
-          name="userLanguage"
-          aria-label="English"
-        />
-      </div>
+      <!-- Add other fields as necessary -->
       <button type="submit" class="btn btn-primary me-3 data-submit" :disabled="isLoading">
         <span
           v-if="isLoading"

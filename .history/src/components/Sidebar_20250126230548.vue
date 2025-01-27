@@ -1,6 +1,6 @@
 <script>
-import { useAuthStore } from '@/stores/auth'
 import TripgemLogo from './Logo.vue'
+// import PermissionMixin from '@/stores/mixins/permissionMixin'
 
 export default {
   name: 'SideBar',
@@ -9,10 +9,7 @@ export default {
   },
 
   data() {
-    const authStore = useAuthStore()
-    const userId = authStore.userId
     return {
-      userId,
       menuItems: [
         {
           title: 'Dashboard',
@@ -60,7 +57,7 @@ export default {
             },
             {
               title: 'Profile',
-              path: `/users/profile/${userId}`,
+              path: '/users/edit/',
               active: false,
               // permission: 'add_user',
             },

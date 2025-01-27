@@ -2,7 +2,6 @@
 import AddressBlock from '@/components/AddressBlock.vue'
 import { useMerchantsStore } from '@/stores/merchant/AddMerchant'
 import { useUsersStore } from '@/stores/users'
-import { handleFileUpload, handleLogoUpload } from '@/utils/handleFileUpload'
 import Tagify from '@yaireo/tagify'
 import Dropzone from 'dropzone'
 import flatpickr from 'flatpickr'
@@ -254,9 +253,34 @@ export default {
       }
     },
 
-    handleFileUpload,
     handleLogoUpload(file) {
-      handleLogoUpload(file, this.formData, this.dropzone, this.toast)
+      if (!file) return
+
+      this.uploadedLogo = file
+      this.formData.logo_url = ''
+
+      // Create a promise to handle the upload
+      return new Promise((resolve, reject) => {
+        this.uploadFile(file, 'logo')
+          .then((url) => {
+            if (url) {
+              this.formData.logo_url = url
+              this.toast.success('Logo uploaded successfully')
+              resolve(url)
+            } else {
+              throw new Error('No valid URL received from server')
+            }
+          })
+          .catch((error) => {
+            console.error('Logo upload failed:', error)
+            this.uploadedLogo = null
+            if (this.dropzone) {
+              this.dropzone.removeFile(file)
+            }
+            this.toast.error(`Logo upload failed: ${error.message}`)
+            reject(error)
+          })
+      })
     },
 
     async submitForm() {

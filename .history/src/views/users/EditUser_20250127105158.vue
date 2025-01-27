@@ -1,5 +1,4 @@
 <script>
-import { handleFileUpload } from '@/utils/handleFileUpload'
 import { useUserEditStore } from '../../stores/users/UserEdit.js'
 
 export default {
@@ -86,10 +85,14 @@ export default {
         this.companies = this.userEditStore.getCompanies
       }
     },
-    async handleFileUpload(event, key) {
-      const files = await handleFileUpload(event, key)
-      if (files.length > 0) {
-        this.userData.meta[key].value = files[0]
+    handleFileUpload(event, key) {
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.userData.meta[key].value = e.target.result
+        }
+        reader.readAsDataURL(file)
       }
     },
   },

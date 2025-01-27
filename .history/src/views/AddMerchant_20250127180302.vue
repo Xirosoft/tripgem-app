@@ -255,9 +255,7 @@ export default {
     },
 
     handleFileUpload,
-    handleLogoUpload(file) {
-      handleLogoUpload(file, this.formData, this.dropzone, this.toast)
-    },
+    handleLogoUpload,
 
     async submitForm() {
       try {

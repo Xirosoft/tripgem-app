@@ -255,8 +255,44 @@ export default {
     },
 
     handleFileUpload,
-    handleLogoUpload(file) {
-      handleLogoUpload(file, this.formData, this.dropzone, this.toast)
+    handleLogoUpload,
+
+    async uploadFile(file, type = 'general') {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('type', type) // Add file type for backend processing
+
+      try {
+        const headers = config.getHeaders()
+        delete headers['Content-Type']
+
+        const response = await fetch(`${config.apiUrl}/upload`, {
+          method: 'POST',
+          body: formData,
+          headers,
+        })
+
+        const result = await response.json()
+        console.log('Upload response:', result) // Debug response
+
+        if (!response.ok) {
+          throw new Error(result.message || `Upload failed: ${response.status}`)
+        }
+
+        // Check all possible URL fields in response
+        const fileUrl = result.file_url || result.url || result.data?.url || result.data?.file_url
+
+        if (!fileUrl) {
+          console.error('Invalid server response:', result)
+          throw new Error('Server did not return a valid file URL')
+        }
+
+        return fileUrl
+      } catch (error) {
+        console.error(`Upload error (${type}):`, error)
+        this.toast.error(`Failed to upload ${type}: ${error.message}`)
+        throw error
+      }
     },
 
     async submitForm() {

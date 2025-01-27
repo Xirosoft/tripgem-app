@@ -1,5 +1,4 @@
 <script>
-import { handleFileUpload } from '@/utils/handleFileUpload'
 import { useUserEditStore } from '../../stores/users/UserEdit.js'
 
 export default {
@@ -7,14 +6,7 @@ export default {
   props: ['userId'],
   data() {
     return {
-      userData: {
-        meta: {
-          location: { value: '' },
-          profile_picture: { value: '' },
-          cover_photo: { value: '' },
-          language: { value: '' },
-        },
-      },
+      userData: null,
       isLoading: false,
       message: null,
       messageType: null,
@@ -61,12 +53,6 @@ export default {
       try {
         await this.userEditStore.fetchUserDetails(this.userId)
         this.userData = this.userEditStore.userData
-        // Ensure meta properties are initialized
-        this.userData.meta = this.userData.meta || {}
-        this.userData.meta.location = this.userData.meta.location || { value: '' }
-        this.userData.meta.profile_picture = this.userData.meta.profile_picture || { value: '' }
-        this.userData.meta.cover_photo = this.userData.meta.cover_photo || { value: '' }
-        this.userData.meta.language = this.userData.meta.language || { value: '' }
       } catch (error) {
         console.error('Failed to fetch user details:', error)
         alert('Failed to load user data')
@@ -86,10 +72,14 @@ export default {
         this.companies = this.userEditStore.getCompanies
       }
     },
-    async handleFileUpload(event, key) {
-      const files = await handleFileUpload(event, key)
-      if (files.length > 0) {
-        this.userData.meta[key].value = files[0]
+    handleFileUpload(event, key) {
+      const file = event.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.userData.meta[key].value = e.target.result
+        }
+        reader.readAsDataURL(file)
       }
     },
   },

@@ -41,6 +41,32 @@ export default {
 }
 </script>
 
+<style scoped>
+.container {
+  max-width: 1200px;
+}
+.user-profile-header-banner img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.user-profile-img {
+  width: 150px;
+  height: 150px;
+  border: 5px solid #fff;
+}
+.card-header {
+  background-color: #007bff;
+  color: white;
+}
+.card-body {
+  padding: 20px;
+}
+.form-label {
+  font-weight: bold;
+}
+</style>
+
 <template>
   <!-- Header -->
   <div class="row">
@@ -321,28 +347,3 @@ export default {
   </div>
   <!--/ User Profile Content -->
 </template>
-<style scoped>
-.container {
-  max-width: 1200px;
-}
-.user-profile-header-banner img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-.user-profile-img {
-  width: 150px;
-  height: 150px;
-  border: 5px solid #fff;
-}
-.card-header {
-  background-color: #007bff;
-  color: white;
-}
-.card-body {
-  padding: 20px;
-}
-.form-label {
-  font-weight: bold;
-}
-</style>
