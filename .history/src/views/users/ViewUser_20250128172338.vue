@@ -1,5 +1,5 @@
 <script>
-import { useUserEditStore } from '../../stores/users/UserEdit.js'
+import { useUserEditStore } from '../../stores/users/UserEdit.js';
 
 export default {
   name: 'ViewUser',
@@ -91,6 +91,8 @@ export default {
                   </li>
                 </ul>
               </div>
+             </div>
+            </div>
 
               <router-link :to="'/users/edit/' + userId" class="btn btn-primary mb-1">
                 <i class="ti ti-user-check ti-xs me-2"></i>Edit

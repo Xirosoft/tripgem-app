@@ -32,150 +32,8 @@ export default {
       parentRoles: [], // Parent roles fetched from the store or API
       filteredUserRoles: [], // User roles based on the selected parent role
       companies: [], // Companies based on the selected role
-      languages: [
-        'Bengali',
-        'English',
-        'Spanish',
-        'French',
-        'German',
-        'Chinese',
-        'Japanese',
-        'Korean',
-        'Russian',
-        'Arabic',
-        'Hindi',
-        'Portuguese',
-        'Italian',
-        'Dutch',
-        'Polish',
-        'Turkish',
-        'Vietnamese',
-        'Thai',
-        'Indonesian',
-        'Malay',
-        'Filipino',
-      ],
-      locations: [
-        'Afghanistan',
-        'Albania',
-        'Algeria',
-        'Andorra',
-        'Angola',
-        'Argentina',
-        'Armenia',
-        'Australia',
-        'Austria',
-        'Azerbaijan',
-        'Bahamas',
-        'Bahrain',
-        'Bangladesh',
-        'Barbados',
-        'Belarus',
-        'Belgium',
-        'Belize',
-        'Benin',
-        'Bhutan',
-        'Bolivia',
-        'Brazil',
-        'Bulgaria',
-        'Cambodia',
-        'Cameroon',
-        'Canada',
-        'Chile',
-        'China',
-        'Colombia',
-        'Costa Rica',
-        'Croatia',
-        'Cuba',
-        'Cyprus',
-        'Czech Republic',
-        'Denmark',
-        'Ecuador',
-        'Egypt',
-        'Estonia',
-        'Ethiopia',
-        'Fiji',
-        'Finland',
-        'France',
-        'Georgia',
-        'Germany',
-        'Ghana',
-        'Greece',
-        'Guatemala',
-        'Haiti',
-        'Honduras',
-        'Hungary',
-        'Iceland',
-        'India',
-        'Indonesia',
-        'Iran',
-        'Iraq',
-        'Ireland',
-        'Israel',
-        'Italy',
-        'Jamaica',
-        'Japan',
-        'Jordan',
-        'Kazakhstan',
-        'Kenya',
-        'Kuwait',
-        'Laos',
-        'Latvia',
-        'Lebanon',
-        'Libya',
-        'Lithuania',
-        'Luxembourg',
-        'Malaysia',
-        'Maldives',
-        'Mali',
-        'Malta',
-        'Mexico',
-        'Monaco',
-        'Mongolia',
-        'Morocco',
-        'Myanmar',
-        'Nepal',
-        'Netherlands',
-        'New Zealand',
-        'Nigeria',
-        'Norway',
-        'Oman',
-        'Pakistan',
-        'Panama',
-        'Paraguay',
-        'Peru',
-        'Philippines',
-        'Poland',
-        'Portugal',
-        'Qatar',
-        'Romania',
-        'Russia',
-        'Saudi Arabia',
-        'Serbia',
-        'Singapore',
-        'Slovakia',
-        'Slovenia',
-        'South Africa',
-        'South Korea',
-        'Spain',
-        'Sri Lanka',
-        'Sweden',
-        'Switzerland',
-        'Syria',
-        'Taiwan',
-        'Thailand',
-        'Turkey',
-        'Ukraine',
-        'United Arab Emirates',
-        'United Kingdom',
-        'United States',
-        'Uruguay',
-        'Uzbekistan',
-        'Venezuela',
-        'Vietnam',
-        'Yemen',
-        'Zimbabwe',
-      ],
+      languages: ['English', 'French', 'German', 'Spanish'], // Example languages
+      locations: ['New York, USA', 'London, UK', 'Paris, France', 'Berlin, Germany'], // Example locations
     }
   },
   methods: {
@@ -299,14 +157,15 @@ export default {
 </script>
 
 <template>
-  <div class="">
+  <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row">
       <div class="col-xl mb-6">
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">User Information</h5>
+            <small class="text-muted float-end">User Details</small>
             <router-link :to="'/users/profile/' + userId" class="btn btn-primary mb-1">
-              <i class="ti ti-eye ti-xs me-2"></i>Profile
+              <i class="ti ti-user-check ti-xs me-2"></i>Edit
             </router-link>
           </div>
           <div class="card-body">
@@ -581,7 +440,7 @@ export default {
                   </div>
                 </div>
               </div>
-              <div class="row justify-content-start">
+              <div class="row justify-content-end">
                 <div class="col-sm-10">
                   <button
                     type="submit"

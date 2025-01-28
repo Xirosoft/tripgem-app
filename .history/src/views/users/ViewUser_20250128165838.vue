@@ -1,5 +1,5 @@
 <script>
-import { useUserEditStore } from '../../stores/users/UserEdit.js'
+import { useUserEditStore } from '../../stores/users/UserEdit.js';
 
 export default {
   name: 'ViewUser',
@@ -90,6 +90,20 @@ export default {
                     >
                   </li>
                 </ul>
+              </div>
+             </div>
+                <a v-if="userData.meta.facebook_link" :href="userData.meta.facebook_link" target="_blank" class="btn btn-icon btn-outline-primary">
+                  <i class="ti ti-brand-facebook"></i>
+                </a>
+                <a v-if="userData.meta.twitter_link" :href="userData.meta.twitter_link" target="_blank" class="btn btn-icon btn-outline-info">
+                  <i class="ti ti-brand-twitter"></i>
+                </a>
+                <a v-if="userData.meta.linkedin_link" :href="userData.meta.linkedin_link" target="_blank" class="btn btn-icon btn-outline-primary">
+                  <i class="ti ti-brand-linkedin"></i>
+                </a>
+                <a v-if="userData.meta.instagram_link" :href="userData.meta.instagram_link" target="_blank" class="btn btn-icon btn-outline-danger">
+                  <i class="ti ti-brand-instagram"></i>
+                </a>
               </div>
 
               <router-link :to="'/users/edit/' + userId" class="btn btn-primary mb-1">

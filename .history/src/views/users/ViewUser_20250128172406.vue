@@ -91,7 +91,6 @@ export default {
                   </li>
                 </ul>
               </div>
-
               <router-link :to="'/users/edit/' + userId" class="btn btn-primary mb-1">
                 <i class="ti ti-user-check ti-xs me-2"></i>Edit
               </router-link>
