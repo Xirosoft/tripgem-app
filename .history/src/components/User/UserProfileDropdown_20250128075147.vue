@@ -24,9 +24,11 @@ const userRole = computed(() => usersStore.getUserRole)
 </script>
 
 <template>
-  <ul class="dropdown-menu dropdown-menu-end">
-    <li>
-      <router-link class="dropdown-item mt-0" :to="'/users/profile/' + authStore.userId">
+  <!-- <li>
+      <router-link
+        class="dropdown-item mt-0"
+        :to="{ name: 'ViewUser', params: { userId: user.value.id } }"
+      >
         <div class="d-flex align-items-center">
           <div class="flex-shrink-0 me-2">
             <div class="avatar avatar-online">
@@ -44,8 +46,40 @@ const userRole = computed(() => usersStore.getUserRole)
       <div class="dropdown-divider my-1 mx-n2"></div>
     </li>
     <li>
-      <router-link class="dropdown-item waves-effect" :to="'/users/profile/' + authStore.userId">
-        <i class="ti ti-user me-3 ti-md"></i><span class="align-middle">My Profile</span>
+      <router-link
+        class="dropdown-item"
+        :to="{ name: 'ViewUser', params: { userId: user.value.id } }"
+      >
+        <small class="text-muted">My Profile</small>
+      </router-link>
+    </li> -->
+
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li>
+      <a class="dropdown-item mt-0" href="pages-account-settings-account.html">
+        <router-link
+          class="dropdown-item mt-0"
+          :to="'/users/edit/' + authStore.userId"
+        ></router-link>
+        <div class="d-flex align-items-center">
+          <div class="flex-shrink-0 me-2">
+            <div class="avatar avatar-online">
+              <img src="/src/frontend/assets/img/avatars/1.png" alt class="rounded-circle" />
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="mb-0">{{ userName }}</h6>
+            <small class="text-muted">{{ userRole }}</small>
+          </div>
+        </div>
+      </a>
+    </li>
+    <li>
+      <div class="dropdown-divider my-1 mx-n2"></div>
+    </li>
+    <li>
+      <router-link class="dropdown-item" :to="'/users/edit/' + authStore.userId">
+        <small class="text-muted">My Profile</small>
       </router-link>
     </li>
     <li>

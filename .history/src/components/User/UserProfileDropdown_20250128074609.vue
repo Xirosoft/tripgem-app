@@ -12,6 +12,7 @@ const handleLogout = () => {
   authStore.logout()
   router.push({ name: 'tripgemlogin' })
 }
+
 onMounted(() => {
   usersStore.fetchUserDetails()
 })
@@ -26,7 +27,10 @@ const userRole = computed(() => usersStore.getUserRole)
 <template>
   <ul class="dropdown-menu dropdown-menu-end">
     <li>
-      <router-link class="dropdown-item mt-0" :to="'/users/profile/' + authStore.userId">
+      <router-link
+        class="dropdown-item mt-0"
+        :to="{ name: 'ViewUser', params: { userId: user.value.id } }"
+      >
         <div class="d-flex align-items-center">
           <div class="flex-shrink-0 me-2">
             <div class="avatar avatar-online">
@@ -44,9 +48,9 @@ const userRole = computed(() => usersStore.getUserRole)
       <div class="dropdown-divider my-1 mx-n2"></div>
     </li>
     <li>
-      <router-link class="dropdown-item waves-effect" :to="'/users/profile/' + authStore.userId">
+      <a class="dropdown-item" href="pages-profile-user.html">
         <i class="ti ti-user me-3 ti-md"></i><span class="align-middle">My Profile</span>
-      </router-link>
+      </a>
     </li>
     <li>
       <a class="dropdown-item" href="pages-account-settings-account.html">

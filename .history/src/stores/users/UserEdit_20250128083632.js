@@ -5,8 +5,6 @@ import config from '../../config/config'
 export const useUserEditStore = defineStore('userEdit', {
   state: () => ({
     userData: null,
-    roleName: '',
-    companyName: '',
     isLoading: false,
     message: null,
     messageType: null,
@@ -77,11 +75,7 @@ export const useUserEditStore = defineStore('userEdit', {
         })
 
         if (response.data.success) {
-          console.log(response.data.data.role_name)
-
           this.userData = response.data.data.user
-          this.roleName = response.data.data.role_name
-          this.companyName = response.data.data.company_name
           this.userData.meta = response.data.data.usermeta || {}
           this.userData.meta.location = this.userData.meta.location || ''
           this.userData.meta.profile_picture = this.userData.meta.profile_picture || ''

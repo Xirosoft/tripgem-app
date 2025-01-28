@@ -19,10 +19,10 @@ export default {
           social_links: {
             twitter: '',
             facebook: '',
-            line: '',
+            google: '',
             linkedin: '',
             instagram: '',
-            tiktok: '',
+            quora: '',
           },
         },
       },
@@ -100,10 +100,10 @@ export default {
             : this.userData.meta.social_links || {
                 twitter: '',
                 facebook: '',
-                line: '',
+                google: '',
                 linkedin: '',
                 instagram: '',
-                tiktok: '',
+                quora: '',
               }
       } catch (error) {
         console.error('Failed to fetch user details:', error)
@@ -420,16 +420,16 @@ export default {
                 </div>
                 <div class="col-md-6">
                   <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-line"
-                      >Line</label
+                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-google"
+                      >Google+</label
                     >
                     <div class="col-sm-9">
                       <input
                         type="text"
-                        id="formtabs-line"
+                        id="formtabs-google"
                         class="form-control"
-                        v-model="userData.meta.social_links.line"
-                        placeholder="https://line.me/abc"
+                        v-model="userData.meta.social_links.google"
+                        placeholder="https://plus.google.com/abc"
                       />
                     </div>
                   </div>
@@ -468,16 +468,16 @@ export default {
                 </div>
                 <div class="col-md-6">
                   <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-tiktok"
-                      >Tiktok</label
+                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-quora"
+                      >Quora</label
                     >
                     <div class="col-sm-9">
                       <input
                         type="text"
-                        id="formtabs-tiktok"
+                        id="formtabs-quora"
                         class="form-control"
-                        v-model="userData.meta.social_links.tiktok"
-                        placeholder="https://tiktok.com/@abc"
+                        v-model="userData.meta.social_links.quora"
+                        placeholder="https://quora.com/profile/abc"
                       />
                     </div>
                   </div>

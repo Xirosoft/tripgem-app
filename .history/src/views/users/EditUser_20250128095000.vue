@@ -19,10 +19,10 @@ export default {
           social_links: {
             twitter: '',
             facebook: '',
-            line: '',
+            google: '',
             linkedin: '',
             instagram: '',
-            tiktok: '',
+            quora: '',
           },
         },
       },
@@ -94,17 +94,14 @@ export default {
         this.userData.meta.profile_picture = { value: this.userData.meta.profile_picture || '' }
         this.userData.meta.cover_photo = { value: this.userData.meta.cover_photo || '' }
         this.userData.meta.language = { value: this.userData.meta.language || [] }
-        this.userData.meta.social_links =
-          typeof this.userData.meta.social_links === 'string'
-            ? JSON.parse(this.userData.meta.social_links)
-            : this.userData.meta.social_links || {
-                twitter: '',
-                facebook: '',
-                line: '',
-                linkedin: '',
-                instagram: '',
-                tiktok: '',
-              }
+        this.userData.meta.social_links = this.userData.meta.social_links || {
+          twitter: '',
+          facebook: '',
+          google: '',
+          linkedin: '',
+          instagram: '',
+          quora: '',
+        }
       } catch (error) {
         console.error('Failed to fetch user details:', error)
         alert('Failed to load user data')
@@ -137,8 +134,6 @@ export default {
           data: this.languages.map((lang) => ({ id: lang, text: lang })),
           multiple: true,
         })
-        .val(this.userData.meta.language.value)
-        .trigger('change')
         .on('change', function () {
           vm.userData.meta.language.value = $(this).val()
         })
@@ -420,16 +415,16 @@ export default {
                 </div>
                 <div class="col-md-6">
                   <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-line"
-                      >Line</label
+                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-google"
+                      >Google+</label
                     >
                     <div class="col-sm-9">
                       <input
                         type="text"
-                        id="formtabs-line"
+                        id="formtabs-google"
                         class="form-control"
-                        v-model="userData.meta.social_links.line"
-                        placeholder="https://line.me/abc"
+                        v-model="userData.meta.social_links.google"
+                        placeholder="https://plus.google.com/abc"
                       />
                     </div>
                   </div>
@@ -468,16 +463,16 @@ export default {
                 </div>
                 <div class="col-md-6">
                   <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-tiktok"
-                      >Tiktok</label
+                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-quora"
+                      >Quora</label
                     >
                     <div class="col-sm-9">
                       <input
                         type="text"
-                        id="formtabs-tiktok"
+                        id="formtabs-quora"
                         class="form-control"
-                        v-model="userData.meta.social_links.tiktok"
-                        placeholder="https://tiktok.com/@abc"
+                        v-model="userData.meta.social_links.quora"
+                        placeholder="https://quora.com/profile/abc"
                       />
                     </div>
                   </div>

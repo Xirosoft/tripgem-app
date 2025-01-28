@@ -77,7 +77,7 @@ export const useUserEditStore = defineStore('userEdit', {
         })
 
         if (response.data.success) {
-          console.log(response.data.data.role_name)
+          console.log(response.data.data)
 
           this.userData = response.data.data.user
           this.roleName = response.data.data.role_name

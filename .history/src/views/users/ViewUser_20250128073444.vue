@@ -8,8 +8,6 @@ export default {
     return {
       userData: null,
       companyData: null,
-      roleName: '',
-      companyName: '',
     }
   },
   methods: {
@@ -18,9 +16,7 @@ export default {
       try {
         await userEditStore.fetchUserDetails(this.userId)
         this.userData = userEditStore.userData
-        this.roleName = userEditStore.roleName
-        this.companyName = userEditStore.companyName
-        console.log('userData:', this.userData)
+        console.log('userData:', this.userData.meta)
         if (userEditStore.userData.parent_role_id === '16') {
           this.companyData = userEditStore.userData.affiliate_data
         } else if (userEditStore.userData.parent_role_id === '12') {
@@ -74,7 +70,8 @@ export default {
                   class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 my-2"
                 >
                   <li class="list-inline-item d-flex gap-2 align-items-center">
-                    <i class="ti ti-palette ti-lg"></i><span class="fw-medium">{{ roleName }}</span>
+                    <i class="ti ti-palette ti-lg"></i
+                    ><span class="fw-medium">{{ userData.role_name }}</span>
                   </li>
                   <li class="list-inline-item d-flex gap-2 align-items-center">
                     <i class="ti ti-calendar ti-lg"></i
@@ -91,9 +88,9 @@ export default {
                   </li>
                 </ul>
               </div>
-              <router-link :to="'/users/edit/' + userId" class="btn btn-primary mb-1">
+              <a href="javascript:void(0)" class="btn btn-primary mb-1">
                 <i class="ti ti-user-check ti-xs me-2"></i>Edit
-              </router-link>
+              </a>
             </div>
           </div>
         </div>
@@ -151,15 +148,15 @@ export default {
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-crown ti-lg"></i><span class="fw-medium mx-2">Role:</span>
-              <span>{{ roleName }}</span>
+              <span>{{ userData.role_name }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-flag ti-lg"></i><span class="fw-medium mx-2">Country:</span>
-              <span>{{ userData.meta.location }}</span>
+              <span>USA</span>
             </li>
             <li class="d-flex align-items-center mb-2">
               <i class="ti ti-language ti-lg"></i><span class="fw-medium mx-2">Languages:</span>
-              <span>{{ userData.meta.language }}</span>
+              <span>English</span>
             </li>
           </ul>
           <small class="card-text text-uppercase text-muted small">Contacts</small>

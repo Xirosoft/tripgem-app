@@ -8,8 +8,6 @@ export default {
     return {
       userData: null,
       companyData: null,
-      roleName: '',
-      companyName: '',
     }
   },
   methods: {
@@ -18,9 +16,7 @@ export default {
       try {
         await userEditStore.fetchUserDetails(this.userId)
         this.userData = userEditStore.userData
-        this.roleName = userEditStore.roleName
-        this.companyName = userEditStore.companyName
-        console.log('userData:', this.userData)
+        console.log('userData:', this.userEditStore.role_name)
         if (userEditStore.userData.parent_role_id === '16') {
           this.companyData = userEditStore.userData.affiliate_data
         } else if (userEditStore.userData.parent_role_id === '12') {
@@ -74,7 +70,8 @@ export default {
                   class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 my-2"
                 >
                   <li class="list-inline-item d-flex gap-2 align-items-center">
-                    <i class="ti ti-palette ti-lg"></i><span class="fw-medium">{{ roleName }}</span>
+                    <i class="ti ti-palette ti-lg"></i
+                    ><span class="fw-medium">{{ userData.role_name }}</span>
                   </li>
                   <li class="list-inline-item d-flex gap-2 align-items-center">
                     <i class="ti ti-calendar ti-lg"></i
@@ -151,7 +148,7 @@ export default {
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-crown ti-lg"></i><span class="fw-medium mx-2">Role:</span>
-              <span>{{ roleName }}</span>
+              <span>{{ userData.role_name }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-flag ti-lg"></i><span class="fw-medium mx-2">Country:</span>

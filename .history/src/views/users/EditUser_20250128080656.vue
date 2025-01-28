@@ -1,8 +1,5 @@
 <script>
 import { handleFileUpload } from '@/utils/handleFileUpload'
-import $ from 'jquery'
-import 'select2'
-import 'select2/dist/css/select2.css'
 import { useUserEditStore } from '../../stores/users/UserEdit.js'
 
 export default {
@@ -15,15 +12,7 @@ export default {
           location: { value: '' },
           profile_picture: { value: '' },
           cover_photo: { value: '' },
-          language: { value: [] },
-          social_links: {
-            twitter: '',
-            facebook: '',
-            line: '',
-            linkedin: '',
-            instagram: '',
-            tiktok: '',
-          },
+          language: { value: '' },
         },
       },
       isLoading: false,
@@ -47,7 +36,6 @@ export default {
             profile_picture: this.userData.meta.profile_picture.value,
             cover_photo: this.userData.meta.cover_photo.value,
             language: this.userData.meta.language.value,
-            social_links: this.userData.meta.social_links,
           },
         }
         console.log('submitData:', submitData)
@@ -93,18 +81,7 @@ export default {
         this.userData.meta.location = { value: this.userData.meta.location || '' }
         this.userData.meta.profile_picture = { value: this.userData.meta.profile_picture || '' }
         this.userData.meta.cover_photo = { value: this.userData.meta.cover_photo || '' }
-        this.userData.meta.language = { value: this.userData.meta.language || [] }
-        this.userData.meta.social_links =
-          typeof this.userData.meta.social_links === 'string'
-            ? JSON.parse(this.userData.meta.social_links)
-            : this.userData.meta.social_links || {
-                twitter: '',
-                facebook: '',
-                line: '',
-                linkedin: '',
-                instagram: '',
-                tiktok: '',
-              }
+        this.userData.meta.language = { value: this.userData.meta.language || '' }
       } catch (error) {
         console.error('Failed to fetch user details:', error)
         alert('Failed to load user data')
@@ -130,25 +107,9 @@ export default {
         this.userData.meta[key].value = files[0]
       }
     },
-    initializeSelect2() {
-      const vm = this
-      $(this.$refs.languageSelect)
-        .select2({
-          data: this.languages.map((lang) => ({ id: lang, text: lang })),
-          multiple: true,
-        })
-        .val(this.userData.meta.language.value)
-        .trigger('change')
-        .on('change', function () {
-          vm.userData.meta.language.value = $(this).val()
-        })
-    },
   },
   async created() {
     await this.initializeData()
-  },
-  mounted() {
-    this.initializeSelect2()
   },
 }
 </script>
@@ -352,7 +313,7 @@ export default {
                   />
                 </div>
               </div>
-              <div class="row mb-6 select2-primary">
+              <div class="row mb-6">
                 <label class="col-sm-2 col-form-label" for="edit-user-language"
                   >Preferred Language</label
                 >
@@ -360,8 +321,6 @@ export default {
                   <select
                     id="edit-user-language"
                     class="form-select"
-                    ref="languageSelect"
-                    multiple
                     v-model="userData.meta.language.value"
                     name="userLanguage"
                   >
@@ -370,117 +329,6 @@ export default {
                       {{ language }}
                     </option>
                   </select>
-                </div>
-              </div>
-              <div class="row mb-6">
-                <label class="col-sm-2 col-form-label" for="edit-user-bio">Bio</label>
-                <div class="col-sm-10">
-                  <textarea
-                    id="edit-user-bio"
-                    class="form-control"
-                    v-model="userData.meta.bio"
-                    placeholder="Enter bio description"
-                    name="userBio"
-                    aria-label="Enter bio description"
-                  ></textarea>
-                </div>
-              </div>
-              <div class="row g-6">
-                <div class="col-md-6">
-                  <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-twitter"
-                      >Twitter</label
-                    >
-                    <div class="col-sm-9">
-                      <input
-                        type="text"
-                        id="formtabs-twitter"
-                        class="form-control"
-                        v-model="userData.meta.social_links.twitter"
-                        placeholder="https://twitter.com/abc"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-facebook"
-                      >Facebook</label
-                    >
-                    <div class="col-sm-9">
-                      <input
-                        type="text"
-                        id="formtabs-facebook"
-                        class="form-control"
-                        v-model="userData.meta.social_links.facebook"
-                        placeholder="https://facebook.com/abc"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-line"
-                      >Line</label
-                    >
-                    <div class="col-sm-9">
-                      <input
-                        type="text"
-                        id="formtabs-line"
-                        class="form-control"
-                        v-model="userData.meta.social_links.line"
-                        placeholder="https://line.me/abc"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-linkedin"
-                      >LinkedIn</label
-                    >
-                    <div class="col-sm-9">
-                      <input
-                        type="text"
-                        id="formtabs-linkedin"
-                        class="form-control"
-                        v-model="userData.meta.social_links.linkedin"
-                        placeholder="https://linkedin.com/in/abc"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-instagram"
-                      >Instagram</label
-                    >
-                    <div class="col-sm-9">
-                      <input
-                        type="text"
-                        id="formtabs-instagram"
-                        class="form-control"
-                        v-model="userData.meta.social_links.instagram"
-                        placeholder="https://instagram.com/abc"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="row">
-                    <label class="col-sm-3 col-form-label text-sm-end" for="formtabs-tiktok"
-                      >Tiktok</label
-                    >
-                    <div class="col-sm-9">
-                      <input
-                        type="text"
-                        id="formtabs-tiktok"
-                        class="form-control"
-                        v-model="userData.meta.social_links.tiktok"
-                        placeholder="https://tiktok.com/@abc"
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
               <div class="row justify-content-end">
