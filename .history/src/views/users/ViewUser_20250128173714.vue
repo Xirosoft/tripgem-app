@@ -7,7 +7,6 @@ export default {
   data() {
     return {
       userData: null,
-      socialLinks: null,
       companyData: null,
       roleName: '',
       companyName: '',
@@ -21,9 +20,9 @@ export default {
         this.userData = userEditStore.userData
         this.roleName = userEditStore.roleName
         this.companyName = userEditStore.companyName
-        // console.log(this.userData.meta.social_links)
-        this.socialLinks = JSON.parse(this.userData.meta.social_links)
-        console.log('socialLinks:', this.socialLinks.twi)
+        console.log(this.userData.meta.social_links)
+        const socialLinks = JSON.parse(this.userData.meta.social_links)
+        console.log('userData:', this.userData)
         if (userEditStore.userData.parent_role_id === '16') {
           this.companyData = userEditStore.userData.affiliate_data
         } else if (userEditStore.userData.parent_role_id === '12') {
@@ -96,32 +95,32 @@ export default {
               </div>
               <div class="social_links">
                 <a
-                  v-if="socialLinks.facebook"
-                  :href="socialLinks.facebook"
+                  v-if="socialLinks.facebook_link"
+                  :href="socialLinks.facebook_link"
                   target="_blank"
                   class="btn btn-icon btn-outline-primary"
                 >
                   <i class="ti ti-brand-facebook"></i>
                 </a>
                 <a
-                  v-if="socialLinks.twitter"
-                  :href="socialLinks.twitter"
+                  v-if="socialLinks.twitter_link"
+                  :href="socialLinks.twitter_link"
                   target="_blank"
                   class="btn btn-icon btn-outline-info"
                 >
                   <i class="ti ti-brand-twitter"></i>
                 </a>
                 <a
-                  v-if="socialLinks.linkedin"
-                  :href="socialLinks.linkedin"
+                  v-if="socialLinks.linkedin_link"
+                  :href="socialLinks.linkedin_link"
                   target="_blank"
                   class="btn btn-icon btn-outline-primary"
                 >
                   <i class="ti ti-brand-linkedin"></i>
                 </a>
                 <a
-                  v-if="socialLinks.instagram"
-                  :href="socialLinks.instagram"
+                  v-if="socialLinks.instagram_link"
+                  :href="socialLinks.instagram_link"
                   target="_blank"
                   class="btn btn-icon btn-outline-danger"
                 >

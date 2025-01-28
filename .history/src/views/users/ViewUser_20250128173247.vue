@@ -7,7 +7,6 @@ export default {
   data() {
     return {
       userData: null,
-      socialLinks: null,
       companyData: null,
       roleName: '',
       companyName: '',
@@ -21,9 +20,7 @@ export default {
         this.userData = userEditStore.userData
         this.roleName = userEditStore.roleName
         this.companyName = userEditStore.companyName
-        // console.log(this.userData.meta.social_links)
-        this.socialLinks = JSON.parse(this.userData.meta.social_links)
-        console.log('socialLinks:', this.socialLinks.twi)
+        console.log('userData:', this.userData)
         if (userEditStore.userData.parent_role_id === '16') {
           this.companyData = userEditStore.userData.affiliate_data
         } else if (userEditStore.userData.parent_role_id === '12') {
@@ -33,6 +30,11 @@ export default {
         } else if (userEditStore.userData.parent_role_id === '6') {
           this.companyData = userEditStore.userData.merchant_data
         }
+        // Parse JSON strings for social links
+        this.userData.meta.facebook_link = JSON.parse(this.userData.meta.facebook_link)
+        this.userData.meta.twitter_link = JSON.parse(this.userData.meta.twitter_link)
+        this.userData.meta.linkedin_link = JSON.parse(this.userData.meta.linkedin_link)
+        this.userData.meta.instagram_link = JSON.parse(this.userData.meta.instagram_link)
       } catch (error) {
         console.error('Failed to fetch user details:', error)
         alert('Failed to load user data')
@@ -96,32 +98,32 @@ export default {
               </div>
               <div class="social_links">
                 <a
-                  v-if="socialLinks.facebook"
-                  :href="socialLinks.facebook"
+                  v-if="userData.meta.facebook_link"
+                  :href="userData.meta.facebook_link"
                   target="_blank"
                   class="btn btn-icon btn-outline-primary"
                 >
                   <i class="ti ti-brand-facebook"></i>
                 </a>
                 <a
-                  v-if="socialLinks.twitter"
-                  :href="socialLinks.twitter"
+                  v-if="userData.meta.twitter_link"
+                  :href="userData.meta.twitter_link"
                   target="_blank"
                   class="btn btn-icon btn-outline-info"
                 >
                   <i class="ti ti-brand-twitter"></i>
                 </a>
                 <a
-                  v-if="socialLinks.linkedin"
-                  :href="socialLinks.linkedin"
+                  v-if="userData.meta.linkedin_link"
+                  :href="userData.meta.linkedin_link"
                   target="_blank"
                   class="btn btn-icon btn-outline-primary"
                 >
                   <i class="ti ti-brand-linkedin"></i>
                 </a>
                 <a
-                  v-if="socialLinks.instagram"
-                  :href="socialLinks.instagram"
+                  v-if="userData.meta.instagram_link"
+                  :href="userData.meta.instagram_link"
                   target="_blank"
                   class="btn btn-icon btn-outline-danger"
                 >
