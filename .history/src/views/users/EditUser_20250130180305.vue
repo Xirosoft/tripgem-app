@@ -205,6 +205,7 @@ export default {
           .on('change', function () {
             vm.userData.company_id = $(this).val()
           })
+        console.log((vm.userData.company_id = $(this).val()))
       })
     },
   },

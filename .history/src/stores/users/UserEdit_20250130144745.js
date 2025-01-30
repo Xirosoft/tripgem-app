@@ -77,7 +77,7 @@ export const useUserEditStore = defineStore('userEdit', {
         })
 
         if (response.data.success) {
-          // console.log(response.data.data.role_name)
+          console.log(response.data.data.role_name)
 
           this.userData = response.data.data.user
           this.roleName = response.data.data.role_name
@@ -98,13 +98,13 @@ export const useUserEditStore = defineStore('userEdit', {
           this.userData.meta.bio = this.userData.meta.bio || ''
 
           if (response.data.data.affiliate_data) {
-            this.userData.company_id = response.data.data.affiliate_data.affiliate_id
+            this.userData.company_id = response.data.data.affiliate_data.affiliate_user_id
             this.userData.parent_role_id = '5'
           } else if (response.data.data.agency_data) {
             this.userData.company_id = response.data.data.agency_data.agency_id
             this.userData.parent_role_id = '3'
           } else if (response.data.data.b2b_data) {
-            this.userData.company_id = response.data.data.b2b_data.b2b_id
+            this.userData.company_id = response.data.data.b2b_data.b2b_user_id
             this.userData.parent_role_id = '4'
           } else if (response.data.data.merchant_data) {
             this.userData.company_id = response.data.data.merchant_data.merchant_id
@@ -136,28 +136,24 @@ export const useUserEditStore = defineStore('userEdit', {
       }
 
       if (userData.parent_role_id === '5') {
-        // Affiliate
         payload.affiliate_data = {
-          affiliate_id: userData.company_id,
+          affiliate_user_id: userData.company_id,
           role_id: userData.role_id,
           status: userData.status,
         }
       } else if (userData.parent_role_id === '3') {
-        // Agency
         payload.agency_data = {
           agency_id: userData.company_id,
           role_id: userData.role_id,
           status: userData.status,
         }
       } else if (userData.parent_role_id === '4') {
-        // B2B
         payload.b2b_data = {
-          b2b_id: userData.company_id,
+          b2b_user_id: userData.company_id,
           role_id: userData.role_id,
           status: userData.status,
         }
       } else if (userData.parent_role_id === '2') {
-        // Merchant
         payload.merchant_data = {
           merchant_id: userData.company_id,
           role_id: userData.role_id,

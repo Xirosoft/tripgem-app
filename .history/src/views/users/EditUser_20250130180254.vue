@@ -193,7 +193,8 @@ export default {
           vm.onRoleChange()
         })
 
-      // Initialize company select2
+      console.log(this.userData.company_id)
+
       this.$nextTick(() => {
         $(this.$refs.companySelect)
           .select2({
@@ -205,6 +206,7 @@ export default {
           .on('change', function () {
             vm.userData.company_id = $(this).val()
           })
+        console.log((vm.userData.company_id = $(this).val()))
       })
     },
   },

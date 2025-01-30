@@ -32,8 +32,150 @@ export default {
       parentRoles: [], // Parent roles fetched from the store or API
       filteredUserRoles: [], // User roles based on the selected parent role
       companies: [], // Companies based on the selected role
-      languages: ['Bengali', 'English'],
-      locations: ['Afghanistan', 'Albania', 'Algeria'],
+      languages: [
+        'Bengali',
+        'English',
+        'Spanish',
+        'French',
+        'German',
+        'Chinese',
+        'Japanese',
+        'Korean',
+        'Russian',
+        'Arabic',
+        'Hindi',
+        'Portuguese',
+        'Italian',
+        'Dutch',
+        'Polish',
+        'Turkish',
+        'Vietnamese',
+        'Thai',
+        'Indonesian',
+        'Malay',
+        'Filipino',
+      ],
+      locations: [
+        'Afghanistan',
+        'Albania',
+        'Algeria',
+        'Andorra',
+        'Angola',
+        'Argentina',
+        'Armenia',
+        'Australia',
+        'Austria',
+        'Azerbaijan',
+        'Bahamas',
+        'Bahrain',
+        'Bangladesh',
+        'Barbados',
+        'Belarus',
+        'Belgium',
+        'Belize',
+        'Benin',
+        'Bhutan',
+        'Bolivia',
+        'Brazil',
+        'Bulgaria',
+        'Cambodia',
+        'Cameroon',
+        'Canada',
+        'Chile',
+        'China',
+        'Colombia',
+        'Costa Rica',
+        'Croatia',
+        'Cuba',
+        'Cyprus',
+        'Czech Republic',
+        'Denmark',
+        'Ecuador',
+        'Egypt',
+        'Estonia',
+        'Ethiopia',
+        'Fiji',
+        'Finland',
+        'France',
+        'Georgia',
+        'Germany',
+        'Ghana',
+        'Greece',
+        'Guatemala',
+        'Haiti',
+        'Honduras',
+        'Hungary',
+        'Iceland',
+        'India',
+        'Indonesia',
+        'Iran',
+        'Iraq',
+        'Ireland',
+        'Israel',
+        'Italy',
+        'Jamaica',
+        'Japan',
+        'Jordan',
+        'Kazakhstan',
+        'Kenya',
+        'Kuwait',
+        'Laos',
+        'Latvia',
+        'Lebanon',
+        'Libya',
+        'Lithuania',
+        'Luxembourg',
+        'Malaysia',
+        'Maldives',
+        'Mali',
+        'Malta',
+        'Mexico',
+        'Monaco',
+        'Mongolia',
+        'Morocco',
+        'Myanmar',
+        'Nepal',
+        'Netherlands',
+        'New Zealand',
+        'Nigeria',
+        'Norway',
+        'Oman',
+        'Pakistan',
+        'Panama',
+        'Paraguay',
+        'Peru',
+        'Philippines',
+        'Poland',
+        'Portugal',
+        'Qatar',
+        'Romania',
+        'Russia',
+        'Saudi Arabia',
+        'Serbia',
+        'Singapore',
+        'Slovakia',
+        'Slovenia',
+        'South Africa',
+        'South Korea',
+        'Spain',
+        'Sri Lanka',
+        'Sweden',
+        'Switzerland',
+        'Syria',
+        'Taiwan',
+        'Thailand',
+        'Turkey',
+        'Ukraine',
+        'United Arab Emirates',
+        'United Kingdom',
+        'United States',
+        'Uruguay',
+        'Uzbekistan',
+        'Venezuela',
+        'Vietnam',
+        'Yemen',
+        'Zimbabwe',
+      ],
     }
   },
   methods: {
@@ -51,7 +193,7 @@ export default {
             bio: this.userData.meta.bio, // Ensure bio is included in submitData
           },
         }
-        // console.log('submitData:', submitData)
+        console.log('submitData:', submitData)
 
         const message = await this.userEditStore.editUser(this.userId, submitData)
         this.message = message
@@ -78,19 +220,6 @@ export default {
       if (['4', '2', '5', '3'].includes(this.userData.parent_role_id)) {
         await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
         this.companies = this.userEditStore.getCompanies
-        // this.$nextTick(() => {
-        //   const vm = this
-        //   $(this.$refs.companySelect)
-        //     .select2({
-        //       placeholder: 'Select Company',
-        //       allowClear: true,
-        //     })
-        //     .val(this.userData.company_id)
-        //     .trigger('change')
-        //     .on('change', function () {
-        //       vm.userData.company_id = $(this).val()
-        //     })
-        // })
       } else {
         this.companies = []
       }
@@ -101,53 +230,49 @@ export default {
         await this.userEditStore.fetchUserDetails(this.userId)
         this.userData = this.userEditStore.userData
         // Ensure meta properties are initialized
-        // console.log('userData:', this.userData)
+        console.log('userData:', this.userData)
 
         this.userData.meta = this.userData.meta || {}
         this.userData.meta.location = { value: this.userData.meta.location || '' }
         this.userData.meta.profile_picture = { value: this.userData.meta.profile_picture || '' }
         this.userData.meta.cover_photo = { value: this.userData.meta.cover_photo || '' }
-        this.userData.meta.language =
-          typeof this.userData.meta.language === 'string' &&
-          this.userData.meta.language.trim() !== ''
-            ? { value: JSON.parse(this.userData.meta.language) }
-            : { value: this.userData.meta.language || [] }
-        this.userData.meta.social_links =
-          typeof this.userData.meta.social_links === 'string' &&
-          this.userData.meta.social_links.trim() !== ''
-            ? JSON.parse(this.userData.meta.social_links)
-            : this.userData.meta.social_links || {
-                twitter: '',
-                facebook: '',
-                line: '',
-                linkedin: '',
-                instagram: '',
-                tiktok: '',
-              }
+        // this.userData.meta.language =
+        //   typeof this.userData.meta.language === 'string' &&
+        //   this.userData.meta.language.trim() !== ''
+        //     ? { value: JSON.parse(this.userData.meta.language) }
+        //     : { value: this.userData.meta.language || [] }
+        // this.userData.meta.social_links =
+        //   typeof this.userData.meta.social_links === 'string' &&
+        //   this.userData.meta.social_links.trim() !== ''
+        //     ? JSON.parse(this.userData.meta.social_links)
+        //     : this.userData.meta.social_links || {
+        //         twitter: '',
+        //         facebook: '',
+        //         line: '',
+        //         linkedin: '',
+        //         instagram: '',
+        //         tiktok: '',
+        //       }
         this.userData.meta.bio = this.userData.meta.bio || '' // Ensure bio is initialized
-
-        // Fetch roles from the store or API
-        await this.userEditStore.fetchRoles()
-        this.parentRoles = this.userEditStore.getParentRoles
-
-        // Fetch user roles if parent role is already selected
-        if (this.userData.parent_role_id) {
-          this.userEditStore.filterUserRoles(this.userData.parent_role_id)
-          this.filteredUserRoles = this.userEditStore.getFilteredUserRoles
-        }
-
-        // Fetch companies if role is already selected
-        if (['4', '2', '5', '3'].includes(this.userData.parent_role_id)) {
-          await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
-          this.companies = this.userEditStore.getCompanies
-        }
-        console.log('companies:', this.companies)
       } catch (error) {
-        // console.log(this.userData.meta.language)
-        // console.log(this.userData.meta.social_links)
+        console.log(this.userData.meta.language)
+        console.log(this.userData.meta.social_links)
         console.error('Failed to fetch user details:', error)
         // alert('Failed to load user data')
         // this.$router.push('/users')
+      }
+      // Fetch roles from the store or API
+      await this.userEditStore.fetchRoles()
+      this.parentRoles = this.userEditStore.getParentRoles
+      // Fetch user roles if parent role is already selected
+      if (this.userData.parent_role_id) {
+        this.userEditStore.filterUserRoles(this.userData.parent_role_id)
+        this.filteredUserRoles = this.userEditStore.getFilteredUserRoles
+      }
+      // Fetch companies if role is already selected
+      if (['4', '2', '5', '3'].includes(this.userData.parent_role_id)) {
+        await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
+        this.companies = this.userEditStore.getCompanies
       }
     },
     async handleFileUpload(event, key) {
@@ -168,44 +293,6 @@ export default {
         .on('change', function () {
           vm.userData.meta.language.value = $(this).val()
         })
-
-      $(this.$refs.parentRoleSelect)
-        .select2({
-          placeholder: 'Select Parent Role',
-          allowClear: true,
-        })
-        .val(this.userData.parent_role_id)
-        .trigger('change')
-        .on('change', function () {
-          vm.userData.parent_role_id = $(this).val()
-          vm.onParentRoleChange()
-        })
-
-      $(this.$refs.userRoleSelect)
-        .select2({
-          placeholder: 'Select User Role',
-          allowClear: true,
-        })
-        .val(this.userData.role_id)
-        .trigger('change')
-        .on('change', function () {
-          vm.userData.role_id = $(this).val()
-          vm.onRoleChange()
-        })
-
-      // Initialize company select2
-      this.$nextTick(() => {
-        $(this.$refs.companySelect)
-          .select2({
-            placeholder: 'Select Company',
-            allowClear: true,
-          })
-          .val(this.userData.company_id)
-          .trigger('change')
-          .on('change', function () {
-            vm.userData.company_id = $(this).val()
-          })
-      })
     },
   },
   async created() {
@@ -285,7 +372,6 @@ export default {
                     <select
                       id="parent-role"
                       class="form-select"
-                      ref="parentRoleSelect"
                       v-model="userData.parent_role_id"
                       name="parentRole"
                       @change="onParentRoleChange"
@@ -301,7 +387,6 @@ export default {
                     <select
                       id="edit-user-role"
                       class="form-select"
-                      ref="userRoleSelect"
                       v-model="userData.role_id"
                       name="userRole"
                       @change="onRoleChange"
@@ -321,7 +406,6 @@ export default {
                     <select
                       id="edit-user-company"
                       class="form-select"
-                      ref="companySelect"
                       v-model="userData.company_id"
                       name="userCompany"
                     >

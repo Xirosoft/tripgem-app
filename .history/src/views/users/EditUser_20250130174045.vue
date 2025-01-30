@@ -51,7 +51,7 @@ export default {
             bio: this.userData.meta.bio, // Ensure bio is included in submitData
           },
         }
-        // console.log('submitData:', submitData)
+        console.log('submitData:', submitData)
 
         const message = await this.userEditStore.editUser(this.userId, submitData)
         this.message = message
@@ -78,19 +78,19 @@ export default {
       if (['4', '2', '5', '3'].includes(this.userData.parent_role_id)) {
         await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
         this.companies = this.userEditStore.getCompanies
-        // this.$nextTick(() => {
-        //   const vm = this
-        //   $(this.$refs.companySelect)
-        //     .select2({
-        //       placeholder: 'Select Company',
-        //       allowClear: true,
-        //     })
-        //     .val(this.userData.company_id)
-        //     .trigger('change')
-        //     .on('change', function () {
-        //       vm.userData.company_id = $(this).val()
-        //     })
-        // })
+        this.$nextTick(() => {
+          const vm = this
+          $(this.$refs.companySelect)
+            .select2({
+              placeholder: 'Select Company',
+              allowClear: true,
+            })
+            .val(this.userData.company_id)
+            .trigger('change')
+            .on('change', function () {
+              vm.userData.company_id = $(this).val()
+            })
+        })
       } else {
         this.companies = []
       }
@@ -101,7 +101,7 @@ export default {
         await this.userEditStore.fetchUserDetails(this.userId)
         this.userData = this.userEditStore.userData
         // Ensure meta properties are initialized
-        // console.log('userData:', this.userData)
+        console.log('userData:', this.userData)
 
         this.userData.meta = this.userData.meta || {}
         this.userData.meta.location = { value: this.userData.meta.location || '' }
@@ -143,8 +143,8 @@ export default {
         }
         console.log('companies:', this.companies)
       } catch (error) {
-        // console.log(this.userData.meta.language)
-        // console.log(this.userData.meta.social_links)
+        console.log(this.userData.meta.language)
+        console.log(this.userData.meta.social_links)
         console.error('Failed to fetch user details:', error)
         // alert('Failed to load user data')
         // this.$router.push('/users')
@@ -193,7 +193,6 @@ export default {
           vm.onRoleChange()
         })
 
-      // Initialize company select2
       this.$nextTick(() => {
         $(this.$refs.companySelect)
           .select2({
@@ -291,7 +290,7 @@ export default {
                       @change="onParentRoleChange"
                     >
                       <option value="">Select Parent Role</option>
-                      <option v-for="role in parentRoles" :key="role.role_id" :value="role.role_id">
+                      <option v-for="role in parentRoles">
                         {{ role.role_name }}
                       </option>
                     </select>

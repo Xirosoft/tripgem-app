@@ -98,14 +98,14 @@ export const useUserEditStore = defineStore('userEdit', {
           this.userData.meta.bio = this.userData.meta.bio || ''
 
           if (response.data.data.affiliate_data) {
-            this.userData.company_id = response.data.data.affiliate_data.affiliate_id
-            this.userData.parent_role_id = '5'
+            this.userData.company_id = response.data.data.affiliate_data.affiliate_user_id
+            this.userData.parent_role_id = '4'
           } else if (response.data.data.agency_data) {
             this.userData.company_id = response.data.data.agency_data.agency_id
             this.userData.parent_role_id = '3'
           } else if (response.data.data.b2b_data) {
-            this.userData.company_id = response.data.data.b2b_data.b2b_id
-            this.userData.parent_role_id = '4'
+            this.userData.company_id = response.data.data.b2b_data.b2b_user_id
+            this.userData.parent_role_id = '5'
           } else if (response.data.data.merchant_data) {
             this.userData.company_id = response.data.data.merchant_data.merchant_id
             this.userData.parent_role_id = '2'

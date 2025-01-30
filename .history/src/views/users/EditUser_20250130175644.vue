@@ -193,19 +193,21 @@ export default {
           vm.onRoleChange()
         })
 
-      // Initialize company select2
-      this.$nextTick(() => {
-        $(this.$refs.companySelect)
-          .select2({
-            placeholder: 'Select Company',
-            allowClear: true,
-          })
-          .val(this.userData.company_id)
-          .trigger('change')
-          .on('change', function () {
-            vm.userData.company_id = $(this).val()
-          })
-      })
+      console.log(this.userData.company_id)
+
+      // this.$nextTick(() => {
+      //   $(this.$refs.companySelect)
+      //     .select2({
+      //       placeholder: 'Select Company',
+      //       allowClear: true,
+      //     })
+      //     .val(this.userData.company_id)
+      //     .trigger('change')
+      //     .on('change', function () {
+      //       vm.userData.company_id = $(this).val()
+      //     })
+      //   console.log((vm.userData.company_id = $(this).val()))
+      // })
     },
   },
   async created() {
