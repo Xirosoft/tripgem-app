@@ -39,16 +39,16 @@ export const useUserEditStore = defineStore('userEdit', {
     async fetchCompanies(parentRoleId) {
       let endpoint = ''
       switch (parentRoleId) {
-        case '4': // B2B
+        case '19': // B2B
           endpoint = 'agency/b2b/view'
           break
-        case '2': // Merchant
+        case '6': // Merchant
           endpoint = 'merchants/view'
           break
-        case '5': // Affiliate
+        case '16': // Affiliate
           endpoint = 'affiliates/view'
           break
-        case '3': // Agency
+        case '12': // Agency
           endpoint = 'agencies/view'
           break
         default:
@@ -135,13 +135,13 @@ export const useUserEditStore = defineStore('userEdit', {
         },
       }
 
-      if (userData.parent_role_id === '6') {
+      if (userData.parent_role_id === '16') {
         payload.affiliate_data = {
           affiliate_user_id: userData.company_id,
           role_id: userData.role_id,
           status: userData.status,
         }
-      } else if (userData.parent_role_id === '3') {
+      } else if (userData.parent_role_id === '12') {
         payload.agency_data = {
           agency_id: userData.company_id,
           role_id: userData.role_id,

@@ -1,7 +1,7 @@
-import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../../config/config'
+
 export const useUsersListStore = defineStore('usersList', {
   state: () => ({
     users: [],
@@ -25,9 +25,8 @@ export const useUsersListStore = defineStore('usersList', {
     async fetchUsers() {
       this.loading = true
       this.error = null
-      const userId = useAuthStore().userId
       try {
-        const response = await axios.get(`${config.apiUrl}/users/list/${userId}`, {
+        const response = await axios.get(`${config.apiUrl}/users/list/`, {
           headers: config.getHeaders(),
         })
         this.users = Array.isArray(response.data) ? response.data : response.data.data

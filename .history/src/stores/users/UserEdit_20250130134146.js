@@ -45,7 +45,7 @@ export const useUserEditStore = defineStore('userEdit', {
         case '2': // Merchant
           endpoint = 'merchants/view'
           break
-        case '5': // Affiliate
+        case '45': // Affiliate
           endpoint = 'affiliates/view'
           break
         case '3': // Agency

@@ -222,6 +222,7 @@ export default {
       } else {
         this.companies = []
       }
+      console.log('companies:', this.companies)
     },
     async initializeData() {
       this.userEditStore = useUserEditStore()

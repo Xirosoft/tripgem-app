@@ -39,16 +39,16 @@ export const useUserEditStore = defineStore('userEdit', {
     async fetchCompanies(parentRoleId) {
       let endpoint = ''
       switch (parentRoleId) {
-        case '4': // B2B
+        case '19': // B2B
           endpoint = 'agency/b2b/view'
           break
-        case '2': // Merchant
+        case '6': // Merchant
           endpoint = 'merchants/view'
           break
-        case '5': // Affiliate
+        case '16': // Affiliate
           endpoint = 'affiliates/view'
           break
-        case '3': // Agency
+        case '12': // Agency
           endpoint = 'agencies/view'
           break
         default:

@@ -216,7 +216,7 @@ export default {
       this.companies = [] // Reset companies selection
     },
     async onRoleChange() {
-      if (['4', '2', '5', '3'].includes(this.userData.parent_role_id)) {
+      if (['5', '2', '6', '12'].includes(this.userData.parent_role_id)) {
         await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
         this.companies = this.userEditStore.getCompanies
       } else {
@@ -236,13 +236,11 @@ export default {
         this.userData.meta.profile_picture = { value: this.userData.meta.profile_picture || '' }
         this.userData.meta.cover_photo = { value: this.userData.meta.cover_photo || '' }
         this.userData.meta.language =
-          typeof this.userData.meta.language === 'string' &&
-          this.userData.meta.language.trim() !== ''
+          typeof this.userData.meta.language === 'string'
             ? { value: JSON.parse(this.userData.meta.language) }
             : { value: this.userData.meta.language || [] }
         this.userData.meta.social_links =
-          typeof this.userData.meta.social_links === 'string' &&
-          this.userData.meta.social_links.trim() !== ''
+          typeof this.userData.meta.social_links === 'string'
             ? JSON.parse(this.userData.meta.social_links)
             : this.userData.meta.social_links || {
                 twitter: '',
@@ -266,7 +264,7 @@ export default {
         this.filteredUserRoles = this.userEditStore.getFilteredUserRoles
       }
       // Fetch companies if role is already selected
-      if (['4', '2', '5', '3'].includes(this.userData.parent_role_id)) {
+      if (['19', '6', '16', '12'].includes(this.userData.parent_role_id)) {
         await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
         this.companies = this.userEditStore.getCompanies
       }

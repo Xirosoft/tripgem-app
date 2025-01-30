@@ -27,7 +27,7 @@ export const useUsersListStore = defineStore('usersList', {
       this.error = null
       const userId = useAuthStore().userId
       try {
-        const response = await axios.get(`${config.apiUrl}/users/list/${userId}`, {
+        const response = await axios.get(`${config.apiUrl}/users/list/`, {
           headers: config.getHeaders(),
         })
         this.users = Array.isArray(response.data) ? response.data : response.data.data

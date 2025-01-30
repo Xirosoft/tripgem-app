@@ -222,6 +222,7 @@ export default {
       } else {
         this.companies = []
       }
+      console.log('companies:', this.companies)
     },
     async initializeData() {
       this.userEditStore = useUserEditStore()
@@ -266,7 +267,7 @@ export default {
         this.filteredUserRoles = this.userEditStore.getFilteredUserRoles
       }
       // Fetch companies if role is already selected
-      if (['4', '2', '5', '3'].includes(this.userData.parent_role_id)) {
+      if (['19', '6', '16', '12'].includes(this.userData.parent_role_id)) {
         await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
         this.companies = this.userEditStore.getCompanies
       }
