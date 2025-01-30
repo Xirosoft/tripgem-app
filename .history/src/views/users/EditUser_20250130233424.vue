@@ -78,19 +78,19 @@ export default {
       if (['4', '2', '5', '3'].includes(this.userData.parent_role_id)) {
         await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
         this.companies = this.userEditStore.getCompanies
-        this.$nextTick(() => {
-          const vm = this
-          $(this.$refs.companySelect)
-            .select2({
-              placeholder: 'Select Company',
-              allowClear: true,
-            })
-            .val(this.userData.company_id)
-            .trigger('change')
-            .on('change', function () {
-              vm.userData.company_id = $(this).val()
-            })
-        })
+        // this.$nextTick(() => {
+        //   const vm = this
+        //   $(this.$refs.companySelect)
+        //     .select2({
+        //       placeholder: 'Select Company',
+        //       allowClear: true,
+        //     })
+        //     .val(this.userData.company_id)
+        //     .trigger('change')
+        //     .on('change', function () {
+        //       vm.userData.company_id = $(this).val()
+        //     })
+        // })
       } else {
         this.companies = []
       }
@@ -140,19 +140,6 @@ export default {
         if (['4', '2', '5', '3'].includes(this.userData.parent_role_id)) {
           await this.userEditStore.fetchCompanies(this.userData.parent_role_id)
           this.companies = this.userEditStore.getCompanies
-          this.$nextTick(() => {
-            const vm = this
-            $(this.$refs.companySelect)
-              .select2({
-                placeholder: 'Select Company',
-                allowClear: true,
-              })
-              .val(this.userData.company_id)
-              .trigger('change')
-              .on('change', function () {
-                vm.userData.company_id = $(this).val()
-              })
-          })
         }
         console.log('companies:', this.companies)
       } catch (error) {
@@ -207,18 +194,18 @@ export default {
         })
 
       // Initialize company select2
-      this.$nextTick(() => {
-        $(this.$refs.companySelect)
-          .select2({
-            placeholder: 'Select Company',
-            allowClear: true,
-          })
-          .val(this.userData.company_id)
-          .trigger('change')
-          .on('change', function () {
-            vm.userData.company_id = $(this).val()
-          })
-      })
+      // this.$nextTick(() => {
+      $(this.$refs.companySelect)
+        .select2({
+          placeholder: 'Select Company',
+          allowClear: true,
+        })
+        .val(this.userData.company_id)
+        .trigger('change')
+        .on('change', function () {
+          vm.userData.company_id = $(this).val()
+        })
+      // })
     },
   },
   async created() {
