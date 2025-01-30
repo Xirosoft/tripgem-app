@@ -32,150 +32,8 @@ export default {
       parentRoles: [], // Parent roles fetched from the store or API
       filteredUserRoles: [], // User roles based on the selected parent role
       companies: [], // Companies based on the selected role
-      languages: [
-        'Bengali',
-        'English',
-        'Spanish',
-        'French',
-        'German',
-        'Chinese',
-        'Japanese',
-        'Korean',
-        'Russian',
-        'Arabic',
-        'Hindi',
-        'Portuguese',
-        'Italian',
-        'Dutch',
-        'Polish',
-        'Turkish',
-        'Vietnamese',
-        'Thai',
-        'Indonesian',
-        'Malay',
-        'Filipino',
-      ],
-      locations: [
-        'Afghanistan',
-        'Albania',
-        'Algeria',
-        'Andorra',
-        'Angola',
-        'Argentina',
-        'Armenia',
-        'Australia',
-        'Austria',
-        'Azerbaijan',
-        'Bahamas',
-        'Bahrain',
-        'Bangladesh',
-        'Barbados',
-        'Belarus',
-        'Belgium',
-        'Belize',
-        'Benin',
-        'Bhutan',
-        'Bolivia',
-        'Brazil',
-        'Bulgaria',
-        'Cambodia',
-        'Cameroon',
-        'Canada',
-        'Chile',
-        'China',
-        'Colombia',
-        'Costa Rica',
-        'Croatia',
-        'Cuba',
-        'Cyprus',
-        'Czech Republic',
-        'Denmark',
-        'Ecuador',
-        'Egypt',
-        'Estonia',
-        'Ethiopia',
-        'Fiji',
-        'Finland',
-        'France',
-        'Georgia',
-        'Germany',
-        'Ghana',
-        'Greece',
-        'Guatemala',
-        'Haiti',
-        'Honduras',
-        'Hungary',
-        'Iceland',
-        'India',
-        'Indonesia',
-        'Iran',
-        'Iraq',
-        'Ireland',
-        'Israel',
-        'Italy',
-        'Jamaica',
-        'Japan',
-        'Jordan',
-        'Kazakhstan',
-        'Kenya',
-        'Kuwait',
-        'Laos',
-        'Latvia',
-        'Lebanon',
-        'Libya',
-        'Lithuania',
-        'Luxembourg',
-        'Malaysia',
-        'Maldives',
-        'Mali',
-        'Malta',
-        'Mexico',
-        'Monaco',
-        'Mongolia',
-        'Morocco',
-        'Myanmar',
-        'Nepal',
-        'Netherlands',
-        'New Zealand',
-        'Nigeria',
-        'Norway',
-        'Oman',
-        'Pakistan',
-        'Panama',
-        'Paraguay',
-        'Peru',
-        'Philippines',
-        'Poland',
-        'Portugal',
-        'Qatar',
-        'Romania',
-        'Russia',
-        'Saudi Arabia',
-        'Serbia',
-        'Singapore',
-        'Slovakia',
-        'Slovenia',
-        'South Africa',
-        'South Korea',
-        'Spain',
-        'Sri Lanka',
-        'Sweden',
-        'Switzerland',
-        'Syria',
-        'Taiwan',
-        'Thailand',
-        'Turkey',
-        'Ukraine',
-        'United Arab Emirates',
-        'United Kingdom',
-        'United States',
-        'Uruguay',
-        'Uzbekistan',
-        'Venezuela',
-        'Vietnam',
-        'Yemen',
-        'Zimbabwe',
-      ],
+      languages: ['Bengali', 'English'],
+      locations: ['Afghanistan', 'Albania', 'Algeria'],
     }
   },
   methods: {
@@ -317,7 +175,6 @@ export default {
         .select2({
           data: this.languages.map((lang) => ({ id: lang, text: lang })),
           multiple: true,
-          minimumInputLength: 1, // Enable search with a minimum of 1 character
         })
         .val(this.userData.meta.language.value)
         .trigger('change')
@@ -362,18 +219,6 @@ export default {
             vm.userData.company_id = $(this).val()
           })
       })
-
-      // Initialize location select2 with search option
-      $(this.$refs.locationSelect)
-        .select2({
-          data: this.locations.map((loc) => ({ id: loc, text: loc })),
-          minimumInputLength: 1, // Enable search with a minimum of 1 character
-        })
-        .val(this.userData.meta.location.value)
-        .trigger('change')
-        .on('change', function () {
-          vm.userData.meta.location.value = $(this).val()
-        })
     },
   },
   async created() {
@@ -526,8 +371,6 @@ export default {
                     <select
                       id="edit-user-location"
                       class="form-select"
-                      ref="locationSelect"
-                      multiple
                       v-model="userData.meta.location.value"
                       name="userLocation"
                     >

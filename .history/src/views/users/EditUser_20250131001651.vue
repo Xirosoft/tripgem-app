@@ -32,7 +32,8 @@ export default {
       parentRoles: [], // Parent roles fetched from the store or API
       filteredUserRoles: [], // User roles based on the selected parent role
       companies: [], // Companies based on the selected role
-      languages: [
+      languages: ['Bengali', 'English'],
+      locations: [
         'Bengali',
         'English',
         'Spanish',
@@ -317,7 +318,6 @@ export default {
         .select2({
           data: this.languages.map((lang) => ({ id: lang, text: lang })),
           multiple: true,
-          minimumInputLength: 1, // Enable search with a minimum of 1 character
         })
         .val(this.userData.meta.language.value)
         .trigger('change')
@@ -362,18 +362,6 @@ export default {
             vm.userData.company_id = $(this).val()
           })
       })
-
-      // Initialize location select2 with search option
-      $(this.$refs.locationSelect)
-        .select2({
-          data: this.locations.map((loc) => ({ id: loc, text: loc })),
-          minimumInputLength: 1, // Enable search with a minimum of 1 character
-        })
-        .val(this.userData.meta.location.value)
-        .trigger('change')
-        .on('change', function () {
-          vm.userData.meta.location.value = $(this).val()
-        })
     },
   },
   async created() {
@@ -526,8 +514,6 @@ export default {
                     <select
                       id="edit-user-location"
                       class="form-select"
-                      ref="locationSelect"
-                      multiple
                       v-model="userData.meta.location.value"
                       name="userLocation"
                     >
