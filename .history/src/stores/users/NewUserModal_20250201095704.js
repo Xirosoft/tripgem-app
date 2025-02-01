@@ -23,7 +23,6 @@ export const useNewUserModal = defineStore('newUserModal', {
           this.parentRoles = this.roles.filter((role) => role.parent_id === null)
           this.userRoles = this.roles.filter((role) => role.parent_id !== null)
         }
-        console.log('Roles:', this.roles)
       } catch (error) {
         console.error('Error fetching roles:', error)
       }

@@ -13,9 +13,8 @@ export const useNewUserModal = defineStore('newUserModal', {
   }),
   actions: {
     async fetchRoles() {
-      const userId = useAuthStore().userId
       try {
-        const response = await axios.get(`${config.apiUrl}/roles/view/${userId}`, {
+        const response = await axios.get(`${config.apiUrl}/roles/view`, {
           headers: config.getHeaders(),
         })
         if (response.data.success) {
@@ -23,7 +22,6 @@ export const useNewUserModal = defineStore('newUserModal', {
           this.parentRoles = this.roles.filter((role) => role.parent_id === null)
           this.userRoles = this.roles.filter((role) => role.parent_id !== null)
         }
-        console.log('Roles:', this.roles)
       } catch (error) {
         console.error('Error fetching roles:', error)
       }

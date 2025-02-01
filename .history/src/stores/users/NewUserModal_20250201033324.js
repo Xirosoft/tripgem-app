@@ -2,7 +2,7 @@ import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../../config/config'
-
+const userId = useAuthStore().userId
 export const useNewUserModal = defineStore('newUserModal', {
   state: () => ({
     roles: [],
@@ -13,9 +13,8 @@ export const useNewUserModal = defineStore('newUserModal', {
   }),
   actions: {
     async fetchRoles() {
-      const userId = useAuthStore().userId
       try {
-        const response = await axios.get(`${config.apiUrl}/roles/view/${userId}`, {
+        const response = await axios.get(`${config.apiUrl}/roles/view`, {
           headers: config.getHeaders(),
         })
         if (response.data.success) {
@@ -23,7 +22,6 @@ export const useNewUserModal = defineStore('newUserModal', {
           this.parentRoles = this.roles.filter((role) => role.parent_id === null)
           this.userRoles = this.roles.filter((role) => role.parent_id !== null)
         }
-        console.log('Roles:', this.roles)
       } catch (error) {
         console.error('Error fetching roles:', error)
       }
@@ -32,19 +30,18 @@ export const useNewUserModal = defineStore('newUserModal', {
       this.filteredUserRoles = this.userRoles.filter((role) => role.parent_id === parentRoleId)
     },
     async fetchCompanies(parentRoleId) {
-      const userId = useAuthStore().userId
       let endpoint = ''
       switch (parentRoleId) {
-        case '4': // B2B
+        case '3': // B2B
           endpoint = 'agency/b2b/view'
           break
-        case '2': // Merchant
+        case '1': // Merchant
           endpoint = 'merchants/view'
           break
-        case '5': // Affiliate
+        case '4': // Affiliate
           endpoint = 'affiliates/view'
           break
-        case '3': // Agency
+        case '2': // Agency
           endpoint = 'agencies/view'
           break
         default:
@@ -53,7 +50,7 @@ export const useNewUserModal = defineStore('newUserModal', {
       }
 
       try {
-        const response = await axios.get(`${config.apiUrl}/${endpoint}/${userId}`, {
+        const response = await axios.get(`${config.apiUrl}/${endpoint}`, {
           headers: config.getHeaders(),
         })
         console.log('API Response:', response)
@@ -123,7 +120,7 @@ export const useNewUserModal = defineStore('newUserModal', {
       }
 
       try {
-        const response = await axios.post(`${config.apiUrl}/${endpoint}`, body, {
+        const response = await axios.post(`${config.apiUrl}/${endpoint}/${userId}`, body, {
           headers: config.getHeaders(),
         })
         return response.data

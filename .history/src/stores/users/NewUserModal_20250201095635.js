@@ -2,7 +2,7 @@ import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../../config/config'
-
+const userId = useAuthStore().userId
 export const useNewUserModal = defineStore('newUserModal', {
   state: () => ({
     roles: [],
@@ -13,7 +13,6 @@ export const useNewUserModal = defineStore('newUserModal', {
   }),
   actions: {
     async fetchRoles() {
-      const userId = useAuthStore().userId
       try {
         const response = await axios.get(`${config.apiUrl}/roles/view/${userId}`, {
           headers: config.getHeaders(),
@@ -23,7 +22,6 @@ export const useNewUserModal = defineStore('newUserModal', {
           this.parentRoles = this.roles.filter((role) => role.parent_id === null)
           this.userRoles = this.roles.filter((role) => role.parent_id !== null)
         }
-        console.log('Roles:', this.roles)
       } catch (error) {
         console.error('Error fetching roles:', error)
       }
@@ -32,7 +30,6 @@ export const useNewUserModal = defineStore('newUserModal', {
       this.filteredUserRoles = this.userRoles.filter((role) => role.parent_id === parentRoleId)
     },
     async fetchCompanies(parentRoleId) {
-      const userId = useAuthStore().userId
       let endpoint = ''
       switch (parentRoleId) {
         case '4': // B2B

@@ -1,7 +1,7 @@
-import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../../config/config'
+
 export const useMerchantsStore = defineStore('merchants', {
   state: () => ({
     merchants: [],
@@ -18,7 +18,6 @@ export const useMerchantsStore = defineStore('merchants', {
     },
 
     async fetchMerchants() {
-      const userId = useAuthStore().userId
       this.loading = true
       this.error = null
       try {
