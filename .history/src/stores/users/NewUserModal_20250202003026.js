@@ -80,6 +80,8 @@ export const useNewUserModal = defineStore('newUserModal', {
     async assignUserToRole(userId, companyId, roleId, status, parentRoleId) {
       let endpoint = ''
       let body = {}
+      console.log('Assigning user to role:', parentRoleId)
+
       switch (parentRoleId) {
         case '4': // B2B
           endpoint = 'b2b/user/add'
@@ -118,7 +120,7 @@ export const useNewUserModal = defineStore('newUserModal', {
           }
           break
         default:
-        // throw new Error('Invalid parent role ID')
+          throw new Error('Invalid parent role ID')
       }
 
       try {
@@ -127,7 +129,7 @@ export const useNewUserModal = defineStore('newUserModal', {
         })
         return response.data
       } catch (error) {
-        console.log('Error assigning user to role:', error)
+        console.error('Error assigning user to role:', error)
         throw error
       }
     },

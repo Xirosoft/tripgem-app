@@ -118,7 +118,7 @@ export const useNewUserModal = defineStore('newUserModal', {
           }
           break
         default:
-        // throw new Error('Invalid parent role ID')
+          throw new Error('Invalid parent role ID')
       }
 
       try {
@@ -127,7 +127,7 @@ export const useNewUserModal = defineStore('newUserModal', {
         })
         return response.data
       } catch (error) {
-        console.log('Error assigning user to role:', error)
+        console.error('Error assigning user to role:', error)
         throw error
       }
     },

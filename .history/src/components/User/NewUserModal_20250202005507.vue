@@ -43,7 +43,7 @@ export default {
         role_id: form.userRole.value,
         status: form.userStatus.value || 'pending',
         is_verified: true,
-        invited_by_admin: true,
+        registerUser: true,
       }
 
       try {
@@ -57,16 +57,13 @@ export default {
         const status = form.userStatus.value || 'pending'
         const parentRoleId = form.parentRole.value
 
-        if (roleId) {
-          await this.newUserModalStore.assignUserToRole(
-            userId,
-            companyId,
-            roleId,
-            status,
-            parentRoleId,
-          )
-        }
-
+        await this.newUserModalStore.assignUserToRole(
+          userId,
+          companyId,
+          roleId,
+          status,
+          parentRoleId,
+        )
         this.message = 'User added successfully. Verify email and phone with OTP.'
         this.messageType = 'success'
       } catch (error) {
