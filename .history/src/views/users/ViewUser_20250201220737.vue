@@ -33,6 +33,8 @@ export default {
         // } else if (userEditStore.userData.parent_role_id === '2') {
         //   this.companyData = userEditStore.userData.merchant_data
         // }
+        console.log('User Company:', this.companyName)
+        console.log('User ROle:', this.roleName)
       } catch (error) {
         console.error('Failed to fetch user details:', error)
         // alert('Failed to load user data')

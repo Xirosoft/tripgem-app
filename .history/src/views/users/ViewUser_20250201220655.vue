@@ -33,6 +33,8 @@ export default {
         // } else if (userEditStore.userData.parent_role_id === '2') {
         //   this.companyData = userEditStore.userData.merchant_data
         // }
+        console.log('User Company:', this.companyName)
+        console.log('User ROle:', this.roleName)
       } catch (error) {
         console.error('Failed to fetch user details:', error)
         // alert('Failed to load user data')
@@ -219,18 +221,20 @@ export default {
           </ul>
           <small class="card-text text-uppercase text-muted small">Company</small>
 
-          <ul class="list-unstyled mb-0 mt-3 pt-1" v-if="companyName">
+          <ul class="list-unstyled mb-0 mt-3 pt-1" v-if="this.company_name">
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-building ti-lg"></i><span class="fw-medium mx-2">Company:</span>
               <span>
-                {{ companyName }}
+                {{ this.company_name }}
               </span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-briefcase ti-lg"></i><span class="fw-medium mx-2">Company Role:</span>
-              <span>{{ roleName }}</span>
+              <span>{{ companyName }}</span>
             </li>
           </ul>
+          <p class="mt-2"><strong>Role:</strong> {{ roleName }}</p>
+          <p><strong>Company:</strong> {{ companyName }}</p>
         </div>
       </div>
       <!--/ About User -->

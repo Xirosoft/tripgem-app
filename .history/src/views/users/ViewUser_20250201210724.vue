@@ -24,15 +24,16 @@ export default {
         // console.log(this.userData.meta.social_links)
         this.socialLinks = JSON.parse(this.userData.meta.social_links)
         // console.log('socialLinks:', this.socialLinks.twi)
-        // if (userEditStore.userData.parent_role_id === '5') {
-        //   this.companyData = userEditStore.userData.affiliate_data
-        // } else if (userEditStore.userData.parent_role_id === '3') {
-        //   this.companyData = userEditStore.userData.agency_data
-        // } else if (userEditStore.userData.parent_role_id === '4') {
-        //   this.companyData = userEditStore.userData.b2b_data
-        // } else if (userEditStore.userData.parent_role_id === '2') {
-        //   this.companyData = userEditStore.userData.merchant_data
-        // }
+        if (userEditStore.userData.parent_role_id === '16') {
+          this.companyData = userEditStore.userData.affiliate_data
+        } else if (userEditStore.userData.parent_role_id === '12') {
+          this.companyData = userEditStore.userData.agency_data
+        } else if (userEditStore.userData.parent_role_id === '19') {
+          this.companyData = userEditStore.userData.b2b_data
+        } else if (userEditStore.userData.parent_role_id === '6') {
+          this.companyData = userEditStore.userData.merchant_data
+        }
+        console.error('User Data:', this.companyData)
       } catch (error) {
         console.error('Failed to fetch user details:', error)
         // alert('Failed to load user data')
@@ -218,17 +219,22 @@ export default {
             </li>
           </ul>
           <small class="card-text text-uppercase text-muted small">Company</small>
-
-          <ul class="list-unstyled mb-0 mt-3 pt-1" v-if="companyName">
+          <ul class="list-unstyled mb-0 mt-3 pt-1" v-if="companyData">
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-building ti-lg"></i><span class="fw-medium mx-2">Company:</span>
               <span>
-                {{ companyName }}
+                {{
+                  companyData.company_name ||
+                  companyData.merchant_name ||
+                  companyData.agency_name ||
+                  companyData.name ||
+                  companyData.b2b_name
+                }}
               </span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-briefcase ti-lg"></i><span class="fw-medium mx-2">Company Role:</span>
-              <span>{{ roleName }}</span>
+              <span>{{ companyData?.role_name }}</span>
             </li>
           </ul>
         </div>

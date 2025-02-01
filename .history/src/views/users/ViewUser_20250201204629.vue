@@ -23,20 +23,20 @@ export default {
         this.companyName = userEditStore.companyName
         // console.log(this.userData.meta.social_links)
         this.socialLinks = JSON.parse(this.userData.meta.social_links)
-        // console.log('socialLinks:', this.socialLinks.twi)
-        // if (userEditStore.userData.parent_role_id === '5') {
-        //   this.companyData = userEditStore.userData.affiliate_data
-        // } else if (userEditStore.userData.parent_role_id === '3') {
-        //   this.companyData = userEditStore.userData.agency_data
-        // } else if (userEditStore.userData.parent_role_id === '4') {
-        //   this.companyData = userEditStore.userData.b2b_data
-        // } else if (userEditStore.userData.parent_role_id === '2') {
-        //   this.companyData = userEditStore.userData.merchant_data
-        // }
+        console.log('socialLinks:', this.socialLinks.twi)
+        if (userEditStore.userData.parent_role_id === '16') {
+          this.companyData = userEditStore.userData.affiliate_data
+        } else if (userEditStore.userData.parent_role_id === '12') {
+          this.companyData = userEditStore.userData.agency_data
+        } else if (userEditStore.userData.parent_role_id === '19') {
+          this.companyData = userEditStore.userData.b2b_data
+        } else if (userEditStore.userData.parent_role_id === '6') {
+          this.companyData = userEditStore.userData.merchant_data
+        }
       } catch (error) {
         console.error('Failed to fetch user details:', error)
-        // alert('Failed to load user data')
-        // this.$router.push('/users')
+        alert('Failed to load user data')
+        this.$router.push('/users')
       }
     },
     goBack() {
@@ -56,7 +56,7 @@ export default {
       <div class="card mb-6">
         <div class="user-profile-header-banner">
           <img
-            v-if="userData?.meta?.profile_picture"
+            v-if="userData && userData.meta && userData.meta.cover_photo"
             :src="userData.meta.cover_photo"
             alt="Banner image"
             class="rounded-top"
@@ -67,7 +67,7 @@ export default {
         >
           <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto">
             <img
-              v-if="userData?.meta?.profile_picture"
+              v-if="userData.meta.profile_picture"
               :src="userData.meta.profile_picture"
               alt="user image"
               class="d-block h-auto ms-0 ms-sm-6 rounded user-profile-img"
@@ -78,7 +78,7 @@ export default {
               class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-5 flex-md-row flex-column gap-4"
             >
               <div class="user-profile-info">
-                <h4 class="mb-2 mt-lg-6">{{ userData?.first_name }} {{ userData?.last_name }}</h4>
+                <h4 class="mb-2 mt-lg-6">{{ userData.first_name }} {{ userData.last_name }}</h4>
                 <ul
                   class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-4 my-2"
                 >
@@ -90,7 +90,7 @@ export default {
                     ><span class="fw-medium"
                       >Joined
                       {{
-                        new Date(userData?.created_at).toLocaleDateString('en-GB', {
+                        new Date(userData.created_at).toLocaleDateString('en-GB', {
                           day: 'numeric',
                           month: 'short',
                           year: 'numeric',
@@ -102,7 +102,7 @@ export default {
               </div>
               <div class="social_links">
                 <a
-                  v-if="socialLinks?.facebook"
+                  v-if="socialLinks.facebook"
                   :href="socialLinks.facebook"
                   target="_blank"
                   class="btn btn-icon btn-outline-primary"
@@ -110,7 +110,7 @@ export default {
                   <i class="ti ti-brand-facebook"></i>
                 </a>
                 <a
-                  v-if="socialLinks?.twitter"
+                  v-if="socialLinks.twitter"
                   :href="socialLinks.twitter"
                   target="_blank"
                   class="btn btn-icon btn-outline-info"
@@ -118,7 +118,7 @@ export default {
                   <i class="ti ti-brand-twitter"></i>
                 </a>
                 <a
-                  v-if="socialLinks?.linkedin"
+                  v-if="socialLinks.linkedin"
                   :href="socialLinks.linkedin"
                   target="_blank"
                   class="btn btn-icon btn-outline-primary"
@@ -126,7 +126,7 @@ export default {
                   <i class="ti ti-brand-linkedin"></i>
                 </a>
                 <a
-                  v-if="socialLinks?.instagram"
+                  v-if="socialLinks.instagram"
                   :href="socialLinks.instagram"
                   target="_blank"
                   class="btn btn-icon btn-outline-danger"
@@ -187,11 +187,11 @@ export default {
           <ul class="list-unstyled my-3 py-1">
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-user ti-lg"></i><span class="fw-medium mx-2">Full Name:</span>
-              <span>{{ userData?.first_name }} {{ userData?.last_name }}</span>
+              <span>{{ userData.first_name }} {{ userData.last_name }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-check ti-lg"></i><span class="fw-medium mx-2">Status:</span>
-              <span>{{ userData?.status }}</span>
+              <span>{{ userData.status }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-crown ti-lg"></i><span class="fw-medium mx-2">Role:</span>
@@ -199,36 +199,41 @@ export default {
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-flag ti-lg"></i><span class="fw-medium mx-2">Country:</span>
-              <span>{{ userData?.meta?.location }}</span>
+              <span>{{ userData.meta.location }}</span>
             </li>
             <li class="d-flex align-items-center mb-2">
               <i class="ti ti-language ti-lg"></i><span class="fw-medium mx-2">Languages:</span>
-              <span>{{ userData?.meta?.language }}</span>
+              <span>{{ userData.meta.language }}</span>
             </li>
           </ul>
           <small class="card-text text-uppercase text-muted small">Contacts</small>
           <ul class="list-unstyled my-3 py-1">
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-phone-call ti-lg"></i><span class="fw-medium mx-2">Contact:</span>
-              <span>{{ userData?.phone_number }}</span>
+              <span>{{ userData.phone_number }}</span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-mail ti-lg"></i><span class="fw-medium mx-2">Email:</span>
-              <span>{{ userData?.email }}</span>
+              <span>{{ userData.email }}</span>
             </li>
           </ul>
           <small class="card-text text-uppercase text-muted small">Company</small>
-
-          <ul class="list-unstyled mb-0 mt-3 pt-1" v-if="companyName">
+          <ul class="list-unstyled mb-0 mt-3 pt-1" v-if="companyData">
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-building ti-lg"></i><span class="fw-medium mx-2">Company:</span>
               <span>
-                {{ companyName }}
+                {{
+                  companyData.company_name ||
+                  companyData.merchant_name ||
+                  companyData.agency_name ||
+                  companyData.name ||
+                  companyData.b2b_name
+                }}
               </span>
             </li>
             <li class="d-flex align-items-center mb-4">
               <i class="ti ti-briefcase ti-lg"></i><span class="fw-medium mx-2">Company Role:</span>
-              <span>{{ roleName }}</span>
+              <span>{{ companyData.role_name }}</span>
             </li>
           </ul>
         </div>
