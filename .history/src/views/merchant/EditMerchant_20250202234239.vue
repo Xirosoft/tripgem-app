@@ -432,6 +432,22 @@ export default {
                   >User's contact information will be used for merchant registration</small
                 >
               </div>
+              <div class="col-12 mb-4">
+                <label class="form-label" for="edit-merchant-status">Status</label>
+                <select
+                  id="edit-merchant-status"
+                  class="form-select"
+                  v-model="formData.status"
+                  name="merchantStatus"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="reject">Reject</option>
+                  <option value="approved">Approved</option>
+                  <option value="hold">Hold</option>
+                  <option value="warning">Warning</option>
+                  <option value="suspend">Suspend</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -520,22 +536,6 @@ export default {
 
       <!-- Second column -->
       <div class="col-12 col-lg-4">
-        <div class="col-12 mb-4">
-          <label class="form-label" for="edit-merchant-status">Status</label>
-          <select
-            id="edit-merchant-status"
-            class="form-select"
-            v-model="formData.status"
-            name="merchantStatus"
-          >
-            <option value="pending">Pending</option>
-            <option value="reject">Reject</option>
-            <option value="approved">Approved</option>
-            <option value="hold">Hold</option>
-            <option value="warning">Warning</option>
-            <option value="suspend">Suspend</option>
-          </select>
-        </div>
         <div class="card-header">
           <h5 class="card-title mb-0">Company Logo</h5>
         </div>

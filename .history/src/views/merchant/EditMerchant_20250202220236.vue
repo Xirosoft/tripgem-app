@@ -1,6 +1,6 @@
 <script>
 import AddressBlock from '@/components/AddressBlock.vue'
-import { useEditMerchantStore } from '@/stores/merchant/EditMerchant'
+import { useMerchantsStore } from '@/stores/merchant/AddMerchant'
 import { useUsersStore } from '@/stores/users'
 import { handleFileUpload, handleLogoUpload } from '@/utils/handleFileUpload'
 import Tagify from '@yaireo/tagify'
@@ -38,9 +38,9 @@ export default {
   },
   setup() {
     const toast = useToast()
-    const editMerchantStore = useEditMerchantStore()
+    const merchantStore = useMerchantsStore()
     const usersStore = useUsersStore()
-    return { toast, editMerchantStore, usersStore }
+    return { toast, merchantStore, usersStore }
   },
   data() {
     return {
@@ -85,7 +85,7 @@ export default {
   methods: {
     async fetchMerchantData() {
       try {
-        const response = await this.editMerchantStore.fetchMerchantById(this.$route.params.id)
+        const response = await this.merchantStore.fetchMerchantById(this.$route.params.id)
         this.formData = { ...response.data }
       } catch (error) {
         console.error('Failed to fetch merchant data:', error)
@@ -271,7 +271,7 @@ export default {
 
     async submitForm() {
       try {
-        // if (!this.editMerchantStore.validateMerchantData(this.formData)) {
+        // if (!this.merchantStore.validateMerchantData(this.formData)) {
         //   this.toast.error('Please fill in all required fields')
         //   return
         // }
@@ -292,10 +292,7 @@ export default {
         }
 
         // Submit to store
-        const result = await this.editMerchantStore.updateMerchant(
-          this.$route.params.id,
-          submitData,
-        )
+        const result = await this.merchantStore.updateMerchant(this.$route.params.id, submitData)
 
         if (result) {
           this.toast.success('Merchant updated successfully')
@@ -379,7 +376,7 @@ export default {
           <button class="btn btn-label-secondary">Discard</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
-        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">Update</button>
+        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">Submit</button>
       </div>
     </div>
 
@@ -520,22 +517,6 @@ export default {
 
       <!-- Second column -->
       <div class="col-12 col-lg-4">
-        <div class="col-12 mb-4">
-          <label class="form-label" for="edit-merchant-status">Status</label>
-          <select
-            id="edit-merchant-status"
-            class="form-select"
-            v-model="formData.status"
-            name="merchantStatus"
-          >
-            <option value="pending">Pending</option>
-            <option value="reject">Reject</option>
-            <option value="approved">Approved</option>
-            <option value="hold">Hold</option>
-            <option value="warning">Warning</option>
-            <option value="suspend">Suspend</option>
-          </select>
-        </div>
         <div class="card-header">
           <h5 class="card-title mb-0">Company Logo</h5>
         </div>
