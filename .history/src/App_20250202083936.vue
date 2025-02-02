@@ -28,8 +28,8 @@ const isAuthPage = computed(() => {
 const isLoggedIn = computed(() => authStore.isLoggedIn)
 
 // Function to handle route changes
-const handleRouteChange = async () => {
-  await nextTick() // Ensure DOM and route are fully updated
+const handleRouteChange = () => {
+  // console.log('Route changed to:', route.path)
   console.log('isAuthPage:', isAuthPage.value)
   console.log('isLoggedIn:', isLoggedIn.value)
 
@@ -40,12 +40,16 @@ const handleRouteChange = async () => {
       console.log('route Match', route.matched)
 
       // Stay on current route if it exists and is valid
-      //   if (route.matched.length > 0) {
-      //     console.log('Staying on current route:', route.name)
-      //   } else {
-      //     console.log('Invalid route, redirecting to AdminDashboard')
-      //     router.push({ name: 'AdminDashboard' })
-      //   }
+      console.log('route length', route.matched.length)
+
+      if (route.matched.length == 0) {
+        console.log('route length if', route.matched.length)
+        console.log('Staying on current route:', route.name)
+        // router.push({ name: 'AdminDashboard' })
+      } else {
+        console.log('route length else', route.matched.length)
+        console.log('Invalid route, redirecting to AdminDashboard')
+      }
     }
   } else if (!isAuthPage.value) {
     console.log('User is not logged in and is not on an auth page........')
@@ -67,7 +71,7 @@ watch(
   () => route.path,
   (newPath, oldPath) => {
     console.log(`Route changed from ${oldPath} to ${newPath}`)
-    // handleRouteChange()
+    handleRouteChange()
   },
 )
 </script>

@@ -15,59 +15,68 @@ const authStore = useAuthStore()
 const authPaths = ['/login', '/register', '/auth-two-steps', '/forget-password', '/reset-password']
 
 // Computed property to check if the current route is an auth page
-const isAuthPage = computed(() => {
-  return authPaths.includes(route.path.trim().toLowerCase())
-})
-
-// Debugging to ensure the value of route.path and isAuthPage
-// console.log('Initial route.path:', route.path)
-// console.log('Initial isAuthPage:', isAuthPage.value)
-// console.log('route.path === "/login":', route.path.trim().toLowerCase() === '/login')
+const isAuthPage = computed(() => authPaths.includes(route.path.trim().toLowerCase()))
 
 // Computed property to check if the user is logged in
 const isLoggedIn = computed(() => authStore.isLoggedIn)
 
-// Function to handle route changes
+// Save the last visited route before leaving
+const saveLastVisitedRoute = () => {
+  if (isLoggedIn.value && !isAuthPage.value) {
+    localStorage.setItem('lastVisitedRoute', route.fullPath)
+  }
+}
+
+// Restore the last visited route on refresh
+const restoreLastVisitedRoute = async () => {
+  const lastRoute = localStorage.getItem('lastVisitedRoute')
+
+  if (isLoggedIn.value && lastRoute && lastRoute !== route.fullPath) {
+    await nextTick()
+    router.replace(lastRoute) // Use replace() to avoid unnecessary history entry
+  }
+}
+
+// Handle route changes and authentication
 const handleRouteChange = async () => {
-  await nextTick() // Ensure DOM and route are fully updated
+  await nextTick()
+
   console.log('isAuthPage:', isAuthPage.value)
   console.log('isLoggedIn:', isLoggedIn.value)
 
   if (isLoggedIn.value) {
     if (!isAuthPage.value) {
-      console.log('route length', route.matched.length)
-      console.log('route track', route.path)
-      console.log('route Match', route.matched)
-
-      // Stay on current route if it exists and is valid
-      //   if (route.matched.length > 0) {
-      //     console.log('Staying on current route:', route.name)
-      //   } else {
-      //     console.log('Invalid route, redirecting to AdminDashboard')
-      //     router.push({ name: 'AdminDashboard' })
-      //   }
+      saveLastVisitedRoute()
     }
   } else if (!isAuthPage.value) {
-    console.log('User is not logged in and is not on an auth page........')
-    router.push({ name: 'tripgemlogin' }) // Uncomment this when ready
-  } else {
-    console.log('User is not logged in and is on an auth page')
-    router.push({ name: 'tripgemlogin' }) // Uncomment this when ready
+    console.log('User is not logged in and is not on an auth page, redirecting to login...')
+    router.push({ name: 'tripgemlogin' })
   }
 }
 
-// Ensure route change handler is called on mount and on route updates.
+// Call restoreLastVisitedRoute on mount
 onMounted(async () => {
-  await nextTick() // Ensure DOM and route are fully updated
-  // console.log('route.path after mount:', route.path)
+  await nextTick()
+  restoreLastVisitedRoute()
   handleRouteChange()
 })
 
+// Watch for route changes
 watch(
   () => route.path,
   (newPath, oldPath) => {
     console.log(`Route changed from ${oldPath} to ${newPath}`)
-    // handleRouteChange()
+    handleRouteChange()
+  },
+)
+
+// Watch for authentication state changes
+watch(
+  () => isLoggedIn.value,
+  (newStatus) => {
+    if (newStatus) {
+      restoreLastVisitedRoute()
+    }
   },
 )
 </script>
@@ -92,7 +101,3 @@ watch(
     </div>
   </template>
 </template>
-
-<style scoped>
-/* Add your styles here */
-</style>

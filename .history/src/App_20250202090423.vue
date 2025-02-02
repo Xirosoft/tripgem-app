@@ -60,6 +60,13 @@ const handleRouteChange = async () => {
 onMounted(async () => {
   await nextTick() // Ensure DOM and route are fully updated
   // console.log('route.path after mount:', route.path)
+  console.log('route length onMount', route.matched.length)
+  if (route.matched.length > 0) {
+    console.log('Staying on current route:', route.name)
+  } else {
+    console.log('Invalid route, redirecting to AdminDashboard')
+    // router.push({ name: 'AdminDashboard' })
+  }
   handleRouteChange()
 })
 

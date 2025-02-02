@@ -40,12 +40,12 @@ const handleRouteChange = async () => {
       console.log('route Match', route.matched)
 
       // Stay on current route if it exists and is valid
-      //   if (route.matched.length > 0) {
-      //     console.log('Staying on current route:', route.name)
-      //   } else {
-      //     console.log('Invalid route, redirecting to AdminDashboard')
-      //     router.push({ name: 'AdminDashboard' })
-      //   }
+      if (route.matched.length > 0) {
+        console.log('Staying on current route:', route.name)
+      } else {
+        console.log('Invalid route, redirecting to AdminDashboard')
+        router.push({ name: 'AdminDashboard' })
+      }
     }
   } else if (!isAuthPage.value) {
     console.log('User is not logged in and is not on an auth page........')

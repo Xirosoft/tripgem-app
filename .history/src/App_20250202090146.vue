@@ -68,6 +68,12 @@ watch(
   (newPath, oldPath) => {
     console.log(`Route changed from ${oldPath} to ${newPath}`)
     // handleRouteChange()
+    if (route.matched.length > 0) {
+      console.log('Staying on current route:', route.name)
+    } else {
+      console.log('Invalid route, redirecting to AdminDashboard')
+      // router.push({ name: 'AdminDashboard' })
+    }
   },
 )
 </script>

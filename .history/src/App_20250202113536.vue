@@ -40,12 +40,12 @@ const handleRouteChange = async () => {
       console.log('route Match', route.matched)
 
       // Stay on current route if it exists and is valid
-      //   if (route.matched.length > 0) {
-      //     console.log('Staying on current route:', route.name)
-      //   } else {
-      //     console.log('Invalid route, redirecting to AdminDashboard')
-      //     router.push({ name: 'AdminDashboard' })
-      //   }
+      if (route.matched.length > 0) {
+        console.log('Staying on current route:', route.name)
+      } else {
+        console.log('Invalid route, redirecting to AdminDashboard')
+        router.push({ name: 'AdminDashboard' })
+      }
     }
   } else if (!isAuthPage.value) {
     console.log('User is not logged in and is not on an auth page........')
@@ -59,7 +59,6 @@ const handleRouteChange = async () => {
 // Ensure route change handler is called on mount and on route updates.
 onMounted(async () => {
   await nextTick() // Ensure DOM and route are fully updated
-  // console.log('route.path after mount:', route.path)
   handleRouteChange()
 })
 
@@ -67,7 +66,17 @@ watch(
   () => route.path,
   (newPath, oldPath) => {
     console.log(`Route changed from ${oldPath} to ${newPath}`)
-    // handleRouteChange()
+    handleRouteChange()
+  },
+)
+
+watch(
+  () => route.matched,
+  (newMatched) => {
+    if (newMatched.length === 0 && !isAuthPage.value) {
+      console.log('Invalid route, redirecting to AdminDashboard')
+      router.push({ name: 'AdminDashboard' })
+    }
   },
 )
 </script>
