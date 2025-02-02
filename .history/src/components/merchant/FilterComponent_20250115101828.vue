@@ -7,7 +7,7 @@
       <button class="dt-button add-new btn btn-primary" @click="$emit('add-merchant')">
         <span>
           <i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
-          <span class="d-none d-sm-inline-block">Add Merchant..</span>
+          <span class="d-none d-sm-inline-block">Add Merchant</span>
         </span>
       </button>
     </div>

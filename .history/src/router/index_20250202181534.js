@@ -1,6 +1,6 @@
 import { usePermissionsStore } from '@/stores/permissions' // Import usePermissionsStore
 import AddMerchant from '@/views/merchant/AddMerchant.vue'
-import MerchantsList from '@/views/merchant/MerchantsList.vue'
+import MerchantsList from '@/views/MerchantsList.vue'
 import PermissionsList from '@/views/permission/PermissionsList.vue'
 import RolesList from '@/views/role/RolesList.vue'
 import EditUser from '@/views/users/EditUser.vue'
