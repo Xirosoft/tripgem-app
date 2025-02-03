@@ -63,34 +63,6 @@ export default {
         documents: [],
       },
       users: [],
-      formData: {
-        company_name: '',
-        slogan: '',
-        business_type: '',
-        established_year: '',
-        user_id: '',
-        address: {},
-        headquarters_location: '',
-        branch_locations: '',
-        phone_number: '',
-        email_address: '',
-        website: '',
-        registration_number: '',
-        tourism_license_number: '',
-        tin: '',
-        logo_url: '',
-        contact_person_name: '',
-        position_designation: '',
-        emergency_contact_number: '',
-        social_media_links: {
-          facebook: '',
-          twitter: '',
-          instagram: '',
-          youtube: '',
-          line: '',
-        },
-        status: '',
-      },
     }
   },
   async created() {
@@ -113,20 +85,6 @@ export default {
       try {
         const response = await this.editMerchantStore.fetchMerchantById(this.$route.params.id)
         this.formData = { ...response.data }
-        // Ensure social_media_links is an object
-        if (typeof this.formData.social_media_links === 'string') {
-          // Parse the string to JSON
-          // this.formData.social_media_links = JSON.parse(this.formData.social_media_links)
-          console.log('Social media links:', this.formData.social_media_links)
-        } else if (!this.formData.social_media_links) {
-          this.formData.social_media_links = {
-            facebook: '',
-            twitter: '',
-            instagram: '',
-            youtube: '',
-            line: '',
-          }
-        }
       } catch (error) {
         console.error('Failed to fetch merchant data:', error)
         this.toast.error('Failed to fetch merchant data')
@@ -329,15 +287,10 @@ export default {
           return
         }
 
-        // Ensure social_media_links is an object
-        if (typeof this.formData.social_media_links === 'string') {
-          this.formData.social_media_links = JSON.parse(this.formData.social_media_links)
-        }
-
         // Prepare submission data
         const submitData = {
           ...this.formData,
-          branch_locations: this.formData.branch_locations
+          branch_locations: Array.isArray(this.formData.branch_locations)
             ? this.formData.branch_locations
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,

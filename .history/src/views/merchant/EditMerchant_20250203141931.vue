@@ -114,9 +114,13 @@ export default {
         const response = await this.editMerchantStore.fetchMerchantById(this.$route.params.id)
         this.formData = { ...response.data }
         // Ensure social_media_links is an object
+
+        console.log('Merchant data:', this.formData)
+
         if (typeof this.formData.social_media_links === 'string') {
-          // Parse the string to JSON
-          // this.formData.social_media_links = JSON.parse(this.formData.social_media_links)
+          // Remove backslashes and parse
+          const cleanStr = this.formData.social_media_links.replace(/\\/g, '')
+          this.formData.social_media_links = JSON.parse(cleanStr)
           console.log('Social media links:', this.formData.social_media_links)
         } else if (!this.formData.social_media_links) {
           this.formData.social_media_links = {
@@ -337,7 +341,7 @@ export default {
         // Prepare submission data
         const submitData = {
           ...this.formData,
-          branch_locations: this.formData.branch_locations
+          branch_locations: Array.isArray(this.formData.branch_locations)
             ? this.formData.branch_locations
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,

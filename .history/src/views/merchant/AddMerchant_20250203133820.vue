@@ -1,14 +1,15 @@
 <script>
 import AddressBlock from '@/components/AddressBlock.vue'
-import { useEditMerchantStore } from '@/stores/merchant/EditMerchant'
+import { useMerchantsStore } from '@/stores/merchant/AddMerchant'
 import { useUsersStore } from '@/stores/users'
-import { handleFileUpload, handleLogoUpload } from '@/utils/handleFileUpload'
+import { handleFileUpload } from '@/utils/handleFileUpload'
 import Tagify from '@yaireo/tagify'
 import Dropzone from 'dropzone'
 import flatpickr from 'flatpickr'
 import Quill from 'quill'
 import { useToast } from 'vue-toastification'
 import config from '../../config/config'
+import { merchantDataStructure } from '../../config/merchantFields'
 
 import jQuery from 'jquery'
 import select2 from 'select2'
@@ -31,21 +32,22 @@ import 'typeahead.js'
 Dropzone.autoDiscover = false
 
 export default {
-  name: 'EditMerchant',
+  name: 'AddMerchants',
   components: {
     AddressBlock,
   },
   setup() {
     const toast = useToast()
-    const editMerchantStore = useEditMerchantStore()
+    const merchantStore = useMerchantsStore()
     const usersStore = useUsersStore()
-    return { toast, editMerchantStore, usersStore }
+    return { toast, merchantStore, usersStore }
   },
   data() {
     return {
       editor: null,
       dropzone: null,
       tagify: null,
+      formData: { ...merchantDataStructure },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
         { value: 'Travel', label: 'Travel' },
@@ -63,44 +65,15 @@ export default {
         documents: [],
       },
       users: [],
-      formData: {
-        company_name: '',
-        slogan: '',
-        business_type: '',
-        established_year: '',
-        user_id: '',
-        address: {},
-        headquarters_location: '',
-        branch_locations: '',
-        phone_number: '',
-        email_address: '',
-        website: '',
-        registration_number: '',
-        tourism_license_number: '',
-        tin: '',
-        logo_url: '',
-        contact_person_name: '',
-        position_designation: '',
-        emergency_contact_number: '',
-        social_media_links: {
-          facebook: '',
-          twitter: '',
-          instagram: '',
-          youtube: '',
-          line: '',
-        },
-        status: '',
-      },
     }
   },
   async created() {
     try {
       await this.usersStore.fetchVerifiedUsers() // Correct method name
       this.users = this.usersStore.getVerifiedUsers // Ensure getter is used correctly
-      await this.fetchMerchantData()
     } catch (error) {
-      console.error('Failed to load users or merchant data:', error)
-      this.toast.error('Failed to load users or merchant data')
+      console.error('Failed to load users:', error)
+      this.toast.error('Failed to load users list')
     }
   },
   mounted() {
@@ -109,30 +82,6 @@ export default {
     })
   },
   methods: {
-    async fetchMerchantData() {
-      try {
-        const response = await this.editMerchantStore.fetchMerchantById(this.$route.params.id)
-        this.formData = { ...response.data }
-        // Ensure social_media_links is an object
-        if (typeof this.formData.social_media_links === 'string') {
-          // Parse the string to JSON
-          // this.formData.social_media_links = JSON.parse(this.formData.social_media_links)
-          console.log('Social media links:', this.formData.social_media_links)
-        } else if (!this.formData.social_media_links) {
-          this.formData.social_media_links = {
-            facebook: '',
-            twitter: '',
-            instagram: '',
-            youtube: '',
-            line: '',
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch merchant data:', error)
-        this.toast.error('Failed to fetch merchant data')
-      }
-    },
-
     initializeComponents() {
       // Initialize Quill Editor
       const commentEditor = document.querySelector('.comment-editor')
@@ -305,39 +254,52 @@ export default {
       }
     },
 
-    async handleFileUpload(event, key) {
-      const files = await handleFileUpload(event, key)
+    handleFileUpload(event, fileType) {
+      const files = event.target.files
       if (files.length > 0) {
-        this.uploadedFiles[key] = files.map((file) => file.url) // Ensure only URLs are stored
-        this.formData[key] = this.uploadedFiles[key][0] // Store only the first URL
+        const file = files[0]
+        // Assuming handleFileUpload returns a URL
+        handleFileUpload(file)
+          .then((url) => {
+            this.formData[fileType] = url
+          })
+          .catch((error) => {
+            console.error('File upload error:', error)
+            this.toast.error('Failed to upload file')
+          })
       }
     },
-
     handleLogoUpload(file) {
-      handleLogoUpload(file, this.formData, this.dropzone, this.toast)
+      console.log('Uploading logo:', file)
+
+      // handleLogoUpload(file)
+      //   .then((url) => {
+      //     this.formData.logo_url = url
+      //   })
+      //   .catch((error) => {
+      //     console.error('Logo upload error:', error)
+      //     this.toast.error('Failed to upload logo')
+      //   })
     },
 
     async submitForm() {
       try {
-        // if (!this.editMerchantStore.validateMerchantData(this.formData)) {
+        // if (!this.merchantStore.validateMerchantData(this.formData)) {
         //   this.toast.error('Please fill in all required fields')
         //   return
         // }
+
+        console.log(this.formData.logo_url.urk)
 
         if (!this.formData.logo_url) {
           this.toast.error('Please upload company logo')
           return
         }
 
-        // Ensure social_media_links is an object
-        if (typeof this.formData.social_media_links === 'string') {
-          this.formData.social_media_links = JSON.parse(this.formData.social_media_links)
-        }
-
         // Prepare submission data
         const submitData = {
           ...this.formData,
-          branch_locations: this.formData.branch_locations
+          branch_locations: Array.isArray(this.formData.branch_locations)
             ? this.formData.branch_locations
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,
@@ -345,25 +307,21 @@ export default {
         }
 
         console.log('Submit data:', submitData)
-        // Submit to store
-        const result = await this.editMerchantStore.updateMerchant(
-          this.$route.params.id,
-          submitData,
-        )
 
-        console.log('Submission result:', result)
+        // Submit to store
+        const result = await this.merchantStore.createMerchant(submitData)
 
         if (result) {
-          this.toast.success('Merchant updated successfully')
+          this.toast.success('Merchant created successfully')
           await this.$nextTick()
           this.cleanupComponents()
 
           // Use the route path instead of name
-          // await this.$router.push('/merchants')
+          await this.$router.push('/merchants')
         }
       } catch (error) {
         console.error('Submission error:', error)
-        this.toast.error(error.message || 'Failed to update merchant')
+        this.toast.error(error.message || 'Failed to create merchant')
       }
     },
 
@@ -427,15 +385,15 @@ export default {
       class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6"
     >
       <div class="d-flex flex-column justify-content-center">
-        <h4 class="mb-1">Edit Merchant</h4>
-        <p class="mb-0">Edit merchant details</p>
+        <h4 class="mb-1">Add New Merchant</h4>
+        <p class="mb-0">Add new merchant details</p>
       </div>
       <div class="d-flex align-content-center flex-wrap gap-4">
         <div class="d-flex gap-4">
           <button class="btn btn-label-secondary">Discard</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
-        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">Update</button>
+        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">Submit</button>
       </div>
     </div>
 
@@ -498,7 +456,7 @@ export default {
             <h5 class="card-title mb-0">Contact Information</h5>
           </div>
           <div class="card-body">
-            <AddressBlock v-model="formData.address" />
+            <AddressBlock v-model="formData.addressDetails" />
 
             <!-- Keep other contact fields -->
             <div class="row">

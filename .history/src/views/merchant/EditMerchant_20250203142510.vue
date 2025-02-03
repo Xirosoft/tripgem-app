@@ -116,7 +116,7 @@ export default {
         // Ensure social_media_links is an object
         if (typeof this.formData.social_media_links === 'string') {
           // Parse the string to JSON
-          // this.formData.social_media_links = JSON.parse(this.formData.social_media_links)
+          this.formData.social_media_links = JSON.parse(this.formData.social_media_links)
           console.log('Social media links:', this.formData.social_media_links)
         } else if (!this.formData.social_media_links) {
           this.formData.social_media_links = {
@@ -337,7 +337,7 @@ export default {
         // Prepare submission data
         const submitData = {
           ...this.formData,
-          branch_locations: this.formData.branch_locations
+          branch_locations: Array.isArray(this.formData.branch_locations)
             ? this.formData.branch_locations
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,

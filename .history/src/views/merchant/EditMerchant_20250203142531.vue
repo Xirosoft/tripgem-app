@@ -337,7 +337,7 @@ export default {
         // Prepare submission data
         const submitData = {
           ...this.formData,
-          branch_locations: this.formData.branch_locations
+          branch_locations: Array.isArray(this.formData.branch_locations)
             ? this.formData.branch_locations
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,
