@@ -1,6 +1,6 @@
 <script>
 import AddressBlock from '@/components/AddressBlock.vue'
-import { useMerchantsStore } from '@/stores/merchant/AddMerchant'
+import { useEditMerchantStore } from '@/stores/merchant/EditMerchant'
 import { useUsersStore } from '@/stores/users'
 import { handleFileUpload, handleLogoUpload } from '@/utils/handleFileUpload'
 import Tagify from '@yaireo/tagify'
@@ -9,7 +9,6 @@ import flatpickr from 'flatpickr'
 import Quill from 'quill'
 import { useToast } from 'vue-toastification'
 import config from '../../config/config'
-import { merchantDataStructure } from '../../config/merchantFields'
 
 import jQuery from 'jquery'
 import select2 from 'select2'
@@ -32,22 +31,21 @@ import 'typeahead.js'
 Dropzone.autoDiscover = false
 
 export default {
-  name: 'AddMerchants',
+  name: 'EditMerchant',
   components: {
     AddressBlock,
   },
   setup() {
     const toast = useToast()
-    const merchantStore = useMerchantsStore()
+    const editMerchantStore = useEditMerchantStore()
     const usersStore = useUsersStore()
-    return { toast, merchantStore, usersStore }
+    return { toast, editMerchantStore, usersStore }
   },
   data() {
     return {
       editor: null,
       dropzone: null,
       tagify: null,
-      formData: { ...merchantDataStructure },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
         { value: 'Travel', label: 'Travel' },
@@ -65,15 +63,44 @@ export default {
         documents: [],
       },
       users: [],
+      formData: {
+        company_name: '',
+        slogan: '',
+        business_type: '',
+        established_year: '',
+        user_id: '',
+        address: {},
+        headquarters_location: '',
+        branch_locations: '',
+        phone_number: '',
+        email_address: '',
+        website: '',
+        registration_number: '',
+        tourism_license_number: '',
+        tin: '',
+        logo_url: '',
+        contact_person_name: '',
+        position_designation: '',
+        emergency_contact_number: '',
+        social_media_links: {
+          facebook: '',
+          twitter: '',
+          instagram: '',
+          youtube: '',
+          line: '',
+        },
+        status: '',
+      },
     }
   },
   async created() {
     try {
       await this.usersStore.fetchVerifiedUsers() // Correct method name
       this.users = this.usersStore.getVerifiedUsers // Ensure getter is used correctly
+      await this.fetchMerchantData()
     } catch (error) {
-      console.error('Failed to load users:', error)
-      this.toast.error('Failed to load users list')
+      console.error('Failed to load users or merchant data:', error)
+      this.toast.error('Failed to load users or merchant data')
     }
   },
   mounted() {
@@ -82,6 +109,32 @@ export default {
     })
   },
   methods: {
+    async fetchMerchantData() {
+      try {
+        const response = await this.editMerchantStore.fetchMerchantById(this.$route.params.id)
+        this.formData = { ...response.data }
+        // Ensure social_media_links is an object
+        if (typeof this.formData.social_media_links === 'string') {
+          this.formData.social_media_links = JSON.parse(this.formData.social_media_links)
+        } else if (!this.formData.social_media_links) {
+          this.formData.social_media_links = {
+            facebook: '',
+            twitter: '',
+            instagram: '',
+            youtube: '',
+            line: '',
+          }
+        }
+        // Reinitialize Select2 components
+        this.$nextTick(() => {
+          this.initializeSelect2()
+        })
+      } catch (error) {
+        console.error('Failed to fetch merchant data:', error)
+        this.toast.error('Failed to fetch merchant data')
+      }
+    },
+
     initializeComponents() {
       // Initialize Quill Editor
       const commentEditor = document.querySelector('.comment-editor')
@@ -141,7 +194,7 @@ export default {
 
         this.dropzone.on('removedfile', () => {
           this.uploadedLogo = null
-          this.formData.logo_url.url = ''
+          this.formData.logo_url = ''
         })
 
         this.dropzone.on('error', (file) => {
@@ -261,18 +314,6 @@ export default {
         this.formData[key] = this.uploadedFiles[key][0] // Store only the first URL
       }
     },
-    // handleLogoUpload(file) {
-    //   console.log('Uploading logo:', file)
-
-    //   handleLogoUpload(file)
-    //     .then((url) => {
-    //       this.formData.logo_url.url = url
-    //     })
-    //     .catch((error) => {
-    //       console.error('Logo upload error:', error)
-    //       this.toast.error('Failed to upload logo')
-    //     })
-    // },
 
     handleLogoUpload(file) {
       handleLogoUpload(file, this.formData, this.dropzone, this.toast)
@@ -280,45 +321,51 @@ export default {
 
     async submitForm() {
       try {
-        // if (!this.merchantStore.validateMerchantData(this.formData)) {
+        // if (!this.editMerchantStore.validateMerchantData(this.formData)) {
         //   this.toast.error('Please fill in all required fields')
         //   return
         // }
 
-        console.log(this.formData.logo_url.url)
-
-        if (!this.formData.logo_url.url) {
+        if (!this.formData.logo_url) {
           this.toast.error('Please upload company logo')
           return
+        }
+
+        // Ensure social_media_links is an object
+        if (typeof this.formData.social_media_links === 'string') {
+          this.formData.social_media_links = JSON.parse(this.formData.social_media_links)
         }
 
         // Prepare submission data
         const submitData = {
           ...this.formData,
-          branch_locations: Array.isArray(this.formData.branch_locations)
+          branch_locations: this.formData.branch_locations
             ? this.formData.branch_locations
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,
           user_id: Number(this.formData.user_id),
-          logo_url: this.formData.logo_url.url,
         }
 
         console.log('Submit data:', submitData)
-
         // Submit to store
-        const result = await this.merchantStore.createMerchant(submitData)
+        const result = await this.editMerchantStore.updateMerchant(
+          this.$route.params.id,
+          submitData,
+        )
+
+        console.log('Submission result:', result)
 
         if (result) {
-          this.toast.success('Merchant created successfully')
+          this.toast.success('Merchant updated successfully')
           await this.$nextTick()
           this.cleanupComponents()
 
           // Use the route path instead of name
-          await this.$router.push('/merchants')
+          // await this.$router.push('/merchants')
         }
       } catch (error) {
         console.error('Submission error:', error)
-        this.toast.error(error.message || 'Failed to create merchant')
+        this.toast.error(error.message || 'Failed to update merchant')
       }
     },
 
@@ -382,15 +429,15 @@ export default {
       class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6"
     >
       <div class="d-flex flex-column justify-content-center">
-        <h4 class="mb-1">Add New Merchant</h4>
-        <p class="mb-0">Add new merchant details</p>
+        <h4 class="mb-1">Edit Merchant</h4>
+        <p class="mb-0">Edit merchant details</p>
       </div>
       <div class="d-flex align-content-center flex-wrap gap-4">
         <div class="d-flex gap-4">
           <button class="btn btn-label-secondary">Discard</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
-        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">Submit</button>
+        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">Update</button>
       </div>
     </div>
 
@@ -561,15 +608,13 @@ export default {
                   </div>
                   <h5 class="mb-0">Drop files here or click to upload</h5>
                   <span class="text-muted">Allowed JPG, JPEG, PNG, GIF. Max size of 5MB.</span>
-                  <div v-if="formData.logo_url.url" class="mt-3">
-                    <img :src="formData.logo_url.url" alt="Preview" style="max-width: 200px" />
+                  <div v-if="formData.logo_url" class="mt-3">
+                    <img :src="formData.logo_url" alt="Preview" style="max-width: 200px" />
                     <p class="text-success mt-2">Logo uploaded successfully</p>
                   </div>
                 </div>
               </div>
-              <small class="text-danger" v-if="!formData.logo_url.url"
-                >Company logo is required</small
-              >
+              <small class="text-danger" v-if="!formData.logo_url">Company logo is required</small>
             </div>
           </div>
         </div>

@@ -154,7 +154,6 @@ export default {
 
           if (initialLoad) {
             $select.val(addressData.value.province).trigger('change')
-            await loadCities(true)
           }
         }
       } catch (error) {

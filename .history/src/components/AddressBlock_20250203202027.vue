@@ -47,9 +47,7 @@ export default {
     watch(
       addressData,
       (newVal) => {
-        if (JSON.stringify(newVal) !== JSON.stringify(props.modelValue)) {
-          emit('update:modelValue', newVal)
-        }
+        emit('update:modelValue', newVal)
       },
       { deep: true },
     )
@@ -64,10 +62,10 @@ export default {
       await loadCountries()
       await nextTick()
       await initializeSelect2('country-select')
-      await loadProvinces(true)
+      await loadProvinces()
       await nextTick()
       await initializeSelect2('province-select')
-      await loadCities(true)
+      await loadCities()
       await nextTick()
       await initializeSelect2('city-select')
     })
@@ -76,7 +74,7 @@ export default {
     watch(
       () => props.modelValue,
       (newVal) => {
-        if (isMounted.value && JSON.stringify(newVal) !== JSON.stringify(addressData.value)) {
+        if (isMounted.value) {
           addressData.value = { ...newVal }
           console.log('AddressBlock updated from props:', addressData.value)
         }
@@ -107,14 +105,12 @@ export default {
       }
     }
 
-    const loadProvinces = async (initialLoad = false) => {
+    const loadProvinces = async () => {
       if (!isMounted.value) return
 
-      if (!initialLoad) {
-        addressData.value.province = ''
-        addressData.value.city = ''
-        addressData.value.zip_code = ''
-      }
+      addressData.value.province = ''
+      addressData.value.city = ''
+      addressData.value.zip_code = ''
       locationData.value.provinces = []
       locationData.value.cities = []
 
@@ -151,11 +147,6 @@ export default {
           })
 
           await initializeSelect2('province-select')
-
-          if (initialLoad) {
-            $select.val(addressData.value.province).trigger('change')
-            await loadCities(true)
-          }
         }
       } catch (error) {
         console.error('Failed to load provinces:', error)
@@ -164,7 +155,7 @@ export default {
       }
     }
 
-    const loadCities = async (initialLoad = false) => {
+    const loadCities = async () => {
       if (!isMounted.value) return
 
       try {
@@ -212,10 +203,6 @@ export default {
 
           $citySelect.prop('disabled', false).trigger('change')
           await initializeSelect2('city-select')
-
-          if (initialLoad) {
-            $citySelect.val(addressData.value.city).trigger('change')
-          }
         }
       } catch (error) {
         console.error('Failed to load cities:', error.response || error)
@@ -313,7 +300,7 @@ export default {
 
     onBeforeUnmount(() => {
       isMounted.value = false
-      abortController.value.abort()
+      abortController.value
     })
 
     return {

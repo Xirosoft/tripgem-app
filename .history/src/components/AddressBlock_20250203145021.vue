@@ -2,10 +2,10 @@
 import axios from 'axios'
 import jQuery from 'jquery'
 import select2 from 'select2'
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue' // Add nextTick and onBeforeUnmount
 const $ = jQuery
 window.$ = window.jQuery = jQuery
-select2()
+select2() // Initialize select2
 
 export default {
   name: 'AddressBlock',
@@ -23,7 +23,7 @@ export default {
     const API_URLs = {
       countries: 'https://restcountries.com/v3.1/all',
       states: 'https://countriesnow.space/api/v0.1/countries/states',
-      cities: 'https://countriesnow.space/api/v0.1/countries/state/cities',
+      cities: 'https://countriesnow.space/api/v0.1/countries/state/cities', // Remove /q from endpoint
     }
 
     const locationData = ref({
@@ -47,9 +47,7 @@ export default {
     watch(
       addressData,
       (newVal) => {
-        if (JSON.stringify(newVal) !== JSON.stringify(props.modelValue)) {
-          emit('update:modelValue', newVal)
-        }
+        emit('update:modelValue', newVal)
       },
       { deep: true },
     )
@@ -58,31 +56,11 @@ export default {
     onMounted(async () => {
       isMounted.value = true
       addressData.value = { ...props.modelValue }
-
-      console.log('AddressBlock mounted:', addressData.value)
-
       await loadCountries()
-      await nextTick()
-      await initializeSelect2('country-select')
-      await loadProvinces(true)
-      await nextTick()
-      await initializeSelect2('province-select')
-      await loadCities(true)
-      await nextTick()
-      await initializeSelect2('city-select')
+      await nextTick(() => {
+        initializeSelect2()
+      })
     })
-
-    // Watch for changes in props.modelValue and update addressData
-    watch(
-      () => props.modelValue,
-      (newVal) => {
-        if (isMounted.value && JSON.stringify(newVal) !== JSON.stringify(addressData.value)) {
-          addressData.value = { ...newVal }
-          console.log('AddressBlock updated from props:', addressData.value)
-        }
-      },
-      { deep: true, immediate: true },
-    )
 
     const loadCountries = async () => {
       if (!isMounted.value) return
@@ -99,7 +77,7 @@ export default {
             }))
             .sort((a, b) => a.name.localeCompare(b.name))
 
-          await nextTick()
+          await nextTick() // Wait for DOM update
           await initializeSelect2('country-select')
         }
       } catch (error) {
@@ -107,14 +85,12 @@ export default {
       }
     }
 
-    const loadProvinces = async (initialLoad = false) => {
+    const loadProvinces = async () => {
       if (!isMounted.value) return
 
-      if (!initialLoad) {
-        addressData.value.province = ''
-        addressData.value.city = ''
-        addressData.value.zip_code = ''
-      }
+      addressData.value.province = ''
+      addressData.value.city = ''
+      addressData.value.zip_code = ''
       locationData.value.provinces = []
       locationData.value.cities = []
 
@@ -128,13 +104,13 @@ export default {
         if (!selectedCountry) return
 
         const response = await axios.post(API_URLs.states, {
-          country: selectedCountry.name,
+          country: selectedCountry.name, // Use common name instead of official name
         })
 
         if (response.data?.data?.states) {
           locationData.value.provinces = response.data.data.states
             .map((state) => ({
-              id: state.name,
+              id: state.name, // Use name as id
               name: state.name,
               state_code: state.state_code,
             }))
@@ -144,18 +120,16 @@ export default {
 
           const $select = $('#province-select')
           $select.empty()
+
+          // Add default option
           $select.append(new Option('Select Province', '', true, true))
 
+          // Add province options with same value for id and name
           locationData.value.provinces.forEach((province) => {
             $select.append(new Option(province.name, province.name))
           })
 
           await initializeSelect2('province-select')
-
-          if (initialLoad) {
-            $select.val(addressData.value.province).trigger('change')
-            await loadCities(true)
-          }
         }
       } catch (error) {
         console.error('Failed to load provinces:', error)
@@ -164,7 +138,7 @@ export default {
       }
     }
 
-    const loadCities = async (initialLoad = false) => {
+    const loadCities = async () => {
       if (!isMounted.value) return
 
       try {
@@ -177,10 +151,13 @@ export default {
           return
         }
 
+        // Simplified payload structure
         const payload = {
           country: selectedCountry.name,
           state: addressData.value.province,
         }
+
+        console.log('Fetching cities with payload:', payload)
 
         const response = await axios.post(API_URLs.cities, payload, {
           headers: {
@@ -188,6 +165,8 @@ export default {
             Accept: 'application/json',
           },
         })
+
+        console.log('Cities API response:', response.data)
 
         if (response.data?.data && isMounted.value) {
           locationData.value.cities = response.data.data
@@ -200,6 +179,7 @@ export default {
 
           await nextTick()
 
+          // Update city select with new data
           const $citySelect = $('#city-select')
           if (!$citySelect.length) return
 
@@ -210,12 +190,9 @@ export default {
             $citySelect.append(new Option(city.name, city.name))
           })
 
+          // Enable and initialize select2
           $citySelect.prop('disabled', false).trigger('change')
           await initializeSelect2('city-select')
-
-          if (initialLoad) {
-            $citySelect.val(addressData.value.city).trigger('change')
-          }
         }
       } catch (error) {
         console.error('Failed to load cities:', error.response || error)
@@ -232,11 +209,12 @@ export default {
     const initializeSelect2 = async (selectId) => {
       if (!isMounted.value) return
 
-      await nextTick()
+      await nextTick() // Wait for DOM update
 
       const $select = $(`#${selectId}`)
-      if (!$select.length) return
+      if (!$select.length) return // Guard against element not found
 
+      // Destroy existing select2 if it exists
       if ($select.hasClass('select2-hidden-accessible')) {
         $select.select2('destroy')
       }
@@ -262,19 +240,22 @@ export default {
       try {
         $select
           .select2(config)
-          .off('select2:select select2:clear')
+          .off('select2:select select2:clear') // Remove any existing event listeners
           .on('select2:select', async (e) => {
             if (!isMounted.value) return
             const value = e.target.value
+            console.log(`${selectId} selected:`, value)
 
             if (selectId === 'country-select') {
               addressData.value.country = value
               await loadProvinces()
+              // Disable and clear city select
               $('#city-select').prop('disabled', true).val('').trigger('change')
             }
 
             if (selectId === 'province-select') {
               addressData.value.province = value
+              console.log('Province selected, loading cities for:', value)
               await loadCities()
             }
 
@@ -305,15 +286,32 @@ export default {
             }
           })
 
+        // Set initial value
         $select.val(addressData.value[selectId.split('-')[0]]).trigger('change')
       } catch (error) {
         console.error(`Failed to initialize select2 for ${selectId}:`, error)
       }
     }
 
+    // Cleanup select2 instances
     onBeforeUnmount(() => {
       isMounted.value = false
-      abortController.value.abort()
+      abortController.value
+      // .abort()
+
+      // [
+      //   // Cleanup select2 instances
+      //   ('country-select', 'province-select', 'city-select')
+      // ].forEach((selectId) => {
+      //   const $select = $(`#${selectId}`)
+      //   if ($select.length && $select.hasClass('select2-hidden-accessible')) {
+      //     try {
+      //       $select.select2('destroy')
+      //     } catch (error) {
+      //       console.warn(`Failed to destroy select2 for ${selectId}`, error)
+      //     }
+      //   }
+      // })
     })
 
     return {

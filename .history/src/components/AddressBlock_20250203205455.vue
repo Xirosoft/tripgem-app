@@ -154,7 +154,6 @@ export default {
 
           if (initialLoad) {
             $select.val(addressData.value.province).trigger('change')
-            await loadCities(true)
           }
         }
       } catch (error) {
@@ -313,7 +312,7 @@ export default {
 
     onBeforeUnmount(() => {
       isMounted.value = false
-      abortController.value.abort()
+      abortController.value
     })
 
     return {
