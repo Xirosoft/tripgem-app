@@ -9,6 +9,7 @@ import flatpickr from 'flatpickr'
 import Quill from 'quill'
 import { useToast } from 'vue-toastification'
 import config from '../../config/config'
+import { merchantDataStructure } from '../../config/merchantFields'
 
 import jQuery from 'jquery'
 import select2 from 'select2'
@@ -46,6 +47,7 @@ export default {
       editor: null,
       dropzone: null,
       tagify: null,
+      formData: { ...merchantDataStructure },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
         { value: 'Travel', label: 'Travel' },
@@ -90,7 +92,6 @@ export default {
         this.toast.error('Failed to fetch merchant data')
       }
     },
-
     initializeComponents() {
       // Initialize Quill Editor
       const commentEditor = document.querySelector('.comment-editor')
@@ -263,14 +264,28 @@ export default {
       }
     },
 
-    async handleFileUpload(event, key) {
-      const files = await handleFileUpload(event, key)
-      if (files.length > 0) {
-        this.uploadedFiles[key] = files.map((file) => file.url) // Ensure only URLs are stored
-        this.formData[key] = this.uploadedFiles[key][0] // Store only the first URL
+    handleFileUpload(event, field) {
+      const files = event.target.files
+      if (files.length) {
+        const formData = new FormData()
+        formData.append('file', files[0])
+
+        axios.post(`${config.apiUrl}/upload`, formData, {
+          headers: {
+            ...config.getHeaders(),
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(response => {
+          this.formData[field].push(response.data.url)
+          this.toast.success('File uploaded successfully')
+        })
+        .catch(error => {
+          console.error('File upload error:', error)
+          this.toast.error('Failed to upload file')
+        })
       }
     },
-
     handleLogoUpload(file) {
       handleLogoUpload(file, this.formData, this.dropzone, this.toast)
     },
@@ -295,6 +310,9 @@ export default {
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,
           user_id: Number(this.formData.user_id),
+          business_permits: this.uploadedFiles.business_permits,
+          membership_certificates: this.uploadedFiles.membership_certificates,
+          documents: this.uploadedFiles.documents,
         }
 
         console.log('Submit data:', submitData)
@@ -303,8 +321,6 @@ export default {
           this.$route.params.id,
           submitData,
         )
-
-        console.log('Submission result:', result)
 
         if (result) {
           this.toast.success('Merchant updated successfully')
@@ -451,7 +467,7 @@ export default {
             <h5 class="card-title mb-0">Contact Information</h5>
           </div>
           <div class="card-body">
-            <AddressBlock v-model="formData.address" />
+            <AddressBlock v-model="formData.addressDetails" />
 
             <!-- Keep other contact fields -->
             <div class="row">
@@ -658,7 +674,7 @@ export default {
                 class="form-control"
                 multiple
                 accept=".pdf"
-                @change="handleFileUpload($event, 'business_permits')"
+                @change="(e) => handleFileUpload(e, 'business_permits')"
               />
             </div>
             <div class="mb-4">
@@ -668,7 +684,7 @@ export default {
                 class="form-control"
                 multiple
                 accept=".pdf"
-                @change="handleFileUpload($event, 'membership_certificates')"
+                @change="(e) => handleFileUpload(e, 'membership_certificates')"
               />
             </div>
             <div class="mb-4">
@@ -678,7 +694,7 @@ export default {
                 class="form-control"
                 multiple
                 accept=".pdf"
-                @change="handleFileUpload($event, 'documents')"
+                @change="(e) => handleFileUpload(e, 'documents')"
               />
             </div>
           </div>

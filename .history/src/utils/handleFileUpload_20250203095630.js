@@ -87,7 +87,7 @@ async function uploadFile(file, type = 'general') {
       throw new Error('Server did not return a valid file URL')
     }
 
-    return { url: fileUrl }
+    return fileUrl
   } catch (error) {
     console.error(`Upload error (${type}):`, error)
     throw error

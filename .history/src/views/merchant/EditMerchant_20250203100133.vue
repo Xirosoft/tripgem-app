@@ -9,6 +9,7 @@ import flatpickr from 'flatpickr'
 import Quill from 'quill'
 import { useToast } from 'vue-toastification'
 import config from '../../config/config'
+import { merchantDataStructure } from '../../config/merchantFields'
 
 import jQuery from 'jquery'
 import select2 from 'select2'
@@ -46,6 +47,7 @@ export default {
       editor: null,
       dropzone: null,
       tagify: null,
+      formData: { ...merchantDataStructure },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
         { value: 'Travel', label: 'Travel' },
@@ -90,7 +92,12 @@ export default {
         this.toast.error('Failed to fetch merchant data')
       }
     },
-
+    async handleFileUpload(event, key) {
+      const files = await handleFileUpload(event, key)
+      if (files.length > 0) {
+        this.userData.meta[key].value = files[0]
+      }
+    },
     initializeComponents() {
       // Initialize Quill Editor
       const commentEditor = document.querySelector('.comment-editor')
@@ -263,11 +270,11 @@ export default {
       }
     },
 
-    async handleFileUpload(event, key) {
-      const files = await handleFileUpload(event, key)
-      if (files.length > 0) {
-        this.uploadedFiles[key] = files.map((file) => file.url) // Ensure only URLs are stored
-        this.formData[key] = this.uploadedFiles[key][0] // Store only the first URL
+    async handleFileUpload(event, field) {
+      const files = event.target.files
+      if (files.length) {
+        this.uploadedFiles[field] = Array.from(files).map(file => file.name)
+        this.formData[field] = this.uploadedFiles[field]
       }
     },
 
@@ -295,6 +302,9 @@ export default {
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,
           user_id: Number(this.formData.user_id),
+          business_permits: this.uploadedFiles.business_permits,
+          membership_certificates: this.uploadedFiles.membership_certificates,
+          documents: this.uploadedFiles.documents,
         }
 
         console.log('Submit data:', submitData)
@@ -304,15 +314,13 @@ export default {
           submitData,
         )
 
-        console.log('Submission result:', result)
-
         if (result) {
           this.toast.success('Merchant updated successfully')
           await this.$nextTick()
           this.cleanupComponents()
 
           // Use the route path instead of name
-          // await this.$router.push('/merchants')
+          await this.$router.push('/merchants')
         }
       } catch (error) {
         console.error('Submission error:', error)
@@ -451,7 +459,7 @@ export default {
             <h5 class="card-title mb-0">Contact Information</h5>
           </div>
           <div class="card-body">
-            <AddressBlock v-model="formData.address" />
+            <AddressBlock v-model="formData.addressDetails" />
 
             <!-- Keep other contact fields -->
             <div class="row">
@@ -658,7 +666,7 @@ export default {
                 class="form-control"
                 multiple
                 accept=".pdf"
-                @change="handleFileUpload($event, 'business_permits')"
+                 @change="handleFileUpload($event, 'business_permits')"
               />
             </div>
             <div class="mb-4">
@@ -678,7 +686,7 @@ export default {
                 class="form-control"
                 multiple
                 accept=".pdf"
-                @change="handleFileUpload($event, 'documents')"
+                 @change="handleFileUpload($event, 'documents')"
               />
             </div>
           </div>

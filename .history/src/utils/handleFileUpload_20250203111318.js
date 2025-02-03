@@ -16,7 +16,7 @@ export async function handleFileUpload(event, type) {
   try {
     const uploadPromises = files.map((file) => uploadFile(file, type))
     const urls = await Promise.all(uploadPromises)
-    uploadedFiles.push(...urls)
+    uploadedFiles.push(...urls.map((file) => file.url)) // Ensure only URLs are stored
 
     const formattedType = formatType(type)
     toast.success(`${formattedType} uploaded successfully`)

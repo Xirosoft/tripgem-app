@@ -9,6 +9,7 @@ import flatpickr from 'flatpickr'
 import Quill from 'quill'
 import { useToast } from 'vue-toastification'
 import config from '../../config/config'
+import { merchantDataStructure } from '../../config/merchantFields'
 
 import jQuery from 'jquery'
 import select2 from 'select2'
@@ -46,6 +47,16 @@ export default {
       editor: null,
       dropzone: null,
       tagify: null,
+      formData: {
+        ...merchantDataStructure,
+        social_media_links: {
+          facebook: '',
+          twitter: '',
+          instagram: '',
+          youtube: '',
+          line: '',
+        },
+      },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
         { value: 'Travel', label: 'Travel' },
@@ -295,6 +306,9 @@ export default {
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,
           user_id: Number(this.formData.user_id),
+          // business_permits: this.uploadedFiles.business_permits || null,
+          // membership_certificates: this.uploadedFiles.membership_certificates || null,
+          // documents: this.uploadedFiles.documents || null,
         }
 
         console.log('Submit data:', submitData)

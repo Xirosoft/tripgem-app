@@ -9,6 +9,7 @@ import flatpickr from 'flatpickr'
 import Quill from 'quill'
 import { useToast } from 'vue-toastification'
 import config from '../../config/config'
+import { merchantDataStructure } from '../../config/merchantFields'
 
 import jQuery from 'jquery'
 import select2 from 'select2'
@@ -46,6 +47,16 @@ export default {
       editor: null,
       dropzone: null,
       tagify: null,
+      formData: {
+        ...merchantDataStructure,
+        social_media_links: {
+          facebook: '',
+          twitter: '',
+          instagram: '',
+          youtube: '',
+          line: '',
+        },
+      },
       businessTypes: [
         { value: 'Tourism', label: 'Tourism' },
         { value: 'Travel', label: 'Travel' },
@@ -85,6 +96,14 @@ export default {
       try {
         const response = await this.editMerchantStore.fetchMerchantById(this.$route.params.id)
         this.formData = { ...response.data }
+        // Ensure social_media_links is an object
+        // this.formData.social_media_links = this.formData.social_media_links || {
+        //   facebook: '',
+        //   twitter: '',
+        //   instagram: '',
+        //   youtube: '',
+        //   line: '',
+        // }
       } catch (error) {
         console.error('Failed to fetch merchant data:', error)
         this.toast.error('Failed to fetch merchant data')
@@ -295,6 +314,9 @@ export default {
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,
           user_id: Number(this.formData.user_id),
+          // business_permits: this.uploadedFiles.business_permits || null,
+          // membership_certificates: this.uploadedFiles.membership_certificates || null,
+          // documents: this.uploadedFiles.documents || null,
         }
 
         console.log('Submit data:', submitData)
@@ -608,11 +630,7 @@ export default {
           <div class="card-body">
             <div class="mb-4">
               <label class="form-label">Facebook</label>
-              <input
-                v-model="formData.social_media_links.facebook"
-                type="url"
-                class="form-control"
-              />
+              <input type="url" class="form-control" />
             </div>
             <div class="mb-4">
               <label class="form-label">Twitter</label>

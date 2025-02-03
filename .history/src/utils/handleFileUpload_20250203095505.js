@@ -1,31 +1,26 @@
 import { useToast } from 'vue-toastification'
 import config from '../config/config'
+import axios from 'axios'
 
-export async function handleFileUpload(event, type) {
-  const toast = useToast()
-  const files = Array.from(event.target.files)
-  const uploadedFiles = []
+export async function handleFileUpload(event, field, formData, toast) {
+  const files = event.target.files
+  if (files.length) {
+    const fileData = new FormData()
+    fileData.append('file', files[0])
 
-  const formatType = (type) => {
-    return type
-      .split('_') // Split the string into an array by underscores
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
-      .join(' ') // Join the array back into a string with spaces
-  }
-
-  try {
-    const uploadPromises = files.map((file) => uploadFile(file, type))
-    const urls = await Promise.all(uploadPromises)
-    uploadedFiles.push(...urls)
-
-    const formattedType = formatType(type)
-    toast.success(`${formattedType} uploaded successfully`)
-    return uploadedFiles
-  } catch (error) {
-    const formattedType = formatType(type)
-    console.error(`${formattedType} upload failed:`, error)
-    toast.error(`Failed to upload ${formattedType}: ${error.message}`)
-    return []
+    try {
+      const response = await axios.post(`${config.apiUrl}/upload`, fileData, {
+        headers: {
+          ...config.getHeaders(),
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      formData[field].push(response.data.url)
+      toast.success('File uploaded successfully')
+    } catch (error) {
+      console.error('File upload error:', error)
+      toast.error('Failed to upload file')
+    }
   }
 }
 
@@ -87,7 +82,7 @@ async function uploadFile(file, type = 'general') {
       throw new Error('Server did not return a valid file URL')
     }
 
-    return { url: fileUrl }
+    return fileUrl
   } catch (error) {
     console.error(`Upload error (${type}):`, error)
     throw error

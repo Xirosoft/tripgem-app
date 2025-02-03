@@ -85,6 +85,14 @@ export default {
       try {
         const response = await this.editMerchantStore.fetchMerchantById(this.$route.params.id)
         this.formData = { ...response.data }
+        // Ensure social_media_links is an object
+        // this.formData.social_media_links = this.formData.social_media_links || {
+        //   facebook: '',
+        //   twitter: '',
+        //   instagram: '',
+        //   youtube: '',
+        //   line: '',
+        // }
       } catch (error) {
         console.error('Failed to fetch merchant data:', error)
         this.toast.error('Failed to fetch merchant data')
