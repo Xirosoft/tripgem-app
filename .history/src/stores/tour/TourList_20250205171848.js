@@ -12,7 +12,7 @@ export const useTourListStore = defineStore('tourList', {
         const response = await axios.get(`${config.apiUrl}/tours/view`, {
           headers: config.getHeaders(),
         })
-        this.tourList = response.data
+        this.tourList = response.data.data
         console.log('Tour list:', this.tourList)
       } catch (error) {
         console.error('Error fetching tour list:', error)

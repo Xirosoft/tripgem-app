@@ -1,5 +1,5 @@
 <script>
-import TourFilter from '@/components/tour/TourFilter.vue'
+// import TourFilter from '@/components/tour/TourFilter.vue'
 import 'datatables.net-bs5'
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import $ from 'jquery'
@@ -10,7 +10,7 @@ import { useTourListStore } from '../../stores/tour/TourList.js'
 export default {
   name: 'TourList',
   components: {
-    TourFilter,
+    // TourFilter,
   },
   data() {
     return {
@@ -49,18 +49,7 @@ export default {
           { data: 'net_price_adult' },
           { data: 'available_dates' },
           { data: 'available_seat' },
-          {
-            data: 'status',
-            render: function (data) {
-              const statusClasses = {
-                pending: 'bg-label-warning',
-                draft: 'bg-label-secondary',
-                published: 'bg-label-success',
-                trust: 'bg-label-info',
-              }
-              return `<span class="badge ${statusClasses[data] || 'bg-label-primary'}">${data}</span>`
-            },
-          },
+          { data: 'status' },
           {
             data: null,
             orderable: false,
@@ -72,7 +61,7 @@ export default {
                   <button class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></button>
                   <div class="dropdown-menu dropdown-menu-end m-0">
                     <a href="javascript:0;" class="dropdown-item">View</a>
-                    <a href="javascript:0;" class="dropdown-item">Delete</a>
+                    <a href="javascript:0;" class="dropdown-item">Suspend</a>
                   </div>
                 </div>
               `
@@ -81,7 +70,7 @@ export default {
         ],
         destroy: true,
         initComplete: () => {
-          // this.addFilters(this.table)
+          this.addFilters(this.table)
         },
       })
     },
@@ -90,8 +79,65 @@ export default {
       // Add sorting logic here if needed
     },
     addFilters(table) {
-      if (!table) return
-      this.$refs.tourFilter.addFilters(table)
+      // Adding tour type filter
+      table.columns(2).every(function () {
+        var column = this
+        var select = $(
+          '<select class="form-select text-capitalize"><option value="">Tour Type</option></select>',
+        )
+          .appendTo('.tour_type')
+          .on('change', function () {
+            column.search($(this).val()).draw()
+          })
+
+        column
+          .data()
+          .unique()
+          .sort()
+          .each(function (d) {
+            select.append(`<option value="${d}">${d}</option>`)
+          })
+      })
+
+      // Adding transport types filter
+      table.columns(3).every(function () {
+        var column = this
+        var select = $(
+          '<select class="form-select text-capitalize"><option value="">Transport Types</option></select>',
+        )
+          .appendTo('.transport_types')
+          .on('change', function () {
+            column.search($(this).val()).draw()
+          })
+
+        column
+          .data()
+          .unique()
+          .sort()
+          .each(function (d) {
+            select.append(`<option value="${d}">${d}</option>`)
+          })
+      })
+
+      // Adding status filter
+      table.columns(8).every(function () {
+        var column = this
+        var select = $(
+          '<select class="form-select text-capitalize"><option value="">Status</option></select>',
+        )
+          .appendTo('.status')
+          .on('change', function () {
+            column.search($(this).val()).draw()
+          })
+
+        column
+          .data()
+          .unique()
+          .sort()
+          .each(function (d) {
+            select.append(`<option value="${d}">${d}</option>`)
+          })
+      })
     },
   },
   watch: {
@@ -106,7 +152,6 @@ export default {
               this.table.clear()
               this.table.rows.add(newVal)
               this.table.draw()
-              this.addFilters(this.table) // Ensure filters are added after data is drawn
             }
           })
         }
@@ -126,7 +171,24 @@ export default {
   <div class="card">
     <div class="card-header">
       <h5 class="card-title">Filter</h5>
-      <TourFilter ref="tourFilter" @apply-filters="applyFilters" />
+      <!-- <TourFilter
+        ref="TourFilter"
+        @apply-filters="applyFilters"
+        @add-tour="$router.push('/tour/add')"
+      /> -->
+    </div>
+    <div class="row pb-2 gap-3 gap-md-0">
+      <div class="col-md-3 tour_type"></div>
+      <div class="col-md-3 transport_types"></div>
+      <div class="col-md-3 status"></div>
+      <div class="col-md-3 d-flex align-items-center justify-content-md-end">
+        <button class="dt-button add-new btn btn-primary" @click="$router.push('/tour/add')">
+          <span>
+            <i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>
+            <span class="d-none d-sm-inline-block">Add Tour</span>
+          </span>
+        </button>
+      </div>
     </div>
     <div class="card-datatable table-responsive">
       <table ref="toursTable" class="datatables-products table">
@@ -135,9 +197,9 @@ export default {
             <th>ID</th>
             <th>Tour Name</th>
             <th>Tour Type</th>
-            <th>Transport</th>
-            <th>Regular (Adult)</th>
-            <th>Net (Adult)</th>
+            <th>Transport Types</th>
+            <th>Regular Price (Adult)</th>
+            <th>Net Price (Adult)</th>
             <th>Available Dates</th>
             <th>Available Seat</th>
             <th>Status</th>

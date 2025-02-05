@@ -72,7 +72,7 @@ export default {
                   <button class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></button>
                   <div class="dropdown-menu dropdown-menu-end m-0">
                     <a href="javascript:0;" class="dropdown-item">View</a>
-                    <a href="javascript:0;" class="dropdown-item">Delete</a>
+                    <a href="javascript:0;" class="dropdown-item">Suspend</a>
                   </div>
                 </div>
               `
