@@ -151,7 +151,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permissions: 'read',
-      permissionName: 'tour_module',
+      permissionName: 'roles_and_permissions',
     },
   },
   { path: '/:pathMatch(.*)*', component: MiscError }, // Catch-all route

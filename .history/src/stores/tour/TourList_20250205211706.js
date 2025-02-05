@@ -1,4 +1,3 @@
-import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
 import { defineStore } from 'pinia'
 import config from '../../config/config'
@@ -9,7 +8,6 @@ export const useTourListStore = defineStore('tourList', {
   }),
   actions: {
     async fetchTourList() {
-      const userId = useAuthStore().userId
       try {
         const response = await axios.get(`${config.apiUrl}/tours/view/${userId}`, {
           headers: config.getHeaders(),
