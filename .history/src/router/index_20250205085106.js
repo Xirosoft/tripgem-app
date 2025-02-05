@@ -107,7 +107,7 @@ const routes = [
     props: true,
     meta: {
       requiresAuth: true,
-      permissions: 'read',
+      permissions: 'create',
       permissionName: 'merchant_module',
     },
   },
@@ -138,7 +138,7 @@ const routes = [
     component: PermissionsList,
     meta: {
       requiresAuth: true,
-      permissions: 'read',
+      permissions: 'write',
       permissionName: 'roles_and_permissions',
     },
   },

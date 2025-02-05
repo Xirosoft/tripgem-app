@@ -69,7 +69,7 @@ export default {
             data: null,
             render: () => {
               let buttons = ''
-              if (this.uCan('write', 'roles_and_permissions')) {
+              if (this.uCan('write', 'manage_users')) {
                 buttons += `
                   <button
                     class="btn rounded-pill btn-label-primary waves-effect edit-permission"
@@ -244,7 +244,7 @@ export default {
             <th>Slug</th>
             <th>Description</th>
             <th>Created Date</th>
-            <th v-if="this.uCan('write', 'roles_and_permissions')">Actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
       </table>

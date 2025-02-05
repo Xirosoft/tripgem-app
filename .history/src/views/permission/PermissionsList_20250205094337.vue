@@ -69,7 +69,7 @@ export default {
             data: null,
             render: () => {
               let buttons = ''
-              if (this.uCan('write', 'roles_and_permissions')) {
+              if (this.uCan('write', 'manage_users')) {
                 buttons += `
                   <button
                     class="btn rounded-pill btn-label-primary waves-effect edit-permission"
@@ -219,7 +219,6 @@ export default {
       <h5 class="card-title mb-0">Permissions</h5>
       <div class="dt-buttons btn-group flex-wrap">
         <button
-          v-if="this.uCan('write', 'roles_and_permissions')"
           class="btn add-new btn-primary mb-6 mb-md-0 waves-effect waves-light"
           tabindex="0"
           aria-controls="DataTables_Table_0"
@@ -244,7 +243,7 @@ export default {
             <th>Slug</th>
             <th>Description</th>
             <th>Created Date</th>
-            <th v-if="this.uCan('write', 'roles_and_permissions')">Actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
       </table>

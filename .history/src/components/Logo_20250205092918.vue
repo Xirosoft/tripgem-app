@@ -11,7 +11,13 @@ export default {
   mounted() {
     // console.log('User Dashboard', this.uCan('read', 'user_dashboard'))
   },
-  computed: {},
+  computed: {
+    vCan() {
+      const result = this.uCan('read', 'brand_logo')
+      console.log('vCan', result)
+      return result
+    },
+  },
 }
 </script>
 

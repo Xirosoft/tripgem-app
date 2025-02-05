@@ -107,7 +107,7 @@ const routes = [
     props: true,
     meta: {
       requiresAuth: true,
-      permissions: 'read',
+      permissions: 'create',
       permissionName: 'merchant_module',
     },
   },
@@ -129,7 +129,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       permissions: 'write',
-      permissionName: 'roles_and_permissions',
+      permissionName: 'manage_users',
     },
   },
   {
@@ -138,8 +138,8 @@ const routes = [
     component: PermissionsList,
     meta: {
       requiresAuth: true,
-      permissions: 'read',
-      permissionName: 'roles_and_permissions',
+      permissions: 'write',
+      permissionName: 'manage_users',
     },
   },
   { path: '/:pathMatch(.*)*', component: MiscError }, // Catch-all route

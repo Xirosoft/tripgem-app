@@ -98,7 +98,6 @@ export default {
     <div class="col-md-3 user_verified"></div>
     <div class="col-md-3 d-flex align-items-center justify-content-md-end">
       <button
-        v-if="this.uCan('create', 'manage_users')"
         class="dt-button add-new btn btn-primary"
         tabindex="0"
         aria-controls="DataTables_Table_0"

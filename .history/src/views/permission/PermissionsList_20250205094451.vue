@@ -244,7 +244,7 @@ export default {
             <th>Slug</th>
             <th>Description</th>
             <th>Created Date</th>
-            <th v-if="this.uCan('write', 'roles_and_permissions')">Actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
       </table>
