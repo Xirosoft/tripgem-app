@@ -24,23 +24,6 @@ export default {
 
     return { rolesListStore, toast }
   },
-  computed: {
-    groupedRoles() {
-      const roles = this.rolesListStore.getAllRoles
-      const grouped = roles.reduce((acc, role) => {
-        if (!role.parent_id) {
-          acc[role.role_id] = { ...role, subRoles: [] }
-        } else {
-          if (!acc[role.parent_id]) {
-            acc[role.parent_id] = { subRoles: [] }
-          }
-          acc[role.parent_id].subRoles.push(role)
-        }
-        return acc
-      }, {})
-      return Object.values(grouped)
-    },
-  },
   methods: {
     initializeEditRoleModal(selector, action) {
       const modalElement = document.getElementById(selector)
@@ -74,7 +57,7 @@ export default {
 </script>
 
 <template>
-  <h4 class="mb-1">Roles List</h4>
+  <h4 class="mb-1">Roles List...</h4>
 
   <div class="row mb-6">
     <div class="col-md-8">
@@ -101,7 +84,11 @@ export default {
   </div>
   <!-- Role cards -->
   <div class="row g-6">
-    <div v-for="role in groupedRoles" :key="role.role_id" class="col-xl-12">
+    <div
+      v-for="role in rolesListStore.getAllRoles"
+      :key="role.role_id"
+      class="col-xl-4 col-lg-6 col-md-6"
+    >
       <div class="card">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-4">
@@ -131,45 +118,6 @@ export default {
             <a href="javascript:void(0);" @click="deleteRole(role.role_id)">
               <i class="ti ti-trash ti-md ti-md text-heading"></i>
             </a>
-          </div>
-          <div v-if="role.subRoles.length" class="sub-roles mt-3 row">
-            <div v-for="subRole in role.subRoles" :key="subRole.role_id" class="mt-5 col-md-3">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-4">
-                    <p class="role_id">#{{ subRole.role_id }}</p>
-                    <h6 class="fw-normal mb-0 text-body">Total {{ subRole.user_count }} users</h6>
-                    <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
-                      <li
-                        v-for="user in subRole.users || []"
-                        :key="user.user_id"
-                        data-bs-toggle="tooltip"
-                        data-popup="tooltip-custom"
-                        data-bs-placement="top"
-                        :title="user.name"
-                        class="avatar pull-up"
-                      >
-                        <img class="rounded-circle" :src="user.avatar" alt="Avatar" />
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="d-flex justify-content-between align-items-end">
-                    <div class="role-heading">
-                      <h5 class="mb-1">{{ subRole.role_name }}</h5>
-                      <a
-                        href="javascript:;"
-                        @click="openEditModal(subRole.role_id)"
-                        class="role-edit-modal"
-                        ><span>Edit Role</span></a
-                      >
-                    </div>
-                    <a href="javascript:void(0);" @click="deleteRole(subRole.role_id)">
-                      <i class="ti ti-trash ti-md ti-md text-heading"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -225,8 +173,5 @@ export default {
   top: 0;
   right: 10px;
   opacity: 0.1;
-}
-.sub-roles {
-  /* margin: 0 0; */
 }
 </style>

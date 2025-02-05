@@ -179,7 +179,7 @@ const routes = [
     },
   },
   {
-    path: '/tour-category',
+    path: '/tour-categoes',
     name: 'TourCategory',
     component: TourCategory,
     meta: {

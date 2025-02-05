@@ -132,9 +132,9 @@ export default {
               <i class="ti ti-trash ti-md ti-md text-heading"></i>
             </a>
           </div>
-          <div v-if="role.subRoles.length" class="sub-roles mt-3 row">
-            <div v-for="subRole in role.subRoles" :key="subRole.role_id" class="mt-5 col-md-3">
-              <div class="card">
+          <div class="row">
+            <div v-if="role.subRoles.length" class="sub-roles mt-3 col-xl-4">
+              <div v-for="subRole in role.subRoles" :key="subRole.role_id" class="card mt-2">
                 <div class="card-body">
                   <div class="d-flex justify-content-between align-items-center mb-4">
                     <p class="role_id">#{{ subRole.role_id }}</p>
@@ -227,6 +227,6 @@ export default {
   opacity: 0.1;
 }
 .sub-roles {
-  /* margin: 0 0; */
+  /* margin-left: 20px; */
 }
 </style>

@@ -133,40 +133,38 @@ export default {
             </a>
           </div>
           <div v-if="role.subRoles.length" class="sub-roles mt-3 row">
-            <div v-for="subRole in role.subRoles" :key="subRole.role_id" class="mt-5 col-md-3">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-4">
-                    <p class="role_id">#{{ subRole.role_id }}</p>
-                    <h6 class="fw-normal mb-0 text-body">Total {{ subRole.user_count }} users</h6>
-                    <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
-                      <li
-                        v-for="user in subRole.users || []"
-                        :key="user.user_id"
-                        data-bs-toggle="tooltip"
-                        data-popup="tooltip-custom"
-                        data-bs-placement="top"
-                        :title="user.name"
-                        class="avatar pull-up"
-                      >
-                        <img class="rounded-circle" :src="user.avatar" alt="Avatar" />
-                      </li>
-                    </ul>
+            <div v-for="subRole in role.subRoles" :key="subRole.role_id" class="card mt-2 col-md-3">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <p class="role_id">#{{ subRole.role_id }}</p>
+                  <h6 class="fw-normal mb-0 text-body">Total {{ subRole.user_count }} users</h6>
+                  <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
+                    <li
+                      v-for="user in subRole.users || []"
+                      :key="user.user_id"
+                      data-bs-toggle="tooltip"
+                      data-popup="tooltip-custom"
+                      data-bs-placement="top"
+                      :title="user.name"
+                      class="avatar pull-up"
+                    >
+                      <img class="rounded-circle" :src="user.avatar" alt="Avatar" />
+                    </li>
+                  </ul>
+                </div>
+                <div class="d-flex justify-content-between align-items-end">
+                  <div class="role-heading">
+                    <h5 class="mb-1">{{ subRole.role_name }}</h5>
+                    <a
+                      href="javascript:;"
+                      @click="openEditModal(subRole.role_id)"
+                      class="role-edit-modal"
+                      ><span>Edit Role</span></a
+                    >
                   </div>
-                  <div class="d-flex justify-content-between align-items-end">
-                    <div class="role-heading">
-                      <h5 class="mb-1">{{ subRole.role_name }}</h5>
-                      <a
-                        href="javascript:;"
-                        @click="openEditModal(subRole.role_id)"
-                        class="role-edit-modal"
-                        ><span>Edit Role</span></a
-                      >
-                    </div>
-                    <a href="javascript:void(0);" @click="deleteRole(subRole.role_id)">
-                      <i class="ti ti-trash ti-md ti-md text-heading"></i>
-                    </a>
-                  </div>
+                  <a href="javascript:void(0);" @click="deleteRole(subRole.role_id)">
+                    <i class="ti ti-trash ti-md ti-md text-heading"></i>
+                  </a>
                 </div>
               </div>
             </div>
@@ -227,6 +225,6 @@ export default {
   opacity: 0.1;
 }
 .sub-roles {
-  /* margin: 0 0; */
+  /* margin-left: 20px; */
 }
 </style>

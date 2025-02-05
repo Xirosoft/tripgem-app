@@ -227,6 +227,6 @@ export default {
   opacity: 0.1;
 }
 .sub-roles {
-  /* margin: 0 0; */
+  margin: 0 0;
 }
 </style>

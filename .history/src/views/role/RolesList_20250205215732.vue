@@ -133,7 +133,7 @@ export default {
             </a>
           </div>
           <div v-if="role.subRoles.length" class="sub-roles mt-3 row">
-            <div v-for="subRole in role.subRoles" :key="subRole.role_id" class="mt-5 col-md-3">
+            <div v-for="subRole in role.subRoles" :key="subRole.role_id" class="mt-4 col-md-3">
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex justify-content-between align-items-center mb-4">
@@ -227,6 +227,6 @@ export default {
   opacity: 0.1;
 }
 .sub-roles {
-  /* margin: 0 0; */
+  margin: 0 0;
 }
 </style>

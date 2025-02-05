@@ -18,10 +18,7 @@ import RestPassWord from '../views/RestPassWord.vue'
 import TwoStepAuth from '../views/TwoStepAuth.vue'
 
 import AddTour from '@/views/tour/AddTour.vue'
-import TourCategory from '@/views/tour/TourCategory.vue'
 import TourList from '@/views/tour/TourList.vue'
-import TourLocation from '@/views/tour/TourLocation.vue'
-import TourTags from '@/views/tour/TourTags.vue'
 
 const routes = [
   {
@@ -172,26 +169,6 @@ const routes = [
     path: '/tour-location',
     name: 'TourLocation',
     component: TourLocation,
-    meta: {
-      requiresAuth: true,
-      permissions: 'read',
-      permissionName: 'tour_module',
-    },
-  },
-  {
-    path: '/tour-category',
-    name: 'TourCategory',
-    component: TourCategory,
-    meta: {
-      requiresAuth: true,
-      permissions: 'read',
-      permissionName: 'tour_module',
-    },
-  },
-  {
-    path: '/tour-tags',
-    name: 'TourTags',
-    component: TourTags,
     meta: {
       requiresAuth: true,
       permissions: 'read',

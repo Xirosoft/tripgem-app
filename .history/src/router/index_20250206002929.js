@@ -21,7 +21,6 @@ import AddTour from '@/views/tour/AddTour.vue'
 import TourCategory from '@/views/tour/TourCategory.vue'
 import TourList from '@/views/tour/TourList.vue'
 import TourLocation from '@/views/tour/TourLocation.vue'
-import TourTags from '@/views/tour/TourTags.vue'
 
 const routes = [
   {
@@ -189,9 +188,9 @@ const routes = [
     },
   },
   {
-    path: '/tour-tags',
-    name: 'TourTags',
-    component: TourTags,
+    path: '/tour-',
+    name: 'TourLocation',
+    component: TourLocation,
     meta: {
       requiresAuth: true,
       permissions: 'read',
