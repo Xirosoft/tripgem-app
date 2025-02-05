@@ -17,8 +17,6 @@ import Register from '../views/Register.vue'
 import RestPassWord from '../views/RestPassWord.vue'
 import TwoStepAuth from '../views/TwoStepAuth.vue'
 
-import TourList from '@/views/tour/TourList.vue'
-
 const routes = [
   {
     path: '/',

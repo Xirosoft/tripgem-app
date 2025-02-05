@@ -4,7 +4,7 @@ import HeaderSection from '@/components/HeaderSection.vue'
 import SideBar from '@/components/Sidebar.vue'
 
 import { useAuthStore } from '@/stores/auth'
-import { computed, onMounted, watch } from 'vue'
+import { computed, nextTick, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -24,16 +24,16 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 
 // Function to handle route changes
 const handleRouteChange = async () => {
-  const rootUrl = window.location.href
-  const currentPath = new URL(rootUrl).pathname
+  await nextTick() // Ensure DOM and route are fully updated
+  console.log(route.path.trim().toLowerCase())
+
   if (isLoggedIn.value) {
     if (isAuthPage.value) {
       router.push({ name: 'AdminDashboard' })
     }
   } else {
-    if (!authPaths.includes(currentPath.trim().toLowerCase())) {
-      console.log('auth page')
-      router.push({ name: 'tripgemlogin' })
+    if (!isAuthPage.value && route.path.trim().toLowerCase() === '/') {
+      // router.push({ name: 'tripgemlogin' })
     }
   }
 }
@@ -42,13 +42,13 @@ const handleRouteChange = async () => {
 watch(
   () => route.path,
   (newPath, oldPath) => {
-    console.log('Route changed from', oldPath, 'to', newPath)
     handleRouteChange()
   },
 )
 
 // Initial route check
-onMounted(() => {
+onMounted(async () => {
+  await nextTick() // Ensure DOM and route are fully updated
   handleRouteChange()
 })
 </script>

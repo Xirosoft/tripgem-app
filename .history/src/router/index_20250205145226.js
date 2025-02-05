@@ -17,8 +17,6 @@ import Register from '../views/Register.vue'
 import RestPassWord from '../views/RestPassWord.vue'
 import TwoStepAuth from '../views/TwoStepAuth.vue'
 
-import TourList from '@/views/tour/TourList.vue'
-
 const routes = [
   {
     path: '/',
@@ -147,7 +145,7 @@ const routes = [
   {
     path: '/all-tours',
     name: 'TourList',
-    component: TourList,
+    component: TourList',,
     meta: {
       requiresAuth: true,
       permissions: 'write',

@@ -16,6 +16,9 @@ const authPaths = ['/login', '/register', '/auth-two-steps', '/forget-password',
 
 // Computed property to check if the current route is an auth page
 const isAuthPage = computed(() => {
+  // console.log(route.path.trim().toLowerCase())
+  const baseUrl = this.$router.options.base
+  console.log(baseUrl) // Outputs: "/" or your configured base URL
   return authPaths.includes(route.path.trim().toLowerCase())
 })
 
@@ -24,15 +27,12 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 
 // Function to handle route changes
 const handleRouteChange = async () => {
-  const rootUrl = window.location.href
-  const currentPath = new URL(rootUrl).pathname
   if (isLoggedIn.value) {
     if (isAuthPage.value) {
       router.push({ name: 'AdminDashboard' })
     }
   } else {
-    if (!authPaths.includes(currentPath.trim().toLowerCase())) {
-      console.log('auth page')
+    if (!isAuthPage.value && route.path.trim().toLowerCase() === '/') {
       router.push({ name: 'tripgemlogin' })
     }
   }
@@ -42,14 +42,13 @@ const handleRouteChange = async () => {
 watch(
   () => route.path,
   (newPath, oldPath) => {
-    console.log('Route changed from', oldPath, 'to', newPath)
     handleRouteChange()
   },
 )
 
 // Initial route check
 onMounted(() => {
-  handleRouteChange()
+  // handleRouteChange()
 })
 </script>
 

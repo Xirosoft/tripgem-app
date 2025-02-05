@@ -24,16 +24,15 @@ const isLoggedIn = computed(() => authStore.isLoggedIn)
 
 // Function to handle route changes
 const handleRouteChange = async () => {
-  const rootUrl = window.location.href
-  const currentPath = new URL(rootUrl).pathname
+  console.log(route.path.trim().toLowerCase())
+
   if (isLoggedIn.value) {
     if (isAuthPage.value) {
       router.push({ name: 'AdminDashboard' })
     }
   } else {
-    if (!authPaths.includes(currentPath.trim().toLowerCase())) {
-      console.log('auth page')
-      router.push({ name: 'tripgemlogin' })
+    if (!isAuthPage.value && route.path.trim().toLowerCase() === '/') {
+      // router.push({ name: 'tripgemlogin' })
     }
   }
 }
@@ -42,14 +41,13 @@ const handleRouteChange = async () => {
 watch(
   () => route.path,
   (newPath, oldPath) => {
-    console.log('Route changed from', oldPath, 'to', newPath)
     handleRouteChange()
   },
 )
 
 // Initial route check
 onMounted(() => {
-  handleRouteChange()
+  // handleRouteChange()
 })
 </script>
 
