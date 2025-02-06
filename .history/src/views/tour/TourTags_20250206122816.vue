@@ -135,34 +135,10 @@ export default defineComponent({
               <thead>
                 <tr>
                   <th><input type="checkbox" @change="toggleSelectAll($event)" /></th>
-                  <th @click="changeSort('tag_id')" class="sortable">
-                    ID
-                    <span
-                      v-if="sortKey === 'tag_id'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
-                  <th @click="changeSort('tag_name')" class="sortable">
-                    Name
-                    <span
-                      v-if="sortKey === 'tag_name'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
-                  <th @click="changeSort('tag_slug')" class="sortable">
-                    Slug
-                    <span
-                      v-if="sortKey === 'tag_slug'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
-                  <th @click="changeSort('description')" class="sortable">
-                    Description
-                    <span
-                      v-if="sortKey === 'description'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
+                  <th @click="changeSort('tag_id')">ID</th>
+                  <th @click="changeSort('tag_name')">Name</th>
+                  <th @click="changeSort('tag_slug')">Slug</th>
+                  <th @click="changeSort('description')">Description</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -371,19 +347,5 @@ export default defineComponent({
   border: 1px solid #dee2e6;
   padding: 0.5rem 0.75rem;
   cursor: pointer;
-}
-
-.sortable {
-  cursor: pointer;
-}
-
-.sort-asc::after {
-  content: '▲';
-  margin-left: 5px;
-}
-
-.sort-desc::after {
-  content: '▼';
-  margin-left: 5px;
 }
 </style>

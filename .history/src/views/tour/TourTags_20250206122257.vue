@@ -26,7 +26,7 @@ export default defineComponent({
     const isEditing = ref(false)
     const currentTagId = ref(null)
     const currentPage = ref(1)
-    const itemsPerPage = ref(10)
+    const itemsPerPage = ref(5)
     const sortKey = ref('tag_id')
     const sortOrder = ref('asc')
 
@@ -135,34 +135,10 @@ export default defineComponent({
               <thead>
                 <tr>
                   <th><input type="checkbox" @change="toggleSelectAll($event)" /></th>
-                  <th @click="changeSort('tag_id')" class="sortable">
-                    ID
-                    <span
-                      v-if="sortKey === 'tag_id'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
-                  <th @click="changeSort('tag_name')" class="sortable">
-                    Name
-                    <span
-                      v-if="sortKey === 'tag_name'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
-                  <th @click="changeSort('tag_slug')" class="sortable">
-                    Slug
-                    <span
-                      v-if="sortKey === 'tag_slug'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
-                  <th @click="changeSort('description')" class="sortable">
-                    Description
-                    <span
-                      v-if="sortKey === 'description'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
+                  <th @click="changeSort('tag_id')">ID</th>
+                  <th @click="changeSort('tag_name')">Name</th>
+                  <th @click="changeSort('tag_slug')">Slug</th>
+                  <th @click="changeSort('description')">Description</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -197,86 +173,16 @@ export default defineComponent({
                 </tr>
               </tbody>
             </table>
-            <div class="dt-paging">
-              <nav aria-label="pagination">
-                <ul class="pagination">
-                  <li class="dt-paging-button page-item" :class="{ disabled: currentPage === 1 }">
-                    <button
-                      class="page-link first"
-                      role="link"
-                      type="button"
-                      aria-controls="DataTables_Table_0"
-                      aria-disabled="currentPage === 1"
-                      aria-label="First"
-                      @click="changePage(1)"
-                    >
-                      «
-                    </button>
-                  </li>
-                  <li class="dt-paging-button page-item" :class="{ disabled: currentPage === 1 }">
-                    <button
-                      class="page-link previous"
-                      role="link"
-                      type="button"
-                      aria-controls="DataTables_Table_0"
-                      aria-disabled="currentPage === 1"
-                      aria-label="Previous"
-                      @click="changePage(currentPage - 1)"
-                    >
-                      ‹
-                    </button>
-                  </li>
-                  <li
-                    v-for="page in totalPages"
-                    :key="page"
-                    class="dt-paging-button page-item"
-                    :class="{ active: currentPage === page }"
-                  >
-                    <button
-                      class="page-link"
-                      role="link"
-                      type="button"
-                      aria-controls="DataTables_Table_0"
-                      aria-current="currentPage === page"
-                      @click="changePage(page)"
-                    >
-                      {{ page }}
-                    </button>
-                  </li>
-                  <li
-                    class="dt-paging-button page-item"
-                    :class="{ disabled: currentPage === totalPages }"
-                  >
-                    <button
-                      class="page-link next"
-                      role="link"
-                      type="button"
-                      aria-controls="DataTables_Table_0"
-                      aria-disabled="currentPage === totalPages"
-                      aria-label="Next"
-                      @click="changePage(currentPage + 1)"
-                    >
-                      ›
-                    </button>
-                  </li>
-                  <li
-                    class="dt-paging-button page-item"
-                    :class="{ disabled: currentPage === totalPages }"
-                  >
-                    <button
-                      class="page-link last"
-                      role="link"
-                      type="button"
-                      aria-controls="DataTables_Table_0"
-                      aria-disabled="currentPage === totalPages"
-                      aria-label="Last"
-                      @click="changePage(totalPages)"
-                    >
-                      »
-                    </button>
-                  </li>
-                </ul>
-              </nav>
+            <div class="pagination">
+              <button
+                v-for="page in totalPages"
+                :key="page"
+                @click="changePage(page)"
+                :class="{ active: currentPage === page }"
+                class="btn btn-secondary btn-sm"
+              >
+                {{ page }}
+              </button>
             </div>
           </div>
         </div>
@@ -339,51 +245,5 @@ export default defineComponent({
 .pagination .btn.active {
   background-color: #007bff;
   color: white;
-}
-
-.dt-paging {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.dt-paging .pagination {
-  display: flex;
-  list-style: none;
-  padding: 0;
-}
-
-.dt-paging .page-item {
-  margin: 0 2px;
-}
-
-.dt-paging .page-item.disabled .page-link {
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-.dt-paging .page-item.active .page-link {
-  background-color: #007bff;
-  color: white;
-}
-
-.dt-paging .page-link {
-  border: 1px solid #dee2e6;
-  padding: 0.5rem 0.75rem;
-  cursor: pointer;
-}
-
-.sortable {
-  cursor: pointer;
-}
-
-.sort-asc::after {
-  content: '▲';
-  margin-left: 5px;
-}
-
-.sort-desc::after {
-  content: '▼';
-  margin-left: 5px;
 }
 </style>
