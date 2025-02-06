@@ -1,10 +1,10 @@
 <script>
-import $ from 'jquery'
-import 'select2'
-import 'select2/dist/css/select2.min.css'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useCategoryStore } from '../../stores/tour/TourCategory.js'
+import 'select2/dist/css/select2.min.css'
+import $ from 'jquery'
+import 'select2'
 
 export default defineComponent({
   name: 'TourCategory',

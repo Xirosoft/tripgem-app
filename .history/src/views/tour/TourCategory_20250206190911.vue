@@ -1,7 +1,4 @@
 <script>
-import $ from 'jquery'
-import 'select2'
-import 'select2/dist/css/select2.min.css'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useCategoryStore } from '../../stores/tour/TourCategory.js'
@@ -36,10 +33,6 @@ export default defineComponent({
 
     onMounted(() => {
       fetchCategories()
-      $('#parentId').select2({
-        placeholder: 'Select Parent Category',
-        allowClear: true,
-      })
     })
 
     const handleEditCategory = async (categoryId) => {
@@ -51,7 +44,6 @@ export default defineComponent({
         parentId.value = category.parent_id
         isEditing.value = true
         currentCategoryId.value = categoryId
-        $('#parentId').val(category.parent_id).trigger('change')
       }
     }
 
@@ -73,7 +65,6 @@ export default defineComponent({
       categorySlug.value = ''
       description.value = ''
       parentId.value = null
-      $('#parentId').val(null).trigger('change')
       fetchCategories() // Ensure the data table updates in real-time
     }
 
@@ -110,10 +101,6 @@ export default defineComponent({
       }
     }
 
-    const parentCategories = computed(() => {
-      return categories.value.filter((category) => category.parent_id === null)
-    })
-
     return {
       categories,
       name,
@@ -137,7 +124,6 @@ export default defineComponent({
       changeSort,
       sortKey,
       sortOrder,
-      parentCategories,
     }
   },
 })
@@ -341,17 +327,14 @@ export default defineComponent({
               ></textarea>
             </div>
             <div>
-              <label for="parentId" class="form-label">Parent Category</label>
-              <select class="form-control" id="parentId" v-model="parentId">
-                <option value="">Select Parent Category</option>
-                <option
-                  v-for="category in parentCategories"
-                  :key="category.category_id"
-                  :value="category.category_id"
-                >
-                  {{ category.category_name }}
-                </option>
-              </select>
+              <label for="parentId" class="form-label">Parent ID</label>
+              <input
+                type="number"
+                class="form-control"
+                id="parentId"
+                v-model="parentId"
+                placeholder="Parent ID"
+              />
             </div>
             <br />
             <button @click="handleSubmit" class="btn btn-primary me-4 waves-effect waves-light">

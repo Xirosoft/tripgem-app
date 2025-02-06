@@ -1,7 +1,4 @@
 <script>
-import $ from 'jquery'
-import 'select2'
-import 'select2/dist/css/select2.min.css'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useToast } from 'vue-toastification'
 import { useCategoryStore } from '../../stores/tour/TourCategory.js'
@@ -14,9 +11,6 @@ export default defineComponent({
     const {
       categories,
       name,
-      categorySlug,
-      description,
-      parentId,
       fetchCategories,
       addCategory,
       selectedCategories,
@@ -36,22 +30,14 @@ export default defineComponent({
 
     onMounted(() => {
       fetchCategories()
-      $('#parentId').select2({
-        placeholder: 'Select Parent Category',
-        allowClear: true,
-      })
     })
 
     const handleEditCategory = async (categoryId) => {
       const category = await getCategory(categoryId)
       if (category) {
-        name.value = category.category_name
-        categorySlug.value = category.category_slug
-        description.value = category.description
-        parentId.value = category.parent_id
+        name.value = category.name
         isEditing.value = true
         currentCategoryId.value = categoryId
-        $('#parentId').val(category.parent_id).trigger('change')
       }
     }
 
@@ -70,10 +56,6 @@ export default defineComponent({
         await addCategory()
       }
       name.value = ''
-      categorySlug.value = ''
-      description.value = ''
-      parentId.value = null
-      $('#parentId').val(null).trigger('change')
       fetchCategories() // Ensure the data table updates in real-time
     }
 
@@ -110,16 +92,9 @@ export default defineComponent({
       }
     }
 
-    const parentCategories = computed(() => {
-      return categories.value.filter((category) => category.parent_id === null)
-    })
-
     return {
       categories,
       name,
-      categorySlug,
-      description,
-      parentId,
       addCategory,
       toast,
       selectedCategories,
@@ -137,7 +112,6 @@ export default defineComponent({
       changeSort,
       sortKey,
       sortOrder,
-      parentCategories,
     }
   },
 })
@@ -160,31 +134,10 @@ export default defineComponent({
                       :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
                     ></span>
                   </th>
-                  <th @click="changeSort('category_name')" class="sortable">
+                  <th @click="changeSort('name')" class="sortable">
                     Name
                     <span
-                      v-if="sortKey === 'category_name'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
-                  <th @click="changeSort('category_slug')" class="sortable">
-                    Slug
-                    <span
-                      v-if="sortKey === 'category_slug'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
-                  <th @click="changeSort('description')" class="sortable">
-                    Description
-                    <span
-                      v-if="sortKey === 'description'"
-                      :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
-                    ></span>
-                  </th>
-                  <th @click="changeSort('parent_id')" class="sortable">
-                    Parent ID
-                    <span
-                      v-if="sortKey === 'parent_id'"
+                      v-if="sortKey === 'name'"
                       :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
                     ></span>
                   </th>
@@ -202,10 +155,7 @@ export default defineComponent({
                     />
                   </td>
                   <td>{{ category.category_id }}</td>
-                  <td>{{ category.category_name }}</td>
-                  <td>{{ category.category_slug }}</td>
-                  <td>{{ category.description }}</td>
-                  <td>{{ category.parent_id }}</td>
+                  <td>{{ category.name }}</td>
                   <td>
                     <button
                       @click="handleEditCategory(category.category_id)"
@@ -320,38 +270,6 @@ export default defineComponent({
                 v-model="name"
                 placeholder="Category Name"
               />
-            </div>
-            <div>
-              <label for="categorySlug" class="form-label">Slug</label>
-              <input
-                type="text"
-                class="form-control"
-                id="categorySlug"
-                v-model="categorySlug"
-                placeholder="Category Slug"
-              />
-            </div>
-            <div>
-              <label for="description" class="form-label">Description</label>
-              <textarea
-                class="form-control"
-                id="description"
-                v-model="description"
-                placeholder="Category Description"
-              ></textarea>
-            </div>
-            <div>
-              <label for="parentId" class="form-label">Parent Category</label>
-              <select class="form-control" id="parentId" v-model="parentId">
-                <option value="">Select Parent Category</option>
-                <option
-                  v-for="category in parentCategories"
-                  :key="category.category_id"
-                  :value="category.category_id"
-                >
-                  {{ category.category_name }}
-                </option>
-              </select>
             </div>
             <br />
             <button @click="handleSubmit" class="btn btn-primary me-4 waves-effect waves-light">
