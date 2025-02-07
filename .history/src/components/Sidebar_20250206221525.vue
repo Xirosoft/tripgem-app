@@ -90,8 +90,8 @@ export default {
               },
             },
             {
-              title: 'Locations',
-              path: '/tour-location',
+              title: 'tour-location',
+              path: '/locations',
               active: false,
               permission: {
                 module: 'tour_module',

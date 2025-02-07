@@ -47,11 +47,9 @@ export default defineComponent({
       }
     }
 
-    const handleDeleteLocation = async (locationId) => {
+    const handleDeleteLocation = (locationId) => {
       if (confirm('Are you sure you want to delete this location?')) {
-        await deleteLocation(locationId)
-        toast.success('Location deleted successfully')
-        fetchLocations() // Ensure the data table updates in real-time
+        deleteLocation(locationId)
       }
     }
 

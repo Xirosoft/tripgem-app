@@ -10,9 +10,12 @@ export default defineComponent({
     const locationStore = useLocationStore()
     const {
       locations,
-      name,
-      slug,
+      locationName,
+      locationSlug,
       address,
+      latitude,
+      longitude,
+      formattedAddress,
       parentId,
       fetchLocations,
       addLocation,
@@ -38,20 +41,21 @@ export default defineComponent({
     const handleEditLocation = async (locationId) => {
       const location = await getLocation(locationId)
       if (location) {
-        name.value = location.location_name
-        slug.value = location.location_slug
-        address.value = location.formatted_address
+        locationName.value = location.location_name
+        locationSlug.value = location.location_slug
+        address.value = location.address
+        latitude.value = location.latitude
+        longitude.value = location.longitude
+        formattedAddress.value = location.formatted_address
         parentId.value = location.parent_id
         isEditing.value = true
         currentLocationId.value = locationId
       }
     }
 
-    const handleDeleteLocation = async (locationId) => {
+    const handleDeleteLocation = (locationId) => {
       if (confirm('Are you sure you want to delete this location?')) {
-        await deleteLocation(locationId)
-        toast.success('Location deleted successfully')
-        fetchLocations() // Ensure the data table updates in real-time
+        deleteLocation(locationId)
       }
     }
 
@@ -63,9 +67,12 @@ export default defineComponent({
       } else {
         await addLocation()
       }
-      name.value = ''
-      slug.value = ''
+      locationName.value = ''
+      locationSlug.value = ''
       address.value = ''
+      latitude.value = ''
+      longitude.value = ''
+      formattedAddress.value = ''
       parentId.value = null
       fetchLocations() // Ensure the data table updates in real-time
     }
@@ -109,9 +116,12 @@ export default defineComponent({
 
     return {
       locations,
-      name,
-      slug,
+      locationName,
+      locationSlug,
       address,
+      latitude,
+      longitude,
+      formattedAddress,
       parentId,
       addLocation,
       toast,
@@ -310,7 +320,7 @@ export default defineComponent({
                 type="text"
                 class="form-control"
                 id="locationName"
-                v-model="name"
+                v-model="locationName"
                 placeholder="Location Name"
               />
             </div>
@@ -320,7 +330,7 @@ export default defineComponent({
                 type="text"
                 class="form-control"
                 id="locationSlug"
-                v-model="slug"
+                v-model="locationSlug"
                 placeholder="Location Slug"
               />
             </div>
@@ -333,7 +343,35 @@ export default defineComponent({
                 placeholder="Location Address"
               ></textarea>
             </div>
-
+            <div>
+              <label for="latitude" class="form-label">Latitude</label>
+              <input
+                type="text"
+                class="form-control"
+                id="latitude"
+                v-model="latitude"
+                placeholder="Latitude"
+              />
+            </div>
+            <div>
+              <label for="longitude" class="form-label">Longitude</label>
+              <input
+                type="text"
+                class="form-control"
+                id="longitude"
+                v-model="longitude"
+                placeholder="Longitude"
+              />
+            </div>
+            <div>
+              <label for="formattedAddress" class="form-label">Formatted Address</label>
+              <textarea
+                class="form-control"
+                id="formattedAddress"
+                v-model="formattedAddress"
+                placeholder="Formatted Address"
+              ></textarea>
+            </div>
             <div>
               <label for="parentId" class="form-label">Parent Location</label>
               <select class="form-control" id="parentId" v-model="parentId">
@@ -343,7 +381,7 @@ export default defineComponent({
                   :key="parent.location_id"
                   :value="parent.location_id"
                 >
-                  {{ parent.location_name }}
+                  {{ parent.name }}
                 </option>
               </select>
             </div>

@@ -38,20 +38,18 @@ export default defineComponent({
     const handleEditLocation = async (locationId) => {
       const location = await getLocation(locationId)
       if (location) {
-        name.value = location.location_name
-        slug.value = location.location_slug
-        address.value = location.formatted_address
+        name.value = location.name
+        slug.value = location.slug
+        address.value = location.address
         parentId.value = location.parent_id
         isEditing.value = true
         currentLocationId.value = locationId
       }
     }
 
-    const handleDeleteLocation = async (locationId) => {
+    const handleDeleteLocation = (locationId) => {
       if (confirm('Are you sure you want to delete this location?')) {
-        await deleteLocation(locationId)
-        toast.success('Location deleted successfully')
-        fetchLocations() // Ensure the data table updates in real-time
+        deleteLocation(locationId)
       }
     }
 
@@ -153,17 +151,17 @@ export default defineComponent({
                       :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
                     ></span>
                   </th>
-                  <th @click="changeSort('location_name')" class="sortable">
+                  <th @click="changeSort('name')" class="sortable">
                     Name
                     <span
-                      v-if="sortKey === 'location_name'"
+                      v-if="sortKey === 'name'"
                       :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
                     ></span>
                   </th>
-                  <th @click="changeSort('location_slug')" class="sortable">
+                  <th @click="changeSort('slug')" class="sortable">
                     Slug
                     <span
-                      v-if="sortKey === 'location_slug'"
+                      v-if="sortKey === 'slug'"
                       :class="sortOrder === 'asc' ? 'sort-asc' : 'sort-desc'"
                     ></span>
                   </th>
@@ -195,9 +193,9 @@ export default defineComponent({
                     />
                   </td>
                   <td>{{ location.location_id }}</td>
-                  <td>{{ location.location_name }}</td>
-                  <td>{{ location.location_slug }}</td>
-                  <td>{{ location.formatted_address }}</td>
+                  <td>{{ location.name }}</td>
+                  <td>{{ location.slug }}</td>
+                  <td>{{ location.address }}</td>
                   <td>{{ location.parent_id }}</td>
                   <td>
                     <button
@@ -305,21 +303,21 @@ export default defineComponent({
           <h5 class="card-header">{{ isEditing ? 'Edit Location' : 'Add new Location' }}</h5>
           <div class="card-body">
             <div>
-              <label for="locationName" class="form-label">Name</label>
+              <label for="name" class="form-label">Name</label>
               <input
                 type="text"
                 class="form-control"
-                id="locationName"
+                id="name"
                 v-model="name"
                 placeholder="Location Name"
               />
             </div>
             <div>
-              <label for="locationSlug" class="form-label">Slug</label>
+              <label for="slug" class="form-label">Slug</label>
               <input
                 type="text"
                 class="form-control"
-                id="locationSlug"
+                id="slug"
                 v-model="slug"
                 placeholder="Location Slug"
               />
@@ -333,7 +331,6 @@ export default defineComponent({
                 placeholder="Location Address"
               ></textarea>
             </div>
-
             <div>
               <label for="parentId" class="form-label">Parent Location</label>
               <select class="form-control" id="parentId" v-model="parentId">
@@ -343,7 +340,7 @@ export default defineComponent({
                   :key="parent.location_id"
                   :value="parent.location_id"
                 >
-                  {{ parent.location_name }}
+                  {{ parent.name }}
                 </option>
               </select>
             </div>
