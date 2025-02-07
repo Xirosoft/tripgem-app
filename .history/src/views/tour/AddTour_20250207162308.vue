@@ -1,26 +1,9 @@
 <script setup>
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import config from '../../config/config'
+import { onMounted } from 'vue'
 import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
-const merchants = ref([])
-
-const fetchMerchants = async () => {
-  try {
-    const response = await axios.get(`${config.apiUrl}/merchants/view/1`, {
-      headers: config.getHeaders(),
-    })
-    console.log('Merchants:', response)
-
-    merchants.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching merchants:', error)
-  }
-}
 
 onMounted(() => {
   initializeEcommerceAddProduct()
-  fetchMerchants()
 })
 </script>
 
@@ -74,7 +57,30 @@ onMounted(() => {
                 aria-label="Tour title"
               />
             </div>
-
+            <!-- <div class="row mb-6">
+              <div class="col">
+                <label class="form-label" for="ecommerce-product-sku">SKU</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="ecommerce-product-sku"
+                  placeholder="SKU"
+                  name="productSku"
+                  aria-label="Product SKU"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="ecommerce-product-barcode">Barcode</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ecommerce-product-barcode"
+                  placeholder="0123-4567"
+                  name="productBarcode"
+                  aria-label="Product barcode"
+                />
+              </div>
+            </div> -->
             <!-- Description -->
             <div>
               <label class="mb-1">Description (Optional)</label>
@@ -656,21 +662,16 @@ onMounted(() => {
             <h5 class="card-title mb-0">Organize</h5>
           </div>
           <div class="card-body">
-            <!-- Merchants -->
+            <!-- Vendor -->
             <div class="mb-6 col ecommerce-select2-dropdown">
-              <label class="form-label mb-1" for="Merchants">Merchants</label>
-              <select
-                id="Merchants"
-                class="select2 form-select"
-                data-placeholder="Select Merchants"
-              >
+              <label class="form-label mb-1" for="vendor"> Merchants </label>
+              <select id="vendor" class="select2 form-select" data-placeholder="Select Vendor">
                 <option value="">Select Merchant</option>
-                <option v-for="merchant in merchants" :key="merchant.id" :value="merchant.id">
-                  {{ merchant.company_name }}
-                </option>
+                <option value="men-clothing">Men's Clothing</option>
+                <option value="women-clothing">Women's-clothing</option>
+                <option value="kid-clothing">Kid's-clothing</option>
               </select>
             </div>
-
             <!-- Category -->
             <div class="d-flex justify-content-between align-items-center">
               <div class="mb-6 col ecommerce-select2-dropdown">

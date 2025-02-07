@@ -1,28 +1,20 @@
 <script setup>
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import config from '../../config/config'
-import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
+import { ref } from 'vue'
+
 const merchants = ref([])
 
 const fetchMerchants = async () => {
   try {
-    const response = await axios.get(`${config.apiUrl}/merchants/view/1`, {
-      headers: config.getHeaders(),
-    })
-    console.log('Merchants:', response)
-
+    const response = await axios.get('merchants/view/{id}')
     merchants.value = response.data.data
   } catch (error) {
     console.error('Error fetching merchants:', error)
   }
 }
-
-onMounted(() => {
-  initializeEcommerceAddProduct()
-  fetchMerchants()
-})
 </script>
+
+onMounted(() => { initializeEcommerceAddProduct() fetchMerchants() })
 
 <template>
   <div class="app-ecommerce">

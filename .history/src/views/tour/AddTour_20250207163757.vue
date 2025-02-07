@@ -1,25 +1,88 @@
 <script setup>
 import axios from 'axios'
+import jQuery from 'jquery'
+import select2 from 'select2'
 import { onMounted, ref } from 'vue'
+import { useToast } from 'vue-toastification'
 import config from '../../config/config'
-import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
+import { useToursStore } from '../../stores/tour/AddTour'
+const $ = jQuery
+window.$ = window.jQuery = jQuery
+select2()
+
+const toast = useToast()
+const toursStore = useToursStore()
+
+const formData = ref({
+  merchant_id: null,
+  user_id: 11,
+  tour_name: '',
+  subheading: '',
+  description: '',
+  itinerary: '',
+  tour_start_time: '',
+  tour_end_time: '',
+  regular_price_adult: 0,
+  net_price_adult: 0,
+  regular_price_child: 0,
+  net_price_child: 0,
+  available_dates: '',
+  available_seat: 0,
+  total_seat: 0,
+  image_gallery: [],
+  video_gallery: [],
+  thumbnail: '',
+  transport_types: '',
+  languages_supported: '',
+  highlights: '',
+  min_age: 0,
+  max_age: 0,
+  cancellation_policy: '',
+  discount_percentage: 0,
+  tour_type: '',
+  currency: '',
+  status: 'draft',
+})
+
 const merchants = ref([])
 
 const fetchMerchants = async () => {
   try {
-    const response = await axios.get(`${config.apiUrl}/merchants/view/1`, {
+    const response = await axios.get(`${config.apiUrl}/merchants/view`, {
       headers: config.getHeaders(),
     })
-    console.log('Merchants:', response)
-
     merchants.value = response.data.data
+    initializeSelect2()
   } catch (error) {
-    console.error('Error fetching merchants:', error)
+    toast.error('Failed to load merchants')
+  }
+}
+
+const initializeSelect2 = () => {
+  $('#Merchants')
+    .select2({
+      data: merchants.value.map((merchant) => ({
+        id: merchant.id,
+        text: merchant.company_name,
+      })),
+      placeholder: 'Select Merchant',
+      allowClear: true,
+    })
+    .on('change', function () {
+      formData.value.merchant_id = $(this).val()
+    })
+}
+
+const submitForm = async () => {
+  try {
+    await toursStore.createTour(formData.value)
+    toast.success('Tour added successfully')
+  } catch (error) {
+    toast.error('Failed to add tour')
   }
 }
 
 onMounted(() => {
-  initializeEcommerceAddProduct()
   fetchMerchants()
 })
 </script>
@@ -39,7 +102,9 @@ onMounted(() => {
           <button class="btn btn-label-secondary">View Tour</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
-        <button type="submit" class="btn btn-primary">Publish Tour</button>
+        <button type="submit" class="btn btn-primary" @click.prevent="submitForm">
+          Publish Tour
+        </button>
       </div>
     </div>
 
@@ -55,6 +120,7 @@ onMounted(() => {
             <div class="mb-6">
               <label class="form-label" for="tour-title">Title</label>
               <input
+                v-model="formData.tour_name"
                 type="text"
                 class="form-control"
                 id="tour-title"
@@ -66,6 +132,7 @@ onMounted(() => {
             <div class="mb-6">
               <label class="form-label" for="tour-title">Sub Title</label>
               <input
+                v-model="formData.subheading"
                 type="text"
                 class="form-control"
                 id="tour-title"
@@ -74,7 +141,30 @@ onMounted(() => {
                 aria-label="Tour title"
               />
             </div>
-
+            <!-- <div class="row mb-6">
+              <div class="col">
+                <label class="form-label" for="ecommerce-product-sku">SKU</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="ecommerce-product-sku"
+                  placeholder="SKU"
+                  name="productSku"
+                  aria-label="Product SKU"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="ecommerce-product-barcode">Barcode</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ecommerce-product-barcode"
+                  placeholder="0123-4567"
+                  name="productBarcode"
+                  aria-label="Product barcode"
+                />
+              </div>
+            </div> -->
             <!-- Description -->
             <div>
               <label class="mb-1">Description (Optional)</label>
@@ -93,6 +183,7 @@ onMounted(() => {
                   </div>
                 </div>
                 <div
+                  v-model="formData.description"
                   class="tour-description-editor border-0 pb-6"
                   id="tour-category-description"
                 ></div>
@@ -114,7 +205,11 @@ onMounted(() => {
                     </span>
                   </div>
                 </div>
-                <div class="tour-itinerary border-0 pb-6" id="tour-itinerary"></div>
+                <div
+                  v-model="formData.itinerary"
+                  class="tour-itinerary border-0 pb-6"
+                  id="tour-itinerary"
+                ></div>
               </div>
             </div>
           </div>
@@ -167,6 +262,7 @@ onMounted(() => {
                     <div class="col-12 mb-3">
                       <label class="form-label" for="adult-regular-price">Regular Price</label>
                       <input
+                        v-model="formData.regular_price_adult"
                         type="number"
                         class="form-control"
                         id="adult-regular-price"
@@ -179,6 +275,7 @@ onMounted(() => {
                     <div class="col-12 mb-3">
                       <label class="form-label" for="adult-net-price">Net Price</label>
                       <input
+                        v-model="formData.net_price_adult"
                         type="number"
                         class="form-control"
                         id="adult-net-price"
@@ -209,6 +306,7 @@ onMounted(() => {
                     <div class="col-12 mb-3">
                       <label class="form-label" for="child-regular-price">Regular Price</label>
                       <input
+                        v-model="formData.regular_price_child"
                         type="number"
                         class="form-control"
                         id="child-regular-price"
@@ -221,6 +319,7 @@ onMounted(() => {
                     <div class="col-12 mb-3">
                       <label class="form-label" for="child-net-price">Net Price</label>
                       <input
+                        v-model="formData.net_price_child"
                         type="number"
                         class="form-control"
                         id="child-net-price"
@@ -658,19 +757,15 @@ onMounted(() => {
           <div class="card-body">
             <!-- Merchants -->
             <div class="mb-6 col ecommerce-select2-dropdown">
-              <label class="form-label mb-1" for="Merchants">Merchants</label>
+              <label class="form-label mb-1" for="Merchants"> Merchants </label>
               <select
                 id="Merchants"
                 class="select2 form-select"
                 data-placeholder="Select Merchants"
               >
                 <option value="">Select Merchant</option>
-                <option v-for="merchant in merchants" :key="merchant.id" :value="merchant.id">
-                  {{ merchant.company_name }}
-                </option>
               </select>
             </div>
-
             <!-- Category -->
             <div class="d-flex justify-content-between align-items-center">
               <div class="mb-6 col ecommerce-select2-dropdown">

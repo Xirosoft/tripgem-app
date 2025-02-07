@@ -7,7 +7,7 @@ const merchants = ref([])
 
 const fetchMerchants = async () => {
   try {
-    const response = await axios.get(`${config.apiUrl}/merchants/view/1`, {
+    const response = await axios.get('merchants/view/1', {
       headers: config.getHeaders(),
     })
     console.log('Merchants:', response)

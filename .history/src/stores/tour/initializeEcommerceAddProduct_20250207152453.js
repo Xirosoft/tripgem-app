@@ -73,7 +73,7 @@ export function initializeEcommerceAddProduct() {
 
     // Basic Tags
     const tagifyBasicEl = document.querySelector('#ecommerce-product-tags')
-    new Tagify(tagifyBasicEl)
+    const TagifyBasic = new Tagify(tagifyBasicEl)
 
     // Flatpickr
     const date = new Date()

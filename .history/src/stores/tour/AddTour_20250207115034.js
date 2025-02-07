@@ -25,7 +25,9 @@ export const useToursStore = defineStore('addtours', {
 
       try {
         const response = await axios.post(`${config.apiUrl}/tour/add`, tourData, {
-          headers: config.getHeaders(),
+          headers: {
+            ...config.getHeaders(),
+          },
         })
 
         if (!response.data) {

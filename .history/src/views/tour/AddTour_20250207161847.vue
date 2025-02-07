@@ -1,26 +1,9 @@
 <script setup>
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import config from '../../config/config'
+import { onMounted } from 'vue'
 import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
-const merchants = ref([])
-
-const fetchMerchants = async () => {
-  try {
-    const response = await axios.get(`${config.apiUrl}/merchants/view/1`, {
-      headers: config.getHeaders(),
-    })
-    console.log('Merchants:', response)
-
-    merchants.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching merchants:', error)
-  }
-}
 
 onMounted(() => {
   initializeEcommerceAddProduct()
-  fetchMerchants()
 })
 </script>
 
@@ -74,7 +57,30 @@ onMounted(() => {
                 aria-label="Tour title"
               />
             </div>
-
+            <!-- <div class="row mb-6">
+              <div class="col">
+                <label class="form-label" for="ecommerce-product-sku">SKU</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="ecommerce-product-sku"
+                  placeholder="SKU"
+                  name="productSku"
+                  aria-label="Product SKU"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="ecommerce-product-barcode">Barcode</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ecommerce-product-barcode"
+                  placeholder="0123-4567"
+                  name="productBarcode"
+                  aria-label="Product barcode"
+                />
+              </div>
+            </div> -->
             <!-- Description -->
             <div>
               <label class="mb-1">Description (Optional)</label>
@@ -296,6 +302,10 @@ onMounted(() => {
                   <div class="tab-pane fade show active" id="photoGallery" role="tabpanel">
                     <h6 class="text-body">You Can Upload upload multiple Photos</h6>
                     <div class="card mb-6">
+                      <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 card-title">Photo Gallery (Optional)</h5>
+                        <!-- <a href="javascript:void(0);" class="fw-medium">Add media from URL</a> -->
+                      </div>
                       <div class="card-body">
                         <form action="/upload" class="dropzone needsclick p-0" id="image_gallery">
                           <div class="dz-message needsclick">
@@ -318,6 +328,10 @@ onMounted(() => {
                   <div class="tab-pane fade" id="videoGallery" role="tabpanel">
                     <h6 class="mb-3 text-body">You can multiple videos</h6>
                     <div class="card mb-6">
+                      <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 card-title">Video Gallery (Optional)</h5>
+                        <!-- <a href="javascript:void(0);" class="fw-medium">Add media from URL</a> -->
+                      </div>
                       <div class="card-body">
                         <form action="/upload" class="dropzone needsclick p-0" id="dropzone-basic">
                           <div class="dz-message needsclick">
@@ -635,11 +649,75 @@ onMounted(() => {
 
         <!-- Pricing Card -->
         <div class="card mb-6">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Pricing</h5>
+          </div>
           <div class="card-body">
             <!-- Base Price -->
+            <div class="mb-6">
+              <label class="form-label" for="ecommerce-product-price">Base Price</label>
+              <input
+                type="number"
+                class="form-control"
+                id="ecommerce-product-price"
+                placeholder="Price"
+                name="productPrice"
+                aria-label="Product price"
+              />
+            </div>
+            <!-- Discounted Price -->
+            <div class="mb-6">
+              <label class="form-label" for="ecommerce-product-discount-price"
+                >Discounted Price</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="ecommerce-product-discount-price"
+                placeholder="Discounted Price"
+                name="productDiscountedPrice"
+                aria-label="Product discounted price"
+              />
+            </div>
+            <!-- Charge tax check box -->
+
+            <!-- Media -->
+            <div class="card mb-6">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 card-title">Thumbnail</h5>
+                <!-- <a href="javascript:void(0);" class="fw-medium">Add media from URL</a> -->
+              </div>
+              <div class="card-body">
+                <form action="/upload" class="dropzone needsclick p-0" id="thumbnail">
+                  <div class="dz-message needsclick">
+                    <p class="h4 needsclick pt-3 mb-2">Drag and drop your image here</p>
+                    <p class="h6 text-muted d-block fw-normal mb-2">or</p>
+                    <span class="note needsclick btn btn-sm btn-label-primary" id="btnBrowse"
+                      >Browse image</span
+                    >
+                  </div>
+                  <div class="fallback">
+                    <input name="thumbnail" type="file" />
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="form-check ms-2 mt-2 mb-4">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="price-charge-tax"
+                checked
+              />
+              <label class="switch-label" for="price-charge-tax">
+                Charge tax on this product
+              </label>
+            </div>
             <!-- Instock switch -->
-            <div class="d-flex justify-content-between align-items-center pt-2">
-              <span class="mb-0">Booking Availability</span>
+            <div class="d-flex justify-content-between align-items-center border-top pt-2">
+              <span class="mb-0">In stock</span>
               <div class="w-25 d-flex justify-content-end">
                 <div class="form-check form-switch me-n3">
                   <input type="checkbox" class="form-check-input" />
@@ -649,28 +727,22 @@ onMounted(() => {
           </div>
         </div>
         <!-- /Pricing Card -->
-
         <!-- Organize Card -->
         <div class="card mb-6">
           <div class="card-header">
             <h5 class="card-title mb-0">Organize</h5>
           </div>
           <div class="card-body">
-            <!-- Merchants -->
+            <!-- Vendor -->
             <div class="mb-6 col ecommerce-select2-dropdown">
-              <label class="form-label mb-1" for="Merchants">Merchants</label>
-              <select
-                id="Merchants"
-                class="select2 form-select"
-                data-placeholder="Select Merchants"
-              >
-                <option value="">Select Merchant</option>
-                <option v-for="merchant in merchants" :key="merchant.id" :value="merchant.id">
-                  {{ merchant.company_name }}
-                </option>
+              <label class="form-label mb-1" for="vendor"> Vendor </label>
+              <select id="vendor" class="select2 form-select" data-placeholder="Select Vendor">
+                <option value="">Select Vendor</option>
+                <option value="men-clothing">Men's Clothing</option>
+                <option value="women-clothing">Women's-clothing</option>
+                <option value="kid-clothing">Kid's-clothing</option>
               </select>
             </div>
-
             <!-- Category -->
             <div class="d-flex justify-content-between align-items-center">
               <div class="mb-6 col ecommerce-select2-dropdown">
@@ -720,28 +792,6 @@ onMounted(() => {
           </div>
         </div>
         <!-- /Organize Card -->
-
-        <!-- Media -->
-        <div class="card mb-6">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 card-title">Thumbnail</h5>
-            <!-- <a href="javascript:void(0);" class="fw-medium">Add media from URL</a> -->
-          </div>
-          <div class="card-body">
-            <form action="/upload" class="dropzone needsclick p-0" id="thumbnail">
-              <div class="dz-message needsclick">
-                <p class="h4 needsclick pt-3 mb-2">Drag and drop your image here</p>
-                <p class="h6 text-muted d-block fw-normal mb-2">or</p>
-                <span class="note needsclick btn btn-sm btn-label-primary" id="btnBrowse"
-                  >Browse image</span
-                >
-              </div>
-              <div class="fallback">
-                <input name="thumbnail" type="file" />
-              </div>
-            </form>
-          </div>
-        </div>
       </div>
       <!-- /Second column -->
     </div>

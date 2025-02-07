@@ -30,8 +30,8 @@ export function initializeEcommerceAddProduct() {
       }
     }
 
-    initCommentEditor('.tour-description-editor', '.description-toolbar', 'Tour Description')
-    initCommentEditor('.tour-itinerary', '.itinerary-toolbar', 'Tour Itinerary')
+    initCommentEditor('.tour-description-editor', '.comment-toolbar', 'Product Description')
+    initCommentEditor('.tour-category-itinerary', '.comment-toolbar', 'Tour Itinerary')
 
     // previewTemplate: Updated Dropzone default previewTemplate
     const previewTemplate = `<div class="dz-preview dz-file-preview">
@@ -52,28 +52,21 @@ export function initializeEcommerceAddProduct() {
     </div>`
 
     // Basic Dropzone
-
-    function dropzoneFileAdded(selector) {
-      const dropzoneBasic = document.querySelector(selector)
-      if (dropzoneBasic) {
-        new Dropzone(dropzoneBasic, {
-          previewTemplate: previewTemplate,
-          parallelUploads: 1,
-          maxFilesize: 5,
-          acceptedFiles: '.jpg,.jpeg,.png,.gif',
-          addRemoveLinks: true,
-          maxFiles: 1,
-        })
-      }
+    const dropzoneBasic = document.querySelector('#dropzone-basic')
+    if (dropzoneBasic) {
+      const myDropzone = new Dropzone(dropzoneBasic, {
+        previewTemplate: previewTemplate,
+        parallelUploads: 1,
+        maxFilesize: 5,
+        acceptedFiles: '.jpg,.jpeg,.png,.gif',
+        addRemoveLinks: true,
+        maxFiles: 1,
+      })
     }
-
-    dropzoneFileAdded('#thumbnail', 'thumbnail')
-    dropzoneFileAdded('#image_gallery', 'image_gallery')
-    dropzoneFileAdded('#video_gallery', 'video_gallery')
 
     // Basic Tags
     const tagifyBasicEl = document.querySelector('#ecommerce-product-tags')
-    new Tagify(tagifyBasicEl)
+    const TagifyBasic = new Tagify(tagifyBasicEl)
 
     // Flatpickr
     const date = new Date()

@@ -1,26 +1,9 @@
 <script setup>
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import config from '../../config/config'
+import { onMounted } from 'vue'
 import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
-const merchants = ref([])
-
-const fetchMerchants = async () => {
-  try {
-    const response = await axios.get(`${config.apiUrl}/merchants/view/1`, {
-      headers: config.getHeaders(),
-    })
-    console.log('Merchants:', response)
-
-    merchants.value = response.data.data
-  } catch (error) {
-    console.error('Error fetching merchants:', error)
-  }
-}
 
 onMounted(() => {
   initializeEcommerceAddProduct()
-  fetchMerchants()
 })
 </script>
 
@@ -658,19 +641,18 @@ onMounted(() => {
           <div class="card-body">
             <!-- Merchants -->
             <div class="mb-6 col ecommerce-select2-dropdown">
-              <label class="form-label mb-1" for="Merchants">Merchants</label>
+              <label class="form-label mb-1" for="Merchants"> Merchants </label>
               <select
                 id="Merchants"
                 class="select2 form-select"
                 data-placeholder="Select Merchants"
               >
                 <option value="">Select Merchant</option>
-                <option v-for="merchant in merchants" :key="merchant.id" :value="merchant.id">
-                  {{ merchant.company_name }}
-                </option>
+                <option value="men-clothing">Men's Clothing</option>
+                <option value="women-clothing">Women's-clothing</option>
+                <option value="kid-clothing">Kid's-clothing</option>
               </select>
             </div>
-
             <!-- Category -->
             <div class="d-flex justify-content-between align-items-center">
               <div class="mb-6 col ecommerce-select2-dropdown">

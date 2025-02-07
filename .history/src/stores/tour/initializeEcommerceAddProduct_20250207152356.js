@@ -53,10 +53,10 @@ export function initializeEcommerceAddProduct() {
 
     // Basic Dropzone
 
-    function dropzoneFileAdded(selector) {
+    function dropzoneFileAdded(selector, file) {
       const dropzoneBasic = document.querySelector(selector)
       if (dropzoneBasic) {
-        new Dropzone(dropzoneBasic, {
+        const myDropzone = new Dropzone(dropzoneBasic, {
           previewTemplate: previewTemplate,
           parallelUploads: 1,
           maxFilesize: 5,
@@ -73,7 +73,7 @@ export function initializeEcommerceAddProduct() {
 
     // Basic Tags
     const tagifyBasicEl = document.querySelector('#ecommerce-product-tags')
-    new Tagify(tagifyBasicEl)
+    const TagifyBasic = new Tagify(tagifyBasicEl)
 
     // Flatpickr
     const date = new Date()

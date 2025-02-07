@@ -53,10 +53,10 @@ export function initializeEcommerceAddProduct() {
 
     // Basic Dropzone
 
-    function dropzoneFileAdded(selector) {
+    function dropzoneFileAdded(selector, file) {
       const dropzoneBasic = document.querySelector(selector)
       if (dropzoneBasic) {
-        new Dropzone(dropzoneBasic, {
+        const myDropzone = new Dropzone(dropzoneBasic, {
           previewTemplate: previewTemplate,
           parallelUploads: 1,
           maxFilesize: 5,
@@ -67,13 +67,13 @@ export function initializeEcommerceAddProduct() {
       }
     }
 
-    dropzoneFileAdded('#thumbnail', 'thumbnail')
+    dropzoneFileAdded('#photo-gallery', 'image_gallery')
     dropzoneFileAdded('#image_gallery', 'image_gallery')
-    dropzoneFileAdded('#video_gallery', 'video_gallery')
+    dropzoneFileAdded('#photo-gallery', 'image_gallery')
 
     // Basic Tags
     const tagifyBasicEl = document.querySelector('#ecommerce-product-tags')
-    new Tagify(tagifyBasicEl)
+    const TagifyBasic = new Tagify(tagifyBasicEl)
 
     // Flatpickr
     const date = new Date()
