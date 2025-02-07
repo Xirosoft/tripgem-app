@@ -7,10 +7,8 @@ import { nextTick, onMounted, ref, watch } from 'vue'
 import config from '../../config/config'
 
 const tags = ref([]) // Holds all available tags
-const selectedTags1 = ref([]) // Holds selected tag IDs for first select
-const selectedTags2 = ref([]) // Holds selected tag IDs for second select
-const tagSelectRef1 = ref(null)
-const tagSelectRef2 = ref(null)
+const selectedTags = ref([]) // Holds selected tag IDs
+const tagSelectRef = ref(null)
 const loadingTags = ref(false)
 
 // Fetch existing tags from the API
@@ -52,20 +50,22 @@ const addTag = async (tag) => {
   }
 }
 
-// Initialize Select2 for a given ref and selectedTags
-const initializeSelect2 = (selectRef, selectedTags) => {
-  if (!selectRef.value) return
+// Initialize Select2
+const initializeSelect2 = () => {
+  console.log('Initializing Select2...')
+
+  if (!tagSelectRef.value) return
 
   console.log('Initializing Select2...')
 
-  if ($.fn.select2 && $(selectRef.value).data('select2')) {
+  if ($.fn.select2 && $(tagSelectRef.value).data('select2')) {
     console.log('Destroying previous Select2 instance...')
-    $(selectRef.value).select2('destroy') // Destroy previous instance if exists
+    // $(tagSelectRef.value).select2('destroy') // Destroy previous instance if exists
   }
 
   nextTick(() => {
     console.log('Setting up Select2 with tags:', tags.value)
-    $(selectRef.value)
+    $(tagSelectRef.value)
       .select2({
         tags: true,
         multiple: true,
@@ -76,19 +76,19 @@ const initializeSelect2 = (selectRef, selectedTags) => {
           return { id: term, text: term, newTag: true }
         },
       })
-      .val(selectedTags.value) // Ensure selected values are set
-      .trigger('change')
+      // .val(selectedTags.value) // Ensure selected values are set
+      // .trigger('change')
 
       // Handle selecting tags
       .on('select2:select', async (e) => {
-        const data = e.params.data
-        console.log('Tag selected:', data)
-        if (data.newTag) {
-          await addTag({ tag_name: data.text })
-        }
-        if (!selectedTags.value.includes(data.id)) {
-          selectedTags.value.push(data.id) // Ensure it updates Vue state
-        }
+        // const data = e.params.data
+        // console.log('Tag selected:', data)
+        // if (data.newTag) {
+        //   await addTag({ tag_name: data.text })
+        // }
+        // selectedTags.value.push(data.id) // Ensure it updates Vue state
+        // if (!selectedTags.value.includes(data.id)) {
+        // }
       })
 
       // Handle unselecting tags
@@ -103,42 +103,38 @@ const initializeSelect2 = (selectRef, selectedTags) => {
 // Run on mount
 onMounted(async () => {
   console.log('Fetching tags...')
+
   await fetchTags()
   nextTick(() => {
     console.log('Tags fetched:', tags.value)
-    initializeSelect2(tagSelectRef1, selectedTags1)
-    // initializeSelect2(tagSelectRef2, selectedTags2)
+
+    // initializeSelect2()
   })
 })
 
 // Watch for changes in tags and reinitialize Select2
 watch(tags, () => {
   console.log('Tags updated:', tags.value)
-  nextTick(() => {
-    initializeSelect2(tagSelectRef1, selectedTags1)
-    // initializeSelect2(tagSelectRef2, selectedTags2)
-  })
+
+  // nextTick(() => {
+  //   initializeSelect2()
+  // })
 })
 
 // Watch for changes in selectedTags and update Select2 UI
-watch(selectedTags1, () => {
-  console.log('Selected tags updated for first select:', selectedTags1.value)
-  $(tagSelectRef1.value).val(selectedTags1.value).trigger('change')
-})
-
-watch(selectedTags2, () => {
-  console.log('Selected tags updated for second select:', selectedTags2.value)
-  $(tagSelectRef2.value).val(selectedTags2.value).trigger('change')
-})
+// watch(selectedTags, () => {
+//   console.log('Selected tags updated:', selectedTags.value)
+//   $(tagSelectRef.value).val(selectedTags.value).trigger('change')
+// })
 </script>
 
 <template>
   <div>
-    <label for="ecommerce-product-tags-1" class="form-label mb-1">Tags</label>
+    <label for="ecommerce-product-tags" class="form-label mb-1">Tags</label>
     <select
-      id="ecommerce-product-tags-1"
+      id="ecommerce-product-tags"
       class="select2 form-control"
-      ref="tagSelectRef1"
+      ref="tagSelectRef"
       multiple="multiple"
       data-placeholder="Select or add tags"
     ></select>

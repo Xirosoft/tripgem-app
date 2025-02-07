@@ -628,16 +628,23 @@ onMounted(() => {
                   <div class="row">
                     <div class="mb-6 col-4">
                       <label class="form-label" for="form-repeater-1-1">Options</label>
-                      <input
-                        type="text"
+                      <select
                         id="form-repeater-1-1"
-                        class="form-control"
-                        placeholder="Enter option"
-                      />
+                        class="select2 form-select"
+                        data-placeholder="Size"
+                      >
+                        <option value="">Size</option>
+                        <option value="size">Size</option>
+                        <option value="color">Color</option>
+                        <option value="weight">Weight</option>
+                        <option value="smell">Smell</option>
+                      </select>
                     </div>
 
                     <div class="mb-6 col-8">
-                      <label class="form-label" for="form-repeater-1-2">Option Vale</label>
+                      <label class="form-label invisible" for="form-repeater-1-2"
+                        >Not visible</label
+                      >
                       <input
                         type="number"
                         id="form-repeater-1-2"

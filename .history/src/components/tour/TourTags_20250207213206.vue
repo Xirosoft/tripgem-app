@@ -107,7 +107,7 @@ onMounted(async () => {
   nextTick(() => {
     console.log('Tags fetched:', tags.value)
     initializeSelect2(tagSelectRef1, selectedTags1)
-    // initializeSelect2(tagSelectRef2, selectedTags2)
+    initializeSelect2(tagSelectRef2, selectedTags2)
   })
 })
 
@@ -116,7 +116,7 @@ watch(tags, () => {
   console.log('Tags updated:', tags.value)
   nextTick(() => {
     initializeSelect2(tagSelectRef1, selectedTags1)
-    // initializeSelect2(tagSelectRef2, selectedTags2)
+    initializeSelect2(tagSelectRef2, selectedTags2)
   })
 })
 
@@ -134,11 +134,21 @@ watch(selectedTags2, () => {
 
 <template>
   <div>
-    <label for="ecommerce-product-tags-1" class="form-label mb-1">Tags</label>
+    <label for="ecommerce-product-tags-1" class="form-label mb-1">Tags 1</label>
     <select
       id="ecommerce-product-tags-1"
       class="select2 form-control"
       ref="tagSelectRef1"
+      multiple="multiple"
+      data-placeholder="Select or add tags"
+    ></select>
+  </div>
+  <div>
+    <label for="ecommerce-product-tags-2" class="form-label mb-1">Tags 2</label>
+    <select
+      id="ecommerce-product-tags-2"
+      class="select2 form-control"
+      ref="tagSelectRef2"
       multiple="multiple"
       data-placeholder="Select or add tags"
     ></select>

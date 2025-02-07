@@ -1,14 +1,13 @@
 <script setup>
-import $ from 'jquery'
 import { onMounted } from 'vue'
 import MerchantUsers from '../../components/tour/MerchantUsers.vue'
 import TourCategory from '../../components/tour/TourCategory.vue'
 import TourLocation from '../../components/tour/TourLocation.vue'
 import TourTags from '../../components/tour/TourTags.vue'
 import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
+
 onMounted(() => {
   initializeEcommerceAddProduct()
-  $('.select2').select2() // Initialize select2 for all elements with class 'select2'
 })
 </script>
 
@@ -389,6 +388,56 @@ onMounted(() => {
           </div>
         </div>
         <!-- /Price -->
+
+        <!-- Variants -->
+        <div class="card mb-6">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Variants</h5>
+          </div>
+          <div class="card-body">
+            <form class="form-repeater">
+              <div data-repeater-list="group-a">
+                <div data-repeater-item>
+                  <div class="row">
+                    <div class="mb-6 col-4">
+                      <label class="form-label" for="form-repeater-1-1">Options</label>
+                      <select
+                        id="form-repeater-1-1"
+                        class="select2 form-select"
+                        data-placeholder="Size"
+                      >
+                        <option value="">Size</option>
+                        <option value="size">Size</option>
+                        <option value="color">Color</option>
+                        <option value="weight">Weight</option>
+                        <option value="smell">Smell</option>
+                      </select>
+                    </div>
+
+                    <div class="mb-6 col-8">
+                      <label class="form-label invisible" for="form-repeater-1-2"
+                        >Not visible</label
+                      >
+                      <input
+                        type="number"
+                        id="form-repeater-1-2"
+                        class="form-control"
+                        placeholder="Enter size"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <button class="btn btn-primary" data-repeater-create>
+                  <i class="ti ti-plus ti-xs me-2"></i>
+                  Add another option
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- /Variants -->
         <!-- Inventory -->
         <div class="card mb-6">
           <div class="card-header">
@@ -615,49 +664,6 @@ onMounted(() => {
           </div>
         </div>
         <!-- /Tour Schedule & Capacity -->
-
-        <!-- Variants -->
-        <div class="card mb-6">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Key Options</h5>
-          </div>
-          <div class="card-body">
-            <form class="form-repeater">
-              <div data-repeater-list="group-a">
-                <div data-repeater-item>
-                  <div class="row">
-                    <div class="mb-6 col-4">
-                      <label class="form-label" for="form-repeater-1-1">Options</label>
-                      <input
-                        type="text"
-                        id="form-repeater-1-1"
-                        class="form-control"
-                        placeholder="Enter option"
-                      />
-                    </div>
-
-                    <div class="mb-6 col-8">
-                      <label class="form-label" for="form-repeater-1-2">Option Vale</label>
-                      <input
-                        type="number"
-                        id="form-repeater-1-2"
-                        class="form-control"
-                        placeholder="Enter size"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <button class="btn btn-primary" data-repeater-create>
-                  <i class="ti ti-plus ti-xs me-2"></i>
-                  Add another option
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <!-- /Variants -->
       </div>
       <!-- Second column -->
       <div class="col-12 col-lg-4">
@@ -670,18 +676,7 @@ onMounted(() => {
             <option value="Inactive">Inactive</option>
           </select>
         </div>
-        <div class="mb-6 col ecommerce-select2-dropdown">
-          <label class="form-label mb-1" for="status-org">Tour Type </label>
-          <select id="tour-type" class="select2 form-select" data-placeholder="Select Tour Type">
-            <option value="Group">Group</option>
-            <option value="Private">Private</option>
-            <option value="Adventure">Adventure</option>
-            <option value="Luxury">Luxury</option>
-            <option value="Cultural">Cultural</option>
-            <option value="Beach">Beach</option>
-            <option value="Eco">Eco</option>
-          </select>
-        </div>
+
         <div class="mb-6 col ecommerce-select2-dropdown">
           <label class="form-label mb-1" for="status-org">Transportation Type </label>
           <select
@@ -704,13 +699,8 @@ onMounted(() => {
           </select>
         </div>
         <div class="mb-6 col ecommerce-select2-dropdown">
-          <label class="form-label mb-1" for="status-org">Guide Language Support</label>
-          <select
-            id="language"
-            class="select2 form-select"
-            data-placeholder="Select Language"
-            multiple
-          >
+          <label class="form-label mb-1" for="status-org">Language Support</label>
+          <select id="language" class="select2 form-select" data-placeholder="Select Language">
             <option value="English">English</option>
             <option value="Spanish">Spanish</option>
             <option value="French">French</option>
@@ -726,13 +716,8 @@ onMounted(() => {
           </select>
         </div>
         <div class="mb-6 col ecommerce-select2-dropdown">
-          <label class="form-label mb-1" for="status-org">Currency Support</label>
-          <select
-            id="currency"
-            class="select2 form-select"
-            data-placeholder="Select Currency"
-            multiple
-          >
+          <label class="form-label mb-1" for="status-org">Language Support</label>
+          <select id="currency" class="select2 form-select" data-placeholder="Select Currency">
             <option value="USD">US Dollar (USD)</option>
             <option value="EUR">Euro (EUR)</option>
             <option value="GBP">British Pound (GBP)</option>

@@ -1,14 +1,13 @@
 <script setup>
-import $ from 'jquery'
 import { onMounted } from 'vue'
 import MerchantUsers from '../../components/tour/MerchantUsers.vue'
 import TourCategory from '../../components/tour/TourCategory.vue'
 import TourLocation from '../../components/tour/TourLocation.vue'
 import TourTags from '../../components/tour/TourTags.vue'
 import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
+
 onMounted(() => {
   initializeEcommerceAddProduct()
-  $('.select2').select2() // Initialize select2 for all elements with class 'select2'
 })
 </script>
 
@@ -34,8 +33,6 @@ onMounted(() => {
     <div class="row">
       <!-- First column-->
       <div class="col-12 col-lg-8">
-        <input type="hidden" name="merchant_id" value="" />
-        <input type="hidden" name="user_id" value="" />
         <!-- Product Information -->
         <div class="card mb-6">
           <div class="card-header">
@@ -107,27 +104,16 @@ onMounted(() => {
                 <div class="tour-itinerary border-0 pb-6" id="tour-itinerary"></div>
               </div>
             </div>
-            <div class="mb-6 mt-6">
-              <label class="form-label" for="tour-title">Highlights</label>
-              <textarea
+            <div class="mb-6">
+              <label class="form-label" for="tour-title">Sub Title</label>
+              <input
                 type="text"
                 class="form-control"
                 id="tour-title"
                 placeholder="Sub title"
                 name="productTitle"
                 aria-label="Tour title"
-              ></textarea>
-            </div>
-            <div class="mb-6 mt-6">
-              <label class="form-label" for="tour-title">Cancellation Policy</label>
-              <textarea
-                type="text"
-                class="form-control"
-                id="tour-title"
-                placeholder="Sub title"
-                name="productTitle"
-                aria-label="Tour title"
-              ></textarea>
+              />
             </div>
           </div>
         </div>
@@ -163,12 +149,6 @@ onMounted(() => {
                         >
                           <i class="ti ti-car ti-sm me-1_5"></i>
                           <span class="align-middle">Child Price</span>
-                        </button>
-                      </li>
-                      <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#age_rules">
-                          <i class="ti ti-car ti-sm me-1_5"></i>
-                          <span class="align-middle">Age Rules</span>
                         </button>
                       </li>
                     </ul>
@@ -258,33 +238,6 @@ onMounted(() => {
                         id="child-discounted-price"
                         placeholder="Discounted Price"
                         name="childDiscountedPrice"
-                        min="0"
-                        step="0.01"
-                      />
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="age_rules" role="tabpanel">
-                    <h6 class="mb-3 text-body">Age Policy</h6>
-                    <div class="col-12 mb-3">
-                      <label class="form-label" for="child-regular-price">Minimum Age</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="child-regular-price"
-                        placeholder="Regular Price"
-                        name="childRegularPrice"
-                        min="0"
-                        step="0.01"
-                      />
-                    </div>
-                    <div class="col-12 mb-3">
-                      <label class="form-label" for="child-net-price">Max Age</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="child-net-price"
-                        placeholder="Net Price"
-                        name="childNetPrice"
                         min="0"
                         step="0.01"
                       />
@@ -389,6 +342,56 @@ onMounted(() => {
           </div>
         </div>
         <!-- /Price -->
+
+        <!-- Variants -->
+        <div class="card mb-6">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Variants</h5>
+          </div>
+          <div class="card-body">
+            <form class="form-repeater">
+              <div data-repeater-list="group-a">
+                <div data-repeater-item>
+                  <div class="row">
+                    <div class="mb-6 col-4">
+                      <label class="form-label" for="form-repeater-1-1">Options</label>
+                      <select
+                        id="form-repeater-1-1"
+                        class="select2 form-select"
+                        data-placeholder="Size"
+                      >
+                        <option value="">Size</option>
+                        <option value="size">Size</option>
+                        <option value="color">Color</option>
+                        <option value="weight">Weight</option>
+                        <option value="smell">Smell</option>
+                      </select>
+                    </div>
+
+                    <div class="mb-6 col-8">
+                      <label class="form-label invisible" for="form-repeater-1-2"
+                        >Not visible</label
+                      >
+                      <input
+                        type="number"
+                        id="form-repeater-1-2"
+                        class="form-control"
+                        placeholder="Enter size"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <button class="btn btn-primary" data-repeater-create>
+                  <i class="ti ti-plus ti-xs me-2"></i>
+                  Add another option
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- /Variants -->
         <!-- Inventory -->
         <div class="card mb-6">
           <div class="card-header">
@@ -615,49 +618,6 @@ onMounted(() => {
           </div>
         </div>
         <!-- /Tour Schedule & Capacity -->
-
-        <!-- Variants -->
-        <div class="card mb-6">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Key Options</h5>
-          </div>
-          <div class="card-body">
-            <form class="form-repeater">
-              <div data-repeater-list="group-a">
-                <div data-repeater-item>
-                  <div class="row">
-                    <div class="mb-6 col-4">
-                      <label class="form-label" for="form-repeater-1-1">Options</label>
-                      <input
-                        type="text"
-                        id="form-repeater-1-1"
-                        class="form-control"
-                        placeholder="Enter option"
-                      />
-                    </div>
-
-                    <div class="mb-6 col-8">
-                      <label class="form-label" for="form-repeater-1-2">Option Vale</label>
-                      <input
-                        type="number"
-                        id="form-repeater-1-2"
-                        class="form-control"
-                        placeholder="Enter size"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <button class="btn btn-primary" data-repeater-create>
-                  <i class="ti ti-plus ti-xs me-2"></i>
-                  Add another option
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <!-- /Variants -->
       </div>
       <!-- Second column -->
       <div class="col-12 col-lg-4">
@@ -668,112 +628,6 @@ onMounted(() => {
             <option value="Published" selected>Draft</option>
             <option value="Scheduled">Scheduled</option>
             <option value="Inactive">Inactive</option>
-          </select>
-        </div>
-        <div class="mb-6 col ecommerce-select2-dropdown">
-          <label class="form-label mb-1" for="status-org">Tour Type </label>
-          <select id="tour-type" class="select2 form-select" data-placeholder="Select Tour Type">
-            <option value="Group">Group</option>
-            <option value="Private">Private</option>
-            <option value="Adventure">Adventure</option>
-            <option value="Luxury">Luxury</option>
-            <option value="Cultural">Cultural</option>
-            <option value="Beach">Beach</option>
-            <option value="Eco">Eco</option>
-          </select>
-        </div>
-        <div class="mb-6 col ecommerce-select2-dropdown">
-          <label class="form-label mb-1" for="status-org">Transportation Type </label>
-          <select
-            id="transport-type"
-            class="select2 form-select"
-            data-placeholder="Select Transportation"
-          >
-            <option value="Car">Car</option>
-            <option value="Bus">Bus</option>
-            <option value="Train">Train</option>
-            <option value="Flight">Flight</option>
-            <option value="Boat">Boat</option>
-            <option value="Bicycle">Bicycle</option>
-            <option value="Motorbike">Motorbike</option>
-            <option value="Ferry">Ferry</option>
-            <option value="Speedboat">Speedboat</option>
-            <option value="Catamaran">Catamaran</option>
-            <option value="Longtail Boat">Longtail Boat</option>
-            <option value="Van">Van</option>
-          </select>
-        </div>
-        <div class="mb-6 col ecommerce-select2-dropdown">
-          <label class="form-label mb-1" for="status-org">Guide Language Support</label>
-          <select
-            id="language"
-            class="select2 form-select"
-            data-placeholder="Select Language"
-            multiple
-          >
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-            <option value="German">German</option>
-            <option value="Italian">Italian</option>
-            <option value="Chinese">Chinese</option>
-            <option value="Japanese">Japanese</option>
-            <option value="Korean">Korean</option>
-            <option value="Thai">Thai</option>
-            <option value="Russian">Russian</option>
-            <option value="Arabic">Arabic</option>
-            <option value="Hindi">Hindi</option>
-          </select>
-        </div>
-        <div class="mb-6 col ecommerce-select2-dropdown">
-          <label class="form-label mb-1" for="status-org">Currency Support</label>
-          <select
-            id="currency"
-            class="select2 form-select"
-            data-placeholder="Select Currency"
-            multiple
-          >
-            <option value="USD">US Dollar (USD)</option>
-            <option value="EUR">Euro (EUR)</option>
-            <option value="GBP">British Pound (GBP)</option>
-            <option value="THB">Thai Baht (THB)</option>
-            <option value="AUD">Australian Dollar (AUD)</option>
-            <option value="CAD">Canadian Dollar (CAD)</option>
-            <option value="SGD">Singapore Dollar (SGD)</option>
-            <option value="JPY">Japanese Yen (JPY)</option>
-            <option value="CNY">Chinese Yuan (CNY)</option>
-            <option value="INR">Indian Rupee (INR)</option>
-            <option value="AED">UAE Dirham (AED)</option>
-            <option value="CHF">Swiss Franc (CHF)</option>
-            <option value="HKD">Hong Kong Dollar (HKD)</option>
-            <option value="NZD">New Zealand Dollar (NZD)</option>
-            <option value="KRW">South Korean Won (KRW)</option>
-            <option value="BRL">Brazilian Real (BRL)</option>
-            <option value="MXN">Mexican Peso (MXN)</option>
-            <option value="ZAR">South African Rand (ZAR)</option>
-            <option value="RUB">Russian Ruble (RUB)</option>
-            <option value="SEK">Swedish Krona (SEK)</option>
-            <option value="NOK">Norwegian Krone (NOK)</option>
-            <option value="DKK">Danish Krone (DKK)</option>
-            <option value="MYR">Malaysian Ringgit (MYR)</option>
-            <option value="IDR">Indonesian Rupiah (IDR)</option>
-            <option value="PHP">Philippine Peso (PHP)</option>
-            <option value="VND">Vietnamese Dong (VND)</option>
-            <option value="SAR">Saudi Riyal (SAR)</option>
-            <option value="EGP">Egyptian Pound (EGP)</option>
-            <option value="PLN">Polish Złoty (PLN)</option>
-            <option value="TRY">Turkish Lira (TRY)</option>
-            <option value="HUF">Hungarian Forint (HUF)</option>
-            <option value="CZK">Czech Koruna (CZK)</option>
-            <option value="TWD">Taiwan Dollar (TWD)</option>
-            <option value="ARS">Argentine Peso (ARS)</option>
-            <option value="COP">Colombian Peso (COP)</option>
-            <option value="PKR">Pakistani Rupee (PKR)</option>
-            <option value="BDT">Bangladeshi Taka (BDT)</option>
-            <option value="LKR">Sri Lankan Rupee (LKR)</option>
-            <option value="NGN">Nigerian Naira (NGN)</option>
-            <option value="KES">Kenyan Shilling (KES)</option>
-            <option value="GHS">Ghanaian Cedi (GHS)</option>
           </select>
         </div>
 

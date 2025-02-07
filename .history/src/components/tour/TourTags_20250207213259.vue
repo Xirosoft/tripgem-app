@@ -134,7 +134,7 @@ watch(selectedTags2, () => {
 
 <template>
   <div>
-    <label for="ecommerce-product-tags-1" class="form-label mb-1">Tags</label>
+    <label for="ecommerce-product-tags-1" class="form-label mb-1">Tags 1</label>
     <select
       id="ecommerce-product-tags-1"
       class="select2 form-control"

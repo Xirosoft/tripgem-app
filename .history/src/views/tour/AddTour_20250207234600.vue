@@ -637,7 +637,9 @@ onMounted(() => {
                     </div>
 
                     <div class="mb-6 col-8">
-                      <label class="form-label" for="form-repeater-1-2">Option Vale</label>
+                      <label class="form-label invisible" for="form-repeater-1-2"
+                        >Not visible</label
+                      >
                       <input
                         type="number"
                         id="form-repeater-1-2"
