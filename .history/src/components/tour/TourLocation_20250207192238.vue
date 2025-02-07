@@ -13,42 +13,13 @@ const showAddLocationForm = ref(false)
 
 const loadingLocations = ref(false)
 
-const sortLocations = (locations) => {
-  const sortedLocations = []
-  const locationMap = new Map()
-
-  locations.forEach(location => {
-    locationMap.set(location.location_id, { ...location, children: [] })
-  })
-
-  locationMap.forEach(location => {
-    if (location.parent_id) {
-      locationMap.get(location.parent_id).children.push(location)
-    } else {
-      sortedLocations.push(location)
-    }
-  })
-
-  const flattenLocations = (locations) => {
-    return locations.reduce((acc, location) => {
-      acc.push(location)
-      if (location.children.length) {
-        acc.push(...flattenLocations(location.children))
-      }
-      return acc
-    }, [])
-  }
-
-  return flattenLocations(sortedLocations)
-}
-
 const fetchLocations = async () => {
   loadingLocations.value = true
   try {
     const response = await axios.get(`${config.apiUrl}/tour/locations/view`, {
       headers: config.getHeaders(),
     })
-    locations.value = sortLocations(response.data)
+    locations.value = response.data
   } catch (error) {
     console.error('Error fetching locations:', error)
   } finally {

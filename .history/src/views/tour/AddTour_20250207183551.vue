@@ -1,9 +1,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import MerchantUsers from '../../components/tour/MerchantUsers.vue'
-import TourCategory from '../../components/tour/TourCategory.vue'
 import TourLocation from '../../components/tour/TourLocation.vue'
-import TourTags from '../../components/tour/TourTags.vue'
 import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
 
 onMounted(() => {
@@ -647,8 +645,42 @@ onMounted(() => {
             <!-- Merchants -->
 
             <TourLocation />
-            <TourCategory />
-            <TourTags />
+
+            <!-- Category -->
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="mb-6 col ecommerce-select2-dropdown">
+                <label class="form-label mb-1" for="category-org">
+                  <span>Category</span>
+                </label>
+                <select
+                  id="category-org"
+                  class="select2 form-select"
+                  data-placeholder="Select Category"
+                >
+                  <option value="">Select Category</option>
+                  <option value="Household">Household</option>
+                  <option value="Management">Management</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Office">Office</option>
+                  <option value="Automotive">Automotive</option>
+                </select>
+              </div>
+              <a href="javascript:void(0);" class="fw-medium btn btn-icon btn-label-primary ms-4"
+                ><i class="ti ti-plus ti-md"></i
+              ></a>
+            </div>
+
+            <!-- Tags -->
+            <div>
+              <label for="ecommerce-product-tags" class="form-label mb-1">Tags</label>
+              <input
+                id="ecommerce-product-tags"
+                class="form-control"
+                name="ecommerce-product-tags"
+                value="Normal,Standard,Premium"
+                aria-label="Product Tags"
+              />
+            </div>
           </div>
         </div>
         <!-- /Organize Card -->

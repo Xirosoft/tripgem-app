@@ -3,7 +3,6 @@ import { onMounted } from 'vue'
 import MerchantUsers from '../../components/tour/MerchantUsers.vue'
 import TourCategory from '../../components/tour/TourCategory.vue'
 import TourLocation from '../../components/tour/TourLocation.vue'
-import TourTags from '../../components/tour/TourTags.vue'
 import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
 
 onMounted(() => {

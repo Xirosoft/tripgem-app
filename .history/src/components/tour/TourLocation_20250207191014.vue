@@ -13,42 +13,13 @@ const showAddLocationForm = ref(false)
 
 const loadingLocations = ref(false)
 
-const sortLocations = (locations) => {
-  const sortedLocations = []
-  const locationMap = new Map()
-
-  locations.forEach(location => {
-    locationMap.set(location.location_id, { ...location, children: [] })
-  })
-
-  locationMap.forEach(location => {
-    if (location.parent_id) {
-      locationMap.get(location.parent_id).children.push(location)
-    } else {
-      sortedLocations.push(location)
-    }
-  })
-
-  const flattenLocations = (locations) => {
-    return locations.reduce((acc, location) => {
-      acc.push(location)
-      if (location.children.length) {
-        acc.push(...flattenLocations(location.children))
-      }
-      return acc
-    }, [])
-  }
-
-  return flattenLocations(sortedLocations)
-}
-
 const fetchLocations = async () => {
   loadingLocations.value = true
   try {
     const response = await axios.get(`${config.apiUrl}/tour/locations/view`, {
       headers: config.getHeaders(),
     })
-    locations.value = sortLocations(response.data)
+    locations.value = response.data
   } catch (error) {
     console.error('Error fetching locations:', error)
   } finally {
@@ -69,8 +40,26 @@ const addLocation = async (location) => {
 }
 
 const getIndentedLocationName = (location) => {
-  const indent = location.parent_id ? '\u00A0\u00A0\u00A0\u00A0' : ''
-  return `${indent}${location.location_name}`
+  return location.parent_id ? `\u00A0\u00A0\u00A0\u00A0${location.location_name}` : location.location_name
+}
+
+const getNestedLocations = (locations) => {
+  const nestedLocations = []
+  const locationMap = new Map()
+
+  locations.forEach(location => {
+    locationMap.set(location.location_id, { ...location, children: [] })
+  })
+
+  locationMap.forEach(location => {
+    if (location.parent_id) {
+      locationMap.get(location.parent_id).children.push(location)
+    } else {
+      nestedLocations.push(location)
+    }
+  })
+
+  return nestedLocations
 }
 
 onMounted(async () => {
@@ -92,13 +81,21 @@ onMounted(async () => {
       ref="locationSelectRef"
     >
       <option value="">Select Location</option>
-      <option
-        v-for="location in locations"
-        :key="location.location_id"
-        :value="location.location_id"
-      >
-        {{ getIndentedLocationName(location) }}
-      </option>
+      <template v-for="location in getNestedLocations(locations)">
+        <option
+          :key="location.location_id"
+          :value="location.location_id"
+        >
+          {{ location.location_name }}
+        </option>
+        <option
+          v-for="child in location.children"
+          :key="child.location_id"
+          :value="child.location_id"
+        >
+          {{ getIndentedLocationName(child) }}
+        </option>
+      </template>
     </select>
   </div>
   <!-- Toggle Add Location Form -->
@@ -139,13 +136,21 @@ onMounted(async () => {
       data-placeholder="Select Parent Location"
     >
       <option value="">Select Parent Location</option>
-      <option
-        v-for="location in locations"
-        :key="location.location_id"
-        :value="location.location_id"
-      >
-        {{ getIndentedLocationName(location) }}
-      </option>
+      <template v-for="location in getNestedLocations(locations)">
+        <option
+          :key="location.location_id"
+          :value="location.location_id"
+        >
+          {{ location.location_name }}
+        </option>
+        <option
+          v-for="child in location.children"
+          :key="child.location_id"
+          :value="child.location_id"
+        >
+          {{ getIndentedLocationName(child) }}
+        </option>
+      </template>
     </select>
     <button
       @click="
