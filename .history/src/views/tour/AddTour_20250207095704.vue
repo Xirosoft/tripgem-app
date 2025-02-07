@@ -14,7 +14,7 @@ onMounted(() => {
       class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4"
     >
       <div class="d-flex flex-column justify-content-center">
-        <h4 class="mb-1">Add a new Tour</h4>
+        <h4 class="mb-1">Add a new Product</h4>
         <p class="mb-0">Orders placed across your store</p>
       </div>
       <div class="d-flex align-content-center flex-wrap gap-4">
@@ -582,11 +582,4 @@ onMounted(() => {
 @import 'quill/dist/quill.snow.css';
 @import 'select2/dist/css/select2.css';
 @import 'flatpickr/dist/flatpickr.css';
-.select2-container .select2-selection--single {
-  height: auto;
-}
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-  height: 36px;
-  right: 7px;
-}
 </style>

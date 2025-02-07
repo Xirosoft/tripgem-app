@@ -582,11 +582,4 @@ onMounted(() => {
 @import 'quill/dist/quill.snow.css';
 @import 'select2/dist/css/select2.css';
 @import 'flatpickr/dist/flatpickr.css';
-.select2-container .select2-selection--single {
-  height: auto;
-}
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-  height: 36px;
-  right: 7px;
-}
 </style>
