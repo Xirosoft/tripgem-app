@@ -643,8 +643,6 @@ onMounted(() => {
             <MerchantUsers />
             <!-- Merchants -->
 
-            <TourLocation />
-
             <!-- Category -->
             <div class="d-flex justify-content-between align-items-center">
               <div class="mb-6 col ecommerce-select2-dropdown">
@@ -668,6 +666,17 @@ onMounted(() => {
                 ><i class="ti ti-plus ti-md"></i
               ></a>
             </div>
+            <!-- Collection -->
+            <div class="mb-6 col ecommerce-select2-dropdown">
+              <label class="form-label mb-1" for="collection">Collection </label>
+              <select id="collection" class="select2 form-select" data-placeholder="Collection">
+                <option value="">Collection</option>
+                <option value="men-clothing">Men's Clothing</option>
+                <option value="women-clothing">Women's-clothing</option>
+                <option value="kid-clothing">Kid's-clothing</option>
+              </select>
+            </div>
+            <!-- Status -->
 
             <!-- Tags -->
             <div>

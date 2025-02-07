@@ -643,8 +643,6 @@ onMounted(() => {
             <MerchantUsers />
             <!-- Merchants -->
 
-            <TourLocation />
-
             <!-- Category -->
             <div class="d-flex justify-content-between align-items-center">
               <div class="mb-6 col ecommerce-select2-dropdown">

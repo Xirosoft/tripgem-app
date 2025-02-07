@@ -1,10 +1,49 @@
 <script setup>
-import { onMounted } from 'vue'
-import MerchantUsers from '../../components/tour/MerchantUsers.vue'
+import axios from 'axios'
+import { onMounted, ref, watch } from 'vue'
+import config from '../../config/config'
 import { initializeEcommerceAddProduct } from '../../stores/tour/initializeEcommerceAddProduct'
+
+const merchants = ref([])
+const users = ref([])
+const selectedMerchant = ref(null)
+
+const fetchMerchants = async () => {
+  try {
+    const response = await axios.get(`${config.apiUrl}/merchants/view/1`, {
+      headers: config.getHeaders(),
+    })
+    // console.log('Merchants:', response)
+    merchants.value = response.data.data
+  } catch (error) {
+    console.error('Error fetching merchants:', error)
+  }
+}
+
+const fetchUsersByMerchantId = async (merchantId) => {
+  try {
+    const response = await axios.get(
+      `${config.apiUrl}/merchant/users/by-merchant-id/${merchantId}`,
+      {
+        headers: config.getHeaders(),
+      },
+    )
+    console.log('Users:', response)
+    users.value = response.data
+  } catch (error) {
+    console.error('Error fetching users:', error)
+  }
+}
 
 onMounted(() => {
   initializeEcommerceAddProduct()
+  fetchMerchants()
+})
+
+watch(selectedMerchant, (newMerchantId) => {
+  if (newMerchantId) {
+    fetchUsersByMerchantId(newMerchantId)
+  }
 })
 </script>
 
@@ -640,11 +679,31 @@ onMounted(() => {
             <h5 class="card-title mb-0">Organize</h5>
           </div>
           <div class="card-body">
-            <MerchantUsers />
             <!-- Merchants -->
-
-            <TourLocation />
-
+            <div class="mb-6 col ecommerce-select2-dropdown">
+              <label class="form-label mb-1" for="Merchants">Merchants</label>
+              <select
+                id="Merchants"
+                class="select2 form-select"
+                data-placeholder="Select Merchants"
+                v-model="selectedMerchant"
+              >
+                <option value="">Select Merchant</option>
+                <option v-for="merchant in merchants" :key="merchant.id" :value="merchant.id">
+                  {{ merchant.company_name }}
+                </option>
+              </select>
+            </div>
+            <!-- Users -->
+            <div class="mb-6 col ecommerce-select2-dropdown">
+              <label class="form-label mb-1" for="Users">Users</label>
+              <select id="Users" class="select2 form-select" data-placeholder="Select Users">
+                <option value="">Select User</option>
+                <option v-for="user in users" :key="user.user_id" :value="user.user_id">
+                  {{ user.user_id }}
+                </option>
+              </select>
+            </div>
             <!-- Category -->
             <div class="d-flex justify-content-between align-items-center">
               <div class="mb-6 col ecommerce-select2-dropdown">
@@ -668,6 +727,17 @@ onMounted(() => {
                 ><i class="ti ti-plus ti-md"></i
               ></a>
             </div>
+            <!-- Collection -->
+            <div class="mb-6 col ecommerce-select2-dropdown">
+              <label class="form-label mb-1" for="collection">Collection </label>
+              <select id="collection" class="select2 form-select" data-placeholder="Collection">
+                <option value="">Collection</option>
+                <option value="men-clothing">Men's Clothing</option>
+                <option value="women-clothing">Women's-clothing</option>
+                <option value="kid-clothing">Kid's-clothing</option>
+              </select>
+            </div>
+            <!-- Status -->
 
             <!-- Tags -->
             <div>
