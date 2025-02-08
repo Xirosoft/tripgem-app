@@ -60,7 +60,6 @@
   // Basic Tags
 
   const tagifyBasicEl = document.querySelector('#ecommerce-product-tags');
-
   const TagifyBasic = new Tagify(tagifyBasicEl);
 
   // Flatpickr

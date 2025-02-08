@@ -136,21 +136,9 @@ const initializeDropzone = (elementId, uploadHandler) => {
 
   dropzoneInstance.on('error', (file) => {
     dropzoneInstance.removeFile(file)
-    toast.error('Failed to upload file.')
-  })
-
-  dropzoneInstance.on('uploadprogress', (file, progress) => {
-    toast.info(`Uploading ${file.name}: ${progress.toFixed(2)}%`, {
-      timeout: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-    })
   })
 
   dropzoneInstance.on('success', (file, response) => {
-    toast.clear()
-    toast.success('Upload success!')
     console.log('Upload success:', response)
   })
 
@@ -700,7 +688,7 @@ onMounted(() => {
                   </div>
                   <!-- Tour Dates Tab -->
                   <div class="tab-pane fade" id="tourDates" role="tabpanel">
-                    <h6 class="mb3 text-body">Tour Availability</h6>
+                    <h6 class="mb-3 text-body">Tour Availability</h6>
                     <div class="row mb-4">
                       <div class="col-md-6">
                         <label class="form-label">Start Date</label>

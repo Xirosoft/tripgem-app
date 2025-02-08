@@ -1,7 +1,5 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
-import Dropzone from 'dropzone'
-import 'dropzone/dist/dropzone.css'
 import Quill from 'quill'
 import { onMounted, ref } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -9,9 +7,9 @@ import MerchantUsers from '../../components/tour/MerchantUsers.vue'
 import TourCategory from '../../components/tour/TourCategory.vue'
 import TourLocation from '../../components/tour/TourLocation.vue'
 import TourTags from '../../components/tour/TourTags.vue'
-import config from '../../config/config'
 import { useToursStore } from '../../stores/tour/AddTour'
 import { initializeAddTour } from '../../stores/tour/initializeAddTour'
+
 const userId = useAuthStore().userId
 
 const toursStore = useToursStore()
@@ -96,77 +94,20 @@ const previewTemplate = `<div class="dz-preview dz-file-preview">
 </div>
 </div>`
 
-const initializeDropzone = (elementId, uploadHandler) => {
-  const dropzoneElement = document.querySelector(elementId)
-  if (!dropzoneElement) return null
+// ? Start your code from here
 
-  const dropzoneInstance = new Dropzone(dropzoneElement, {
-    url: `${config.apiUrl}/upload`,
-    headers: config.getHeaders(),
-    previewTemplate,
+// Basic Dropzone
+
+const dropzoneBasic = document.querySelector('#dropzone-basic')
+if (dropzoneBasic) {
+  const myDropzone = new Dropzone(dropzoneBasic, {
+    previewTemplate: previewTemplate,
     parallelUploads: 1,
     maxFilesize: 5,
     acceptedFiles: '.jpg,.jpeg,.png,.gif',
     addRemoveLinks: true,
     maxFiles: 1,
-    autoProcessQueue: false,
-    timeout: 180000,
-    createImageThumbnails: true,
-    dictDefaultMessage: 'Drop files here or click to upload',
-    dictFileTooBig: 'File is too big ({{filesize}}MB). Max filesize: {{maxFilesize}}MB.',
-    dictInvalidFileType: 'Invalid file type.',
   })
-
-  dropzoneInstance.on('addedfile', (file) => {
-    if (dropzoneInstance.files.length > 1) {
-      dropzoneInstance.removeFile(dropzoneInstance.files[0])
-    }
-    uploadHandler(file)
-  })
-
-  dropzoneInstance.on('removedfile', () => {
-    if (elementId === '#thumbnail') {
-      formData.value.thumbnail = ''
-    } else if (elementId === '#image_gallery') {
-      formData.value.image_gallery = []
-    } else if (elementId === '#dropzone-basic') {
-      formData.value.video_gallery = []
-    }
-  })
-
-  dropzoneInstance.on('error', (file) => {
-    dropzoneInstance.removeFile(file)
-    toast.error('Failed to upload file.')
-  })
-
-  dropzoneInstance.on('uploadprogress', (file, progress) => {
-    toast.info(`Uploading ${file.name}: ${progress.toFixed(2)}%`, {
-      timeout: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-    })
-  })
-
-  dropzoneInstance.on('success', (file, response) => {
-    toast.clear()
-    toast.success('Upload success!')
-    console.log('Upload success:', response)
-  })
-
-  return dropzoneInstance
-}
-
-const handleThumbnailUpload = (file) => {
-  formData.value.thumbnail = file.name
-}
-
-const handleImageGalleryUpload = (file) => {
-  formData.value.image_gallery.push(file.name)
-}
-
-const handleVideoGalleryUpload = (file) => {
-  formData.value.video_gallery.push(file.name)
 }
 
 onMounted(() => {
@@ -199,11 +140,6 @@ onMounted(() => {
   descriptionEditor.on('text-change', () => {
     formData.value.description = descriptionEditor.root.innerHTML
   })
-
-  // Initialize Dropzones
-  initializeDropzone('#thumbnail', handleThumbnailUpload)
-  initializeDropzone('#image_gallery', handleImageGalleryUpload)
-  initializeDropzone('#dropzone-basic', handleVideoGalleryUpload)
 })
 </script>
 
@@ -700,7 +636,7 @@ onMounted(() => {
                   </div>
                   <!-- Tour Dates Tab -->
                   <div class="tab-pane fade" id="tourDates" role="tabpanel">
-                    <h6 class="mb3 text-body">Tour Availability</h6>
+                    <h6 class="mb-3 text-body">Tour Availability</h6>
                     <div class="row mb-4">
                       <div class="col-md-6">
                         <label class="form-label">Start Date</label>

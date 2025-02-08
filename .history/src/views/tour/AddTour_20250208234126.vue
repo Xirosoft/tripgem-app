@@ -96,6 +96,10 @@ const previewTemplate = `<div class="dz-preview dz-file-preview">
 </div>
 </div>`
 
+// ? Start your code from here
+
+// Basic Dropzone
+
 const initializeDropzone = (elementId, uploadHandler) => {
   const dropzoneElement = document.querySelector(elementId)
   if (!dropzoneElement) return null
@@ -125,49 +129,35 @@ const initializeDropzone = (elementId, uploadHandler) => {
   })
 
   dropzoneInstance.on('removedfile', () => {
-    if (elementId === '#thumbnail') {
-      formData.value.thumbnail = ''
-    } else if (elementId === '#image_gallery') {
-      formData.value.image_gallery = []
-    } else if (elementId === '#dropzone-basic') {
-      formData.value.video_gallery = []
+    const isLogo = elementId === '#dropzone-basic'
+    if (isLogo) {
+      this.uploadedLogo = null
+      this.formData.logo_url.url = ''
+    } else {
+      this.uploadedCoverPhoto = null
+      this.formData.cover_photo.url = ''
     }
   })
 
   dropzoneInstance.on('error', (file) => {
     dropzoneInstance.removeFile(file)
-    toast.error('Failed to upload file.')
-  })
-
-  dropzoneInstance.on('uploadprogress', (file, progress) => {
-    toast.info(`Uploading ${file.name}: ${progress.toFixed(2)}%`, {
-      timeout: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-    })
   })
 
   dropzoneInstance.on('success', (file, response) => {
-    toast.clear()
-    toast.success('Upload success!')
     console.log('Upload success:', response)
   })
 
   return dropzoneInstance
 }
 
-const handleThumbnailUpload = (file) => {
-  formData.value.thumbnail = file.name
-}
+// Initialize both dropzones using the common function
 
-const handleImageGalleryUpload = (file) => {
-  formData.value.image_gallery.push(file.name)
-}
+this.dropzoneCoverPhoto = initializeDropzone('#dropzone-cover-photo', this.handleCoverPhoto)
 
-const handleVideoGalleryUpload = (file) => {
-  formData.value.video_gallery.push(file.name)
-}
+thumbnail(file) {
+      DragAndDropUpload(file, this.formData, this.dropzone, this.toast, 'thumbnail')
+    }
+
 
 onMounted(() => {
   initializeAddTour()
@@ -199,11 +189,6 @@ onMounted(() => {
   descriptionEditor.on('text-change', () => {
     formData.value.description = descriptionEditor.root.innerHTML
   })
-
-  // Initialize Dropzones
-  initializeDropzone('#thumbnail', handleThumbnailUpload)
-  initializeDropzone('#image_gallery', handleImageGalleryUpload)
-  initializeDropzone('#dropzone-basic', handleVideoGalleryUpload)
 })
 </script>
 
@@ -700,7 +685,7 @@ onMounted(() => {
                   </div>
                   <!-- Tour Dates Tab -->
                   <div class="tab-pane fade" id="tourDates" role="tabpanel">
-                    <h6 class="mb3 text-body">Tour Availability</h6>
+                    <h6 class="mb-3 text-body">Tour Availability</h6>
                     <div class="row mb-4">
                       <div class="col-md-6">
                         <label class="form-label">Start Date</label>
