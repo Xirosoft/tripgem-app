@@ -153,7 +153,7 @@ onMounted(() => {
   // Initialize Dropzones
   initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
   initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
-  initializeDropzone('#video_gallery', handleVideoGalleryUpload, formData.value, toast, true)
+  initializeDropzone('#video_gallery">', handleVideoGalleryUpload, formData.value, toast, true)
 })
 </script>
 

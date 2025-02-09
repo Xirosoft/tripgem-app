@@ -1,5 +1,7 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
+import Dropzone from 'dropzone'
+import 'dropzone/dist/dropzone.css'
 import Quill from 'quill'
 import { onMounted, ref } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -7,9 +9,10 @@ import MerchantUsers from '../../components/tour/MerchantUsers.vue'
 import TourCategory from '../../components/tour/TourCategory.vue'
 import TourLocation from '../../components/tour/TourLocation.vue'
 import TourTags from '../../components/tour/TourTags.vue'
+import config from '../../config/config'
 import { useToursStore } from '../../stores/tour/AddTour'
 import { initializeAddTour } from '../../stores/tour/initializeAddTour'
-import { DragAndDropUpload, initializeDropzone } from '../../utils/DropzoneFileUpload'
+import { DragAndDropUpload } from '../../utils/DropzoneFileUpload'
 const userId = useAuthStore().userId
 
 const toursStore = useToursStore()
@@ -77,46 +80,100 @@ const handleSubmit = async () => {
   }
 }
 
+const previewTemplate = `<div class="dz-preview dz-file-preview">
+<div class="dz-details">
+  <div class="dz-thumbnail">
+    <img data-dz-thumbnail>
+    <span class="dz-nopreview">No preview</span>
+    <div class="dz-success-mark"></div>
+    <div class="dz-error-mark"></div>
+    <div class="dz-error-message"><span data-dz-errormessage></span></div>
+    <div class="progress">
+      <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>
+    </div>
+  </div>
+  <div class="dz-filename" data-dz-name></div>
+  <div class="dz-size" data-dz-size></div>
+</div>
+</div>`
+
+const initializeDropzone = (elementId, uploadHandler) => {
+  const dropzoneElement = document.querySelector(elementId)
+  if (!dropzoneElement) return null
+
+  const dropzoneInstance = new Dropzone(dropzoneElement, {
+    url: `${config.apiUrl}/upload`,
+    headers: config.getHeaders(),
+    previewTemplate,
+    parallelUploads: 1,
+    maxFilesize: 5,
+    acceptedFiles: '.jpg,.jpeg,.png,.gif',
+    addRemoveLinks: true,
+    maxFiles: 1,
+    autoProcessQueue: false,
+    timeout: 180000,
+    createImageThumbnails: true,
+    dictDefaultMessage: 'Drop files here or click to upload',
+    dictFileTooBig: 'File is too big ({{filesize}}MB). Max filesize: {{maxFilesize}}MB.',
+    dictInvalidFileType: 'Invalid file type.',
+  })
+
+  dropzoneInstance.on('addedfile', (file) => {
+    if (dropzoneInstance.files.length > 1) {
+      dropzoneInstance.removeFile(dropzoneInstance.files[0])
+    }
+    uploadHandler(file)
+  })
+
+  dropzoneInstance.on('removedfile', () => {
+    if (elementId === '#thumbnail') {
+      formData.value.thumbnail = ''
+    } else if (elementId === '#image_gallery') {
+      formData.value.image_gallery = []
+    } else if (elementId === '#dropzone-basic') {
+      formData.value.video_gallery = []
+    }
+  })
+
+  dropzoneInstance.on('error', (file) => {
+    dropzoneInstance.removeFile(file)
+    toast.error('Failed to upload file.')
+  })
+
+  dropzoneInstance.on('uploadprogress', (file, progress) => {
+    toast.info(`Uploading ${file.name}: ${progress.toFixed(2)}%`, {
+      timeout: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+    })
+  })
+
+  dropzoneInstance.on('success', (file, response) => {
+    toast.clear()
+    toast.success('Upload success!')
+    console.log('Upload success:', response)
+  })
+
+  return dropzoneInstance
+}
+
 const handleThumbnailUpload = async (file) => {
   try {
     const url = await DragAndDropUpload(file, formData.value, null, toast, 'thumbnail')
     formData.value.thumbnail = url
-    // toast.success('Thumbnail uploaded successfully')
+    toast.success('Thumbnail uploaded successfully')
   } catch (error) {
-    toast.error('Failed to upload thumbnail', error)
+    toast.error('Failed to upload thumbnail')
   }
 }
 
-const handleImageGalleryUpload = async (files) => {
-  console.log('Files:', files)
-
-  try {
-    for (const file of files) {
-      const thumbnail = await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
-      // console.log('URL:', url)
-
-      formData.value.image_gallery.push(thumbnail.url)
-    }
-    // toast.success('Images uploaded successfully')
-  } catch (error) {
-    console.log('Error:', error)
-
-    // toast.error('Failed to upload images...', error)
-  }
+const handleImageGalleryUpload = (file) => {
+  formData.value.image_gallery.push(file.name)
 }
 
-const handleVideoGalleryUpload = async (files) => {
-  try {
-    for (const file of files) {
-      const url = await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
-      formData.value.video_gallery.push(url)
-    }
-    // toast.success('Videos uploaded successfully')
-  } catch (error) {
-    console.log('Error:', error)
-
-    // toast.error('Failed to upload videos', error)
-  }
+const handleVideoGalleryUpload = (file) => {
+  formData.value.video_gallery.push(file.name)
 }
 
 onMounted(() => {
@@ -151,9 +208,9 @@ onMounted(() => {
   })
 
   // Initialize Dropzones
-  initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
-  initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
-  initializeDropzone('#video_gallery', handleVideoGalleryUpload, formData.value, toast, true)
+  initializeDropzone('#thumbnail', handleThumbnailUpload)
+  initializeDropzone('#image_gallery', handleImageGalleryUpload)
+  initializeDropzone('#dropzone-basic', handleVideoGalleryUpload)
 })
 </script>
 
@@ -470,12 +527,12 @@ onMounted(() => {
                 <div class="tab-content p-0 ps-md-4">
                   <!-- photoGallery Tab -->
                   <div class="tab-pane fade show active" id="photoGallery" role="tabpanel">
-                    <h6 class="text-body">You Can Upload multiple Photos</h6>
+                    <h6 class="text-body">You Can Upload upload multiple Photos</h6>
                     <div class="card mb-6">
                       <div class="card-body">
                         <div class="dropzone needsclick p-0" id="image_gallery">
                           <div class="dz-message needsclick">
-                            <p class="h4 needsclick pt-3 mb-2">Drag and drop your images here</p>
+                            <p class="h4 needsclick pt-3 mb-2">Drag and drop your image here</p>
                             <p class="h6 text-muted d-block fw-normal mb-2">or</p>
                             <span
                               class="note needsclick btn btn-sm btn-label-primary"
@@ -484,7 +541,7 @@ onMounted(() => {
                             >
                           </div>
                           <div class="fallback">
-                            <input name="image_gallery" type="file" multiple />
+                            <input name="image_gallery" type="file" />
                           </div>
                         </div>
                       </div>
@@ -492,12 +549,12 @@ onMounted(() => {
                   </div>
                   <!-- Child Price Tab -->
                   <div class="tab-pane fade" id="videoGallery" role="tabpanel">
-                    <h6 class="mb-3 text-body">You can upload multiple videos</h6>
+                    <h6 class="mb-3 text-body">You can multiple videos</h6>
                     <div class="card mb-6">
                       <div class="card-body">
-                        <div class="dropzone needsclick p-0" id="video_gallery">
+                        <div class="dropzone needsclick p-0" id="dropzone-basic">
                           <div class="dz-message needsclick">
-                            <p class="h4 needsclick pt-3 mb-2">Drag and drop your videos here</p>
+                            <p class="h4 needsclick pt-3 mb-2">Drag and drop your image here</p>
                             <p class="h6 text-muted d-block fw-normal mb-2">or</p>
                             <span
                               class="note needsclick btn btn-sm btn-label-primary"
@@ -506,7 +563,7 @@ onMounted(() => {
                             >
                           </div>
                           <div class="fallback">
-                            <input name="video_gallery" type="file" multiple />
+                            <input name="video_gallery" type="file" />
                           </div>
                         </div>
                       </div>
@@ -582,7 +639,7 @@ onMounted(() => {
                       <input
                         type="time"
                         class="form-control"
-                        id="TourScheduleStarTime"
+                        id="pickupTimeStart"
                         v-model="formData.tour_start_time"
                       />
                     </div>
@@ -591,7 +648,7 @@ onMounted(() => {
                       <input
                         type="time"
                         class="form-control"
-                        id="TourScheduleEndTime"
+                        id="pickupTimeEnd"
                         v-model="formData.tour_end_time"
                       />
                     </div>
@@ -600,8 +657,8 @@ onMounted(() => {
                       <input
                         type="number"
                         class="form-control"
-                        id="TourDuration"
-                        v-model="formData.duration"
+                        id="pickupTimeEnd"
+                        v-model="formData.tour_end_time"
                       />
                     </div>
                   </div>

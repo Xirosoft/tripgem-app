@@ -79,8 +79,8 @@ const handleSubmit = async () => {
 
 const handleThumbnailUpload = async (file) => {
   try {
-    const url = await DragAndDropUpload(file, formData.value, null, toast, 'thumbnail')
-    formData.value.thumbnail = url
+    // const url = await DragAndDropUpload(file, formData.value, null, toast, 'thumbnail')
+    // formData.value.thumbnail = url
     // toast.success('Thumbnail uploaded successfully')
   } catch (error) {
     toast.error('Failed to upload thumbnail', error)
@@ -88,20 +88,14 @@ const handleThumbnailUpload = async (file) => {
 }
 
 const handleImageGalleryUpload = async (files) => {
-  console.log('Files:', files)
-
   try {
     for (const file of files) {
-      const thumbnail = await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
-      // console.log('URL:', url)
-
-      formData.value.image_gallery.push(thumbnail.url)
+      const url = await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
+      formData.value.image_gallery.push(url)
     }
-    // toast.success('Images uploaded successfully')
+    toast.success('Images uploaded successfully')
   } catch (error) {
-    console.log('Error:', error)
-
-    // toast.error('Failed to upload images...', error)
+    toast.error('Failed to upload images', error)
   }
 }
 
@@ -111,11 +105,9 @@ const handleVideoGalleryUpload = async (files) => {
       const url = await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
       formData.value.video_gallery.push(url)
     }
-    // toast.success('Videos uploaded successfully')
+    toast.success('Videos uploaded successfully')
   } catch (error) {
-    console.log('Error:', error)
-
-    // toast.error('Failed to upload videos', error)
+    toast.error('Failed to upload videos', error)
   }
 }
 
@@ -153,7 +145,7 @@ onMounted(() => {
   // Initialize Dropzones
   initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
   initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
-  initializeDropzone('#video_gallery', handleVideoGalleryUpload, formData.value, toast, true)
+  initializeDropzone('#dropzone-basic', handleVideoGalleryUpload, formData.value, toast, true)
 })
 </script>
 
@@ -495,7 +487,7 @@ onMounted(() => {
                     <h6 class="mb-3 text-body">You can upload multiple videos</h6>
                     <div class="card mb-6">
                       <div class="card-body">
-                        <div class="dropzone needsclick p-0" id="video_gallery">
+                        <div class="dropzone needsclick p-0" id="dropzone-basic">
                           <div class="dz-message needsclick">
                             <p class="h4 needsclick pt-3 mb-2">Drag and drop your videos here</p>
                             <p class="h6 text-muted d-block fw-normal mb-2">or</p>

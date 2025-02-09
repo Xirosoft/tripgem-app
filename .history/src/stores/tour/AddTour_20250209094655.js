@@ -42,8 +42,8 @@ export const useToursStore = defineStore('addtours', {
         console.log('Create tour error:', error)
 
         this.loading = false
-        this.error = error.response?.data?.message || error.message
-        toast.error(this.error, {
+        this.error = error.message
+        toast.error('ERRR ', error.message, {
           position: 'top-right',
           duration: 5000,
         })
