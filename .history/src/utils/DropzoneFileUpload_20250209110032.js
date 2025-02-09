@@ -73,9 +73,8 @@ export function initializeDropzone(elementId, uploadHandler, formData, toast, mu
         if (file.type.startsWith('video/')) {
           const videoElement = document.createElement('video')
           videoElement.controls = true
-          videoElement.width = 200 // Set a width for the video preview
           videoElement.src = URL.createObjectURL(file)
-          file.previewElement.querySelector('.dz-details').appendChild(videoElement)
+          file.previewElement.appendChild(videoElement)
         }
       })
     },
