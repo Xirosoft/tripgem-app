@@ -40,6 +40,7 @@ export function initializeDropzone(elementId, uploadHandler, formData, toast, mu
     <div class="dz-details">
       <div class="dz-thumbnail">
         <img data-dz-thumbnail>
+        <video data-dz-video controls style="display: none;"></video>
         <span class="dz-nopreview">No preview</span>
         <div class="dz-success-mark"></div>
         <div class="dz-error-mark"></div>
@@ -73,6 +74,14 @@ export function initializeDropzone(elementId, uploadHandler, formData, toast, mu
   dropzoneInstance.on('addedfile', (file) => {
     if (!multiple && dropzoneInstance.files.length > 1) {
       dropzoneInstance.removeFile(dropzoneInstance.files[0])
+    }
+    if (file.type.startsWith('video/')) {
+      const videoElement = file.previewElement.querySelector('[data-dz-video]')
+      const imgElement = file.previewElement.querySelector('[data-dz-thumbnail]')
+      imgElement.style.display = 'none'
+      videoElement.style.display = 'block'
+      videoElement.src = URL.createObjectURL(file)
+      videoElement.load() // Ensure the video is loaded
     }
     uploadHandler(file, formData, dropzoneInstance, toast)
   })

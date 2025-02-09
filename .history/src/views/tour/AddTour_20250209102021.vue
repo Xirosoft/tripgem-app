@@ -113,7 +113,7 @@ const handleVideoGalleryUpload = async (files) => {
     }
     // toast.success('Videos uploaded successfully')
   } catch (error) {
-    console.error(error)
+    console.log('Error:', error)
 
     // toast.error('Failed to upload videos', error)
   }
