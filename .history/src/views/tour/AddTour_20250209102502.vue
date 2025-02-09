@@ -113,8 +113,8 @@ const handleVideoGalleryUpload = async (file) => {
         formData.value.video_gallery.push(url)
       }
     } else {
-      // const url = await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
-      // formData.value.video_gallery.push(url)
+      const url = await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
+      formData.value.video_gallery.push(url)
     }
     // toast.success('Videos uploaded successfully')
   } catch (error) {
