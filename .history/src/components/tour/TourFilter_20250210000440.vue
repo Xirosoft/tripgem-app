@@ -4,12 +4,6 @@ export default {
   name: 'TourFilter',
   methods: {
     addFilters(table) {
-      // Clear existing filters
-      $('.tour_type').empty()
-      $('.transport_types').empty()
-      $('.status').empty()
-      $('.sort_by').empty()
-
       // Adding tour type filter
       table.columns(2).every(function () {
         var column = this
@@ -106,7 +100,7 @@ export default {
     <div class="col-md-2 transport_types"></div>
     <div class="col-md-3 status"></div>
     <div class="col-md-3 sort_by"></div>
-    <div class="col-md-2 d-flex align-items-center justify-content-md-end">
+    <div class="col-md-2 d-flex align-items-cent fer justify-content-md-end">
       <button class="dt-button add-new btn btn-primary" @click="$router.push('/add-tour')">
         <span>
           <i class="ti ti-plus me-0 me-sm-1 ti-xs"></i>

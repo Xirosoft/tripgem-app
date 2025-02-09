@@ -148,7 +148,7 @@ export default {
               this.table.clear()
               this.table.rows.add(newVal)
               this.table.draw()
-              this.addFilters(this.table) // Ensure filters are added after data is drawn
+              // this.addFilters(this.table) // Ensure filters are added after data is drawn
             }
           })
         }

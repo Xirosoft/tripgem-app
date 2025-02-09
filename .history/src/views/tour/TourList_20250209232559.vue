@@ -1,12 +1,12 @@
 <script>
 import TourFilter from '@/components/tour/TourFilter.vue'
-import axios from 'axios'
 import 'datatables.net-bs5'
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'
 import $ from 'jquery'
 import 'select2'
 import 'select2/dist/css/select2.min.css'
 import Swal from 'sweetalert2'
+import axios from 'axios'
 import config from '../../config/config'
 import { useTourListStore } from '../../stores/tour/TourList.js'
 
@@ -119,6 +119,7 @@ export default {
         this.table.clear()
         this.table.rows.add(this.tourListStore.tourList)
         this.table.draw()
+        this.addFilters(this.table) // Reapply filters after data is drawn
         Swal.fire('Deleted!', 'The tour has been deleted.', 'success')
       } catch (error) {
         console.error('Error deleting tour:', error)
@@ -126,8 +127,8 @@ export default {
       }
     },
     applyFilters(filters) {
-      if (!filters) {
-        // this.tourListStore.applyFilters(filters)
+      if (!filters){
+        this.tourListStore.applyFilters(filters)
       }
       // Add sorting logic here if needed
     },
@@ -148,7 +149,7 @@ export default {
               this.table.clear()
               this.table.rows.add(newVal)
               this.table.draw()
-              this.addFilters(this.table) // Ensure filters are added after data is drawn
+              // this.addFilters(this.table) // Ensure filters are added after data is drawn
             }
           })
         }

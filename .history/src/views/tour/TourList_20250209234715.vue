@@ -84,7 +84,7 @@ export default {
         ],
         destroy: true,
         initComplete: () => {
-          // this.addFilters(this.table)
+          this.addFilters(this.table)
         },
       })
 
@@ -119,6 +119,7 @@ export default {
         this.table.clear()
         this.table.rows.add(this.tourListStore.tourList)
         this.table.draw()
+        this.addFilters(this.table) // Reapply filters after data is drawn
         Swal.fire('Deleted!', 'The tour has been deleted.', 'success')
       } catch (error) {
         console.error('Error deleting tour:', error)
@@ -127,12 +128,14 @@ export default {
     },
     applyFilters(filters) {
       if (!filters) {
-        // this.tourListStore.applyFilters(filters)
+        this.tourListStore.applyFilters(filters)
       }
       // Add sorting logic here if needed
     },
     addFilters(table) {
       if (!table) return
+      // Clear existing filters before adding new ones
+      this.$refs.tourFilter.clearFilters()
       this.$refs.tourFilter.addFilters(table)
     },
   },

@@ -133,7 +133,7 @@ export default {
     },
     addFilters(table) {
       if (!table) return
-      this.$refs.tourFilter.addFilters(table)
+      // this.$refs.tourFilter.addFilters(table)
     },
   },
   watch: {

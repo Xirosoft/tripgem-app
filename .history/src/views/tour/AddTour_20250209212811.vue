@@ -2,7 +2,6 @@
 import { useAuthStore } from '@/stores/auth'
 import Quill from 'quill'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import MerchantUsers from '../../components/tour/MerchantUsers.vue'
 import TourCategory from '../../components/tour/TourCategory.vue'
@@ -15,7 +14,6 @@ const userId = useAuthStore().userId
 
 const toursStore = useToursStore()
 const toast = useToast()
-const router = useRouter()
 const formData = ref({
   merchant_id: '',
   user_id: userId,
@@ -67,45 +65,6 @@ const removeMetaField = (index) => {
   formData.value.tour_meta.splice(index, 1)
 }
 
-const clearForm = () => {
-  formData.value = {
-    merchant_id: '',
-    user_id: userId,
-    tour_name: '',
-    subheading: '',
-    description: '',
-    itinerary: '',
-    tour_start_time: '',
-    tour_end_time: '',
-    regular_price_adult: 0,
-    net_price_adult: 0,
-    regular_price_child: 0,
-    net_price_child: 0,
-    available_dates: '',
-    available_seat: 0,
-    total_seat: 0,
-    image_gallery: [],
-    video_gallery: [],
-    thumbnail: '',
-    transport_types: '',
-    languages_supported: '',
-    highlights: '',
-    min_age: 0,
-    max_age: 0,
-    cancellation_policy: '',
-    discount_percentage: 0,
-    tour_type: '',
-    currency: '',
-    status: 'draft',
-    tour_meta: [],
-    pick_up_time: '',
-    drop_time: '',
-    pickup_location_details: '',
-    dropoff_location_details: '',
-    duration: '',
-  }
-}
-
 const handleSubmit = async () => {
   try {
     await toursStore.createTour(formData.value)
@@ -113,8 +72,6 @@ const handleSubmit = async () => {
       position: 'top-right',
       duration: 5000,
     })
-    clearForm()
-    router.push('/all-tours')
   } catch (error) {
     console.log('Failed to create tour: ' + error)
   }
@@ -259,6 +216,11 @@ onMounted(() => {
             <!-- Description -->
             <div>
               <label class="mb-1">Description (Optional)</label>
+              <!-- <textarea
+                class="form-control"
+                v-model="formData.description"
+                placeholder="Description"
+              ></textarea> -->
               <div class="form-control p-0">
                 <div class="description-toolbar border-0 border-bottom">
                   <div class="d-flex justify-content-start">

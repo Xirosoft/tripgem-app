@@ -84,7 +84,7 @@ export default {
         ],
         destroy: true,
         initComplete: () => {
-          // this.addFilters(this.table)
+          this.addFilters(this.table)
         },
       })
 
@@ -127,7 +127,7 @@ export default {
     },
     applyFilters(filters) {
       if (!filters) {
-        // this.tourListStore.applyFilters(filters)
+        this.tourListStore.applyFilters(filters)
       }
       // Add sorting logic here if needed
     },

@@ -2,7 +2,6 @@
 import { useAuthStore } from '@/stores/auth'
 import Quill from 'quill'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import MerchantUsers from '../../components/tour/MerchantUsers.vue'
 import TourCategory from '../../components/tour/TourCategory.vue'
@@ -11,6 +10,7 @@ import TourTags from '../../components/tour/TourTags.vue'
 import { useToursStore } from '../../stores/tour/AddTour'
 import { initializeAddTour } from '../../stores/tour/initializeAddTour'
 import { DragAndDropUpload, initializeDropzone } from '../../utils/DropzoneFileUpload'
+import { useRouter } from 'vue-router'
 const userId = useAuthStore().userId
 
 const toursStore = useToursStore()
@@ -259,6 +259,11 @@ onMounted(() => {
             <!-- Description -->
             <div>
               <label class="mb-1">Description (Optional)</label>
+              <!-- <textarea
+                class="form-control"
+                v-model="formData.description"
+                placeholder="Description"
+              ></textarea> -->
               <div class="form-control p-0">
                 <div class="description-toolbar border-0 border-bottom">
                   <div class="d-flex justify-content-start">

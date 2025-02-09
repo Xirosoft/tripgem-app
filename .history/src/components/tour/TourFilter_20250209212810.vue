@@ -4,12 +4,6 @@ export default {
   name: 'TourFilter',
   methods: {
     addFilters(table) {
-      // Clear existing filters
-      $('.tour_type').empty()
-      $('.transport_types').empty()
-      $('.status').empty()
-      $('.sort_by').empty()
-
       // Adding tour type filter
       table.columns(2).every(function () {
         var column = this
