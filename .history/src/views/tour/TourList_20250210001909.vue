@@ -68,7 +68,7 @@ export default {
             data: null,
             orderable: false,
             searchable: false,
-            render: function () {
+            render: function (data) {
               return `
                 <div class="d-inline-block text-nowrap">
                   <button class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light edit-tour"><i class="ti ti-edit ti-md"></i></button>

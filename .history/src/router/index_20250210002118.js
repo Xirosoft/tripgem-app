@@ -1,13 +1,13 @@
-import { usePermissionsStore } from '@/stores/permissions' // Import usePermissionsStore
+import { usePermissionsStore } from '@/stores/permissions'; // Import usePermissionsStore
 import AddMerchant from '@/views/merchant/AddMerchant.vue'
-import EditMerchant from '@/views/merchant/EditMerchant.vue' // Import EditMerchant component
+import EditMerchant from '@/views/merchant/EditMerchant.vue'; // Import EditMerchant component
 import MerchantsList from '@/views/merchant/MerchantsList.vue'
 import ViewMerchant from '@/views/merchant/ViewMerchant.vue'
 import PermissionsList from '@/views/permission/PermissionsList.vue'
 import RolesList from '@/views/role/RolesList.vue'
 import EditUser from '@/views/users/EditUser.vue'
 import UserList from '@/views/users/UserList.vue'
-import ViewUser from '@/views/users/ViewUser.vue' // Import ViewUser component
+import ViewUser from '@/views/users/ViewUser.vue'; // Import ViewUser component
 import { createRouter, createWebHistory } from 'vue-router'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import ForgetPassWord from '../views/ForgetPassWord.vue'
@@ -173,7 +173,6 @@ const routes = [
     path: '/edit-tour/:id',
     name: 'EditTour',
     component: EditTour,
-    props: true,
     meta: {
       requiresAuth: true,
       permissions: 'read',

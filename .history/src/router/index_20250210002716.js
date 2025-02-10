@@ -170,7 +170,7 @@ const routes = [
     },
   },
   {
-    path: '/edit-tour/:id',
+    path: '/edit-tour/:tourId',
     name: 'EditTour',
     component: EditTour,
     props: true,

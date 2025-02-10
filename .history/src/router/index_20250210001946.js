@@ -18,7 +18,6 @@ import RestPassWord from '../views/RestPassWord.vue'
 import TwoStepAuth from '../views/TwoStepAuth.vue'
 
 import AddTour from '@/views/tour/AddTour.vue'
-import EditTour from '@/views/tour/EditTour.vue'
 import TourCategory from '@/views/tour/TourCategory.vue'
 import TourList from '@/views/tour/TourList.vue'
 import TourLocation from '@/views/tour/TourLocation.vue'
@@ -170,10 +169,9 @@ const routes = [
     },
   },
   {
-    path: '/edit-tour/:id',
+    path: '/edit-tour',
     name: 'EditTour',
     component: EditTour,
-    props: true,
     meta: {
       requiresAuth: true,
       permissions: 'read',
