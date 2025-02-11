@@ -9,8 +9,6 @@ import TourCategory from '../../components/tour/TourCategory.vue'
 import TourLocation from '../../components/tour/TourLocation.vue'
 import TourTags from '../../components/tour/TourTags.vue'
 // import { useToursStore } from '../../stores/tour/AddTour'
-import $ from 'jquery'
-import 'select2'
 import { useEditTourStore } from '../../stores/tour/EditTour'
 import { initializeAddTour } from '../../stores/tour/initializeAddTour'
 import { DragAndDropUpload, initializeDropzone } from '../../utils/DropzoneFileUpload'
@@ -124,12 +122,6 @@ const loadTourDetails = async () => {
     // Ensure select dropdowns are updated with existing data
     formData.value.languages_supported = tourDetails.languages_supported || []
     formData.value.currency = tourDetails.currency || []
-
-    // Initialize select2 with existing data
-    setTimeout(() => {
-      $('#language').val(formData.value.languages_supported).trigger('change')
-      $('#currency').val(formData.value.currency).trigger('change')
-    }, 0)
   } catch (error) {
     toast.error('Failed to load tour details: ' + error.message)
   }
@@ -236,10 +228,6 @@ onMounted(() => {
   initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
   initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
   initializeDropzone('#dropzone-basic', handleVideoGalleryUpload, formData.value, toast, true)
-
-  // Initialize select2
-  $('#language').select2()
-  $('#currency').select2()
 })
 </script>
 
