@@ -1,24 +1,21 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
-import $ from 'jquery'
 import Quill from 'quill'
-import 'select2'
 import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import MerchantUsers from '../../components/tour/MerchantUsers.vue'
 import TourCategory from '../../components/tour/TourCategory.vue'
 import TourLocation from '../../components/tour/TourLocation.vue'
 import TourTags from '../../components/tour/TourTags.vue'
-import { useEditTourStore } from '../../stores/tour/EditTour'
+import { useToursStore } from '../../stores/tour/AddTour'
 import { initializeAddTour } from '../../stores/tour/initializeAddTour'
 import { DragAndDropUpload, initializeDropzone } from '../../utils/DropzoneFileUpload'
-
 const userId = useAuthStore().userId
-const editTourStore = useEditTourStore()
+
+const toursStore = useToursStore()
 const toast = useToast()
 const router = useRouter()
-const route = useRoute()
 const formData = ref({
   merchant_id: '',
   user_id: userId,
@@ -109,52 +106,24 @@ const clearForm = () => {
   }
 }
 
-const loadTourDetails = async () => {
-  try {
-    const tourId = route.params.id
-    if (!tourId) {
-      throw new Error('Tour ID is missing')
-    }
-    console.log('Tour ID:', tourId)
-
-    const tourDetails = await editTourStore.fetchTourDetails(tourId)
-    formData.value = { ...formData.value, ...tourDetails }
-    // Ensure select dropdowns are updated with existing data
-    formData.value.languages_supported = tourDetails.languages_supported || []
-    formData.value.currency = tourDetails.currency || []
-
-    // Initialize select2 with existing data
-    setTimeout(() => {
-      $('#language').val(formData.value.languages_supported).trigger('change')
-      $('#currency').val(formData.value.currency).trigger('change')
-    }, 0)
-  } catch (error) {
-    toast.error('Failed to load tour details: ' + error.message)
-  }
-}
-
 const handleSubmit = async () => {
   try {
-    const tourId = route.params.id
-    if (!tourId) {
-      throw new Error('Tour ID is missing')
-    }
-    await editTourStore.updateTourDetails(tourId, formData.value)
-    toast.success('Tour updated successfully!', {
+    await toursStore.createTour(formData.value)
+    toast.success('Tour created successfully!', {
       position: 'top-right',
       duration: 5000,
     })
     clearForm()
     router.push('/all-tours')
   } catch (error) {
-    console.log('Failed to update tour: ' + error.message)
+    console.log('Failed to create tour: ' + error)
   }
 }
 
 const handleThumbnailUpload = async (file) => {
   try {
     const url = await DragAndDropUpload(file, formData.value, null, toast, 'thumbnail')
-    formData.value.thumbnail = url
+    formData.value.thumbnail = url.url
     // toast.success('Thumbnail uploaded successfully')
   } catch (error) {
     toast.error('Failed to upload thumbnail', error)
@@ -185,8 +154,11 @@ const handleVideoGalleryUpload = async (file) => {
       for (const f of file) {
         const url = await DragAndDropUpload(f, formData.value, null, toast, 'video_gallery')
         formData.value.video_gallery.push(url)
+        console.log('success in')
       }
     } else {
+      console.log('success out')
+
       // const url = await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
       // formData.value.video_gallery.push(url)
     }
@@ -198,9 +170,7 @@ const handleVideoGalleryUpload = async (file) => {
 }
 
 onMounted(() => {
-  console.log('Route params:', route.params)
   initializeAddTour()
-  loadTourDetails()
 
   // Initialize Quill editor for itinerary
   const itineraryEditor = new Quill('.tour-itinerary', {
@@ -234,10 +204,6 @@ onMounted(() => {
   initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
   initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
   initializeDropzone('#dropzone-basic', handleVideoGalleryUpload, formData.value, toast, true)
-
-  // Initialize select2
-  $('#language').select2()
-  $('#currency').select2()
 })
 </script>
 
@@ -256,7 +222,7 @@ onMounted(() => {
           <button class="btn btn-label-secondary">View Tour</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
-        <button type="submit" class="btn btn-primary" @click="handleSubmit">Update Tour</button>
+        <button type="submit" class="btn btn-primary" @click="handleSubmit">Publish Tour</button>
       </div>
     </div>
 
@@ -1063,14 +1029,12 @@ onMounted(() => {
             <h5 class="card-title mb-0">Organize</h5>
           </div>
           <div class="card-body">
-            <MerchantUsers
-              :selectedMerchantId="formData.merchant_id"
-              :selectedUserId="formData.user_id"
-              @merchant-user-change="handleMerchantUserChange"
-            />
-            <TourLocation :selectedLocationId="formData.location_id" />
-            <TourCategory :selectedCategoryId="formData.category_id" />
-            <TourTags :selectedTags="formData.tags" />
+            <MerchantUsers @merchant-user-change="handleMerchantUserChange" />
+            <!-- Merchants -->
+
+            <TourLocation />
+            <TourCategory />
+            <TourTags />
           </div>
         </div>
         <!-- /Organize Card -->

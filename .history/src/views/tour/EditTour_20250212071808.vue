@@ -1063,14 +1063,12 @@ onMounted(() => {
             <h5 class="card-title mb-0">Organize</h5>
           </div>
           <div class="card-body">
-            <MerchantUsers
-              :selectedMerchantId="formData.merchant_id"
-              :selectedUserId="formData.user_id"
-              @merchant-user-change="handleMerchantUserChange"
-            />
-            <TourLocation :selectedLocationId="formData.location_id" />
-            <TourCategory :selectedCategoryId="formData.category_id" />
-            <TourTags :selectedTags="formData.tags" />
+            <MerchantUsers @merchant-user-change="handleMerchantUserChange" />
+            <!-- Merchants -->
+
+            <TourLocation />
+            <TourCategory />
+            <TourTags />
           </div>
         </div>
         <!-- /Organize Card -->
