@@ -47,6 +47,30 @@ const fetchUsersByMerchantId = async (merchantId) => {
   }
 }
 
+const props = defineProps({
+  selectedMerchantId: String,
+  selectedUserId: String,
+})
+
+const merchantId = ref(props.selectedMerchantId)
+const userId = ref(props.selectedUserId)
+
+watch(
+  () => props.selectedMerchantId,
+  (newVal) => {
+    merchantId.value = newVal
+    $('#merchant-select').val(newVal).trigger('change')
+  },
+)
+
+watch(
+  () => props.selectedUserId,
+  (newVal) => {
+    userId.value = newVal
+    $('#user-select').val(newVal).trigger('change')
+  },
+)
+
 onMounted(async () => {
   await fetchMerchants()
   nextTick(() => {
@@ -57,6 +81,10 @@ onMounted(async () => {
       })
     $(userSelectRef.value).select2()
   })
+  $('#merchant-select').select2()
+  $('#user-select').select2()
+  $('#merchant-select').val(merchantId.value).trigger('change')
+  $('#user-select').val(userId.value).trigger('change')
 })
 
 watch(

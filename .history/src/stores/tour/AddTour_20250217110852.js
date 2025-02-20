@@ -106,7 +106,7 @@ export const useToursStore = defineStore('addtours', {
         video_gallery: [],
         thumbnail: '',
         transport_types: '',
-        languages_supported: [],
+        languages_supported: '',
         highlights: '',
         min_age: 0,
         max_age: 0,

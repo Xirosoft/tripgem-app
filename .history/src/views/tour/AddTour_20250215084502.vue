@@ -36,14 +36,14 @@ const formData = ref({
   video_gallery: [],
   thumbnail: '',
   transport_types: '',
-  languages_supported: [],
+  languages_supported: '',
   highlights: '',
   min_age: 0,
   max_age: 0,
   cancellation_policy: '',
   discount_percentage: 0,
   tour_type: '',
-  currency: [],
+  currency: '',
   status: '',
   tour_meta: [],
   pick_up_time: '',
@@ -88,14 +88,14 @@ const clearForm = () => {
     video_gallery: [],
     thumbnail: '',
     transport_types: '',
-    languages_supported: [],
+    languages_supported: '',
     highlights: '',
     min_age: 0,
     max_age: 0,
     cancellation_policy: '',
     discount_percentage: 0,
     tour_type: '',
-    currency: [],
+    currency: '',
     status: 'draft',
     tour_meta: [],
     pick_up_time: '',
@@ -113,8 +113,8 @@ const handleSubmit = async () => {
       position: 'top-right',
       duration: 5000,
     })
-    // clearForm()
-    // router.push('/all-tours')
+    clearForm()
+    router.push('/all-tours')
   } catch (error) {
     console.log('Failed to create tour: ' + error)
   }
@@ -983,9 +983,9 @@ onMounted(() => {
           >
             <option value="USD">US Dollar (USD)</option>
             <option value="EUR">Euro (EUR)</option>
-            <option value="GBP">British Pound (GBP)</option>
+            <!-- <option value="GBP">British Pound (GBP)</option>
             <option value="THB">Thai Baht (THB)</option>
-            <!-- <option value="AUD">Australian Dollar (AUD)</option>
+            <option value="AUD">Australian Dollar (AUD)</option>
             <option value="CAD">Canadian Dollar (CAD)</option>
             <option value="SGD">Singapore Dollar (SGD)</option>
             <option value="JPY">Japanese Yen (JPY)</option>

@@ -6,7 +6,25 @@ import 'select2/dist/css/select2.css'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import config from '../../config/config'
 
-const tags = ref([]) // Holds all available tags
+const props = defineProps({
+  selectedTags: Array,
+})
+
+const tags = ref(props.selectedTags)
+
+watch(
+  () => props.selectedTags,
+  (newVal) => {
+    tags.value = newVal
+    $('#tags-select').val(newVal).trigger('change')
+  },
+)
+
+onMounted(() => {
+  $('#tags-select').select2()
+  $('#tags-select').val(tags.value).trigger('change')
+})
+
 const selectedTags1 = ref([]) // Holds selected tag IDs for first select
 const selectedTags2 = ref([]) // Holds selected tag IDs for second select
 const tagSelectRef1 = ref(null)
@@ -134,14 +152,10 @@ watch(selectedTags2, () => {
 
 <template>
   <div>
-    <label for="ecommerce-product-tags-1" class="form-label mb-1">Tags</label>
-    <select
-      id="ecommerce-product-tags-1"
-      class="select2 form-control"
-      ref="tagSelectRef1"
-      multiple="multiple"
-      data-placeholder="Select or add tags"
-    ></select>
+    <label for="tags-select">Tags</label>
+    <select id="tags-select" class="select2 form-select" multiple v-model="tags">
+      <!-- Options for tags -->
+    </select>
   </div>
 </template>
 

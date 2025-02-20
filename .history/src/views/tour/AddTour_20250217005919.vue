@@ -983,9 +983,9 @@ onMounted(() => {
           >
             <option value="USD">US Dollar (USD)</option>
             <option value="EUR">Euro (EUR)</option>
-            <option value="GBP">British Pound (GBP)</option>
+            <!-- <option value="GBP">British Pound (GBP)</option>
             <option value="THB">Thai Baht (THB)</option>
-            <!-- <option value="AUD">Australian Dollar (AUD)</option>
+            <option value="AUD">Australian Dollar (AUD)</option>
             <option value="CAD">Canadian Dollar (CAD)</option>
             <option value="SGD">Singapore Dollar (SGD)</option>
             <option value="JPY">Japanese Yen (JPY)</option>
