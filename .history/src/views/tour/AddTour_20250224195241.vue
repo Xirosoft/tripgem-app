@@ -1402,8 +1402,7 @@ ul.nav.nav-pills.display-inline.w-100 {
 .dropzone .dz-preview .dz-details {
   opacity: 1 !important;
 }
-.dz-message.needsclick {
-  width: 100%;
+element.style {
 }
 div#thumbnail {
   display: block;

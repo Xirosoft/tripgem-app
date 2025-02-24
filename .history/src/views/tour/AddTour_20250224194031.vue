@@ -502,12 +502,12 @@ onMounted(() => {
                         </button>
                       </div>
                       <div v-if="!formData.net_price_adult.include_park_fee" class="mt-2">
-                        <label class="form-label" for="adult-park-fee">National Park fee</label>
+                        <label class="form-label" for="adult-park-fee">Park Fee</label>
                         <input
                           type="number"
                           class="form-control"
                           id="adult-park-fee"
-                          placeholder="Enter Park Fee"
+                          placeholder="Park Fee"
                           v-model="formData.park_fee.price_adult_park_fee"
                           min="0"
                           step="0.01"
@@ -541,14 +541,12 @@ onMounted(() => {
                         </button>
                       </div>
                       <div v-if="!formData.local_net_price_adult.include_park_fee" class="mt-2">
-                        <label class="form-label" for="local-adult-park-fee"
-                          >National Park fee</label
-                        >
+                        <label class="form-label" for="local-adult-park-fee">Park Fee</label>
                         <input
                           type="number"
                           class="form-control"
                           id="local-adult-park-fee"
-                          placeholder="Enter Park Fee"
+                          placeholder="Park Fee"
                           v-model="formData.park_fee.local_price_adult_park_fee"
                           min="0"
                           step="0.01"
@@ -557,7 +555,6 @@ onMounted(() => {
                     </div>
                     <div class="col-12 mb-3">
                       <label class="form-label" for="adult-discount">Discount</label>
-                      <br />
                       <div
                         v-for="(discount, index) in formData.discount.filter(
                           (d) => d.target === 'adult',
@@ -645,12 +642,12 @@ onMounted(() => {
                         </button>
                       </div>
                       <div v-if="!formData.net_price_child.include_park_fee" class="mt-2">
-                        <label class="form-label" for="child-park-fee">National Park fee</label>
+                        <label class="form-label" for="child-park-fee">Park Fee</label>
                         <input
                           type="number"
                           class="form-control"
                           id="child-park-fee"
-                          placeholder="Enter Park Fee"
+                          placeholder="Park Fee"
                           v-model="formData.park_fee.price_child_park_fee"
                           min="0"
                           step="0.01"
@@ -684,14 +681,12 @@ onMounted(() => {
                         </button>
                       </div>
                       <div v-if="!formData.local_net_price_child.include_park_fee" class="mt-2">
-                        <label class="form-label" for="local-child-park-fee"
-                          >National Park fee</label
-                        >
+                        <label class="form-label" for="local-child-park-fee">Park Fee</label>
                         <input
                           type="number"
                           class="form-control"
                           id="local-child-park-fee"
-                          placeholder="Enter Park Fee"
+                          placeholder="Park Fee"
                           v-model="formData.park_fee.local_price_child_park_fee"
                           min="0"
                           step="0.01"
@@ -700,7 +695,6 @@ onMounted(() => {
                     </div>
                     <div class="col-12 mb-3">
                       <label class="form-label" for="child-discount">Discount</label>
-                      <br />
                       <div
                         v-for="(discount, index) in formData.discount.filter(
                           (d) => d.target === 'child',
@@ -819,7 +813,7 @@ onMounted(() => {
               <!-- /Navigation -->
               <!-- Options -->
               <div class="col-12 pt-6 pt-md-0">
-                <div class="tab-content p-0 mt-3">
+                <div class="tab-content p-0 ps-md-4">
                   <!-- photoGallery Tab -->
                   <div class="tab-pane fade show active" id="photoGallery" role="tabpanel">
                     <h6 class="text-body">You Can Upload multiple Photos</h6>
@@ -1392,18 +1386,10 @@ body .select2-container--default .select2-selection--single .select2-selection__
   height: 36px;
   right: 7px;
 }
-ul.nav.nav-pills.display-inline.w-100 {
-  display: flex;
-  align-content: center;
-  flex-direction: row;
-}
 
 /* Dropzone */
 .dropzone .dz-preview .dz-details {
-  opacity: 1 !important;
-}
-.dz-message.needsclick {
-  width: 100%;
+  opacity: 1;
 }
 div#thumbnail {
   display: block;

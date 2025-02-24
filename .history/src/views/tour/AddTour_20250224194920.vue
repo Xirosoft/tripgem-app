@@ -1400,10 +1400,7 @@ ul.nav.nav-pills.display-inline.w-100 {
 
 /* Dropzone */
 .dropzone .dz-preview .dz-details {
-  opacity: 1 !important;
-}
-.dz-message.needsclick {
-  width: 100%;
+  opacity: 1;
 }
 div#thumbnail {
   display: block;

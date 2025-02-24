@@ -819,7 +819,7 @@ onMounted(() => {
               <!-- /Navigation -->
               <!-- Options -->
               <div class="col-12 pt-6 pt-md-0">
-                <div class="tab-content p-0 mt-3">
+                <div class="tab-content p-0 ps-md-4">
                   <!-- photoGallery Tab -->
                   <div class="tab-pane fade show active" id="photoGallery" role="tabpanel">
                     <h6 class="text-body">You Can Upload multiple Photos</h6>
@@ -1400,10 +1400,7 @@ ul.nav.nav-pills.display-inline.w-100 {
 
 /* Dropzone */
 .dropzone .dz-preview .dz-details {
-  opacity: 1 !important;
-}
-.dz-message.needsclick {
-  width: 100%;
+  opacity: 1;
 }
 div#thumbnail {
   display: block;
