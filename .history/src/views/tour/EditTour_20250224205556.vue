@@ -555,9 +555,7 @@ onMounted(() => {
                       </div>
                     </div>
                     <div class="col-12 mb-3">
-                      <label class="form-label" for="adult-discounted-price"
-                        >Discounted Price</label
-                      >
+                      <label class="form-label" for="adult-discounted-price">Discounted Price</label>
                       <input
                         type="number"
                         class="form-control"
@@ -749,234 +747,82 @@ onMounted(() => {
               </div>
               <!-- /Navigation -->
               <!-- Options -->
-              <div class="col-12 pt-6 pt-md-0">
-                <div class="tab-content p-0 ps-md-4">
-                  <!-- photoGallery Tab -->
-                  <div class="tab-pane fade show active" id="photoGallery" role="tabpanel">
-                    <h6 class="text-body">You Can Upload multiple Photos</h6>
-                    <div class="card mb-6">
-                      <div class="card-body">
-                        <div class="dropzone needsclick p-0" id="image_gallery">
-                          <div class="dz-message needsclick">
-                            <p class="h4 needsclick pt-3 mb-2">Drag and drop your images here</p>
-                            <p class="h6 text-muted d-block fw-normal mb-2">or</p>
-                            <span
-                              class="note needsclick btn btn-sm btn-label-primary"
-                              id="btnBrowse"
-                              >Browse images</span
-                            >
-                          </div>
-                          <div class="fallback">
-                            <input name="image_gallery" type="file" multiple />
-                          </div>
-                        </div>
+                          name="tourEndDate"
+                        />
                       </div>
                     </div>
-                  </div>
-                  <!-- Child Price Tab -->
-                  <div class="tab-pane fade" id="videoGallery" role="tabpanel">
-                    <h6 class="mb-3 text-body">You can upload multiple videos</h6>
-                    <div class="card mb-6">
-                      <div class="card-body">
-                        <div class="dropzone needsclick p-0" id="video_gallery">
-                          <div class="dz-message needsclick">
-                            <p class="h4 needsclick pt-3 mb-2">Drag and drop your videos here</p>
-                            <p class="h6 text-muted d-block fw-normal mb-2">or</p>
-                            <span
-                              class="note needsclick btn btn-sm btn-label-primary"
-                              id="btnBrowse"
-                              >Browse videos</span
-                            >
-                          </div>
-                          <div class="fallback">
-                            <input name="video_gallery" type="file" multiple />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- /Media -->
-                  </div>
-                </div>
-              </div>
-              <!-- /Options-->
-            </div>
-          </div>
-        </div>
-        <!-- /Gallery -->
-        <!-- Inventory -->
-        <div class="card mb-6">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Tour Schedule & Capacity</h5>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <!-- Navigation -->
-              <div class="col-12 col-md-4 col-xl-5 col-xxl-4 mx-auto card-separator">
-                <div class="d-flex justify-content-between flex-column mb-4 mb-md-0 pe-md-4">
-                  <div class="nav-align-left">
-                    <ul class="nav nav-pills flex-column w-100">
-                      <li class="nav-item">
-                        <button
-                          class="nav-link active"
-                          data-bs-toggle="tab"
-                          data-bs-target="#tour_schedule"
-                        >
-                          <i class="ti ti-clock ti-sm me-1_5"></i>
-                          <span class="align-middle">Tour Schedule</span>
-                        </button>
-                      </li>
-                      <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pickupTime">
-                          <i class="ti ti-clock ti-sm me-1_5"></i>
-                          <span class="align-middle">Pickup Time</span>
-                        </button>
-                      </li>
-                      <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#dropoffTime">
-                          <i class="ti ti-clock-off ti-sm me-1_5"></i>
-                          <span class="align-middle">Drop-off Time</span>
-                        </button>
-                      </li>
-                      <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tourDates">
-                          <i class="ti ti-calendar ti-sm me-1_5"></i>
-                          <span class="align-middle">Tour Dates</span>
-                        </button>
-                      </li>
-                      <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#capacity">
-                          <i class="ti ti-users ti-sm me-1_5"></i>
-                          <span class="align-middle">Tour Capacity</span>
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <!-- /Navigation -->
-              <!-- Options -->
-              <div class="col-12 col-md-8 col-xl-7 col-xxl-8 pt-6 pt-md-0">
-                <div class="tab-content p-0 ps-md-4">
-                  <!-- Pickup Time Tab -->
-                  <div class="tab-pane fade show active" id="tour_schedule" role="tabpanel">
-                    <h6 class="text-body">Tour Start end time</h6>
-                    <div class="mb-3">
-                      <label class="form-label">Tour Start Time</label>
-                      <input
-                        type="time"
-                        class="form-control"
-                        id="TourScheduleStarTime"
-                        v-model="formData.tour_start_time"
-                      />
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label">End TIme</label>
-                      <input
-                        type="time"
-                        class="form-control"
-                        id="TourScheduleEndTime"
-                        v-model="formData.tour_end_time"
-                      />
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label">Tour Duration</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        id="TourDuration"
-                        v-model="formData.duration"
-                      />
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="pickupTime" role="tabpanel">
-                    <h6 class="text-body">Tour Pickup Time Range</h6>
-                    <div v-for="(pickup, index) in formData.pick_up_time" :key="index" class="mb-3">
-                      <label class="form-label">From</label>
-                      <input type="time" class="form-control" v-model="pickup.from" />
-                      <label class="form-label">To</label>
-                      <input type="time" class="form-control" v-model="pickup.to" />
-                      <label class="form-label">Location</label>
-                      <input type="text" class="form-control" v-model="pickup.location" />
-                      <label class="form-label">Charge</label>
-                      <input type="number" class="form-control" v-model="pickup.charge" />
-                      <button
-                        type="button"
-                        class="btn btn-danger"
-                        @click="removePickUpLocation(index)"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                    <button type="button" class="btn btn-primary" @click="addPickUpLocation">
-                      Add Pickup Location
-                    </button>
-                  </div>
-                  <!-- Drop-off Time Tab -->
-                  <div class="tab-pane fade" id="dropoffTime" role="tabpanel">
-                    <h6 class="mb-3 text-body">Tour Drop-off Time Range</h6>
-                    <div v-for="(drop, index) in formData.drop_time" :key="index" class="mb-3">
-                      <label class="form-label">From</label>
-                      <input type="time" class="form-control" v-model="drop.from" />
-                      <label class="form-label">To</label>
-                      <input type="time" class="form-control" v-model="drop.to" />
-                      <label class="form-label">Location</label>
-                      <input type="text" class="form-control" v-model="drop.location" />
-                      <label class="form-label">Charge</label>
-                      <input type="number" class="form-control" v-model="drop.charge" />
-                      <button
-                        type="button"
-                        class="btn btn-danger"
-                        @click="removeDropLocation(index)"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                    <button type="button" class="btn btn-primary" @click="addDropLocation">
-                      Add Drop-off Location
-                    </button>
-                  </div>
-                  <!-- Tour Dates Tab -->
-                  <div class="tab-pane fade" id="tourDates" role="tabpanel">
-                    <h6 class="mb3 text-body">Tour Availability</h6>
-                    <div
-                      v-for="(date, index) in formData.available_dates"
-                      :key="index"
-                      class="row mb-4"
-                    >
-                      <div class="col-md-6">
-                        <label class="form-label">Start Date</label>
-                        <input type="date" class="form-control" v-model="date.from" />
-                      </div>
-                      <div class="col-md-6">
-                        <label class="form-label">End Date</label>
-                        <input type="date" class="form-control" v-model="date.to" />
-                      </div>
-                      <button
-                        type="button"
-                        class="btn btn-danger"
-                        @click="removeAvailableDate(index)"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                    <button type="button" class="btn btn-primary" @click="addAvailableDate">
-                      Add Available Date
-                    </button>
                     <div class="mb-4">
                       <label class="form-label">Operating Days</label>
                       <div class="d-flex flex-wrap gap-2">
-                        <div
-                          class="form-check"
-                          v-for="(day, index) in formData.available_days"
-                          :key="index"
-                        >
+                        <div class="form-check">
                           <input
                             class="form-check-input"
                             type="checkbox"
-                            :id="day.day"
-                            v-model="day.checked"
+                            id="monday"
+                            name="operatingDays"
+                            value="monday"
                           />
-                          <label class="form-check-label" :for="day.day">{{ day.day }}</label>
+                          <label class="form-check-label" for="monday">Monday</label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="tuesday"
+                            name="operatingDays"
+                            value="tuesday"
+                          />
+                          <label class="form-check-label" for="tuesday">Tuesday</label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="wednesday"
+                            name="operatingDays"
+                            value="wednesday"
+                          />
+                          <label class="form-check-label" for="wednesday">Wednesday</label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="thursday"
+                            name="operatingDays"
+                            value="thursday"
+                          />
+                          <label class="form-check-label" for="thursday">Thursday</label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="friday"
+                            name="operatingDays"
+                            value="friday"
+                          />
+                          <label class="form-check-label" for="friday">Friday</label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="saturday"
+                            name="operatingDays"
+                            value="saturday"
+                          />
+                          <label class="form-check-label" for="saturday">Saturday</label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="sunday"
+                            name="operatingDays"
+                            value="sunday"
+                          />
+                          <label class="form-check-label" for="sunday">Sunday</label>
                         </div>
                       </div>
                     </div>
@@ -1088,11 +934,7 @@ onMounted(() => {
               <span class="mb-0">Booking Availability</span>
               <div class="w-25 d-flex justify-content-end">
                 <div class="form-check form-switch me-n3">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    v-model="formData.booking_enabled"
-                  />
+                  <input type="checkbox" class="form-check-input" />
                 </div>
               </div>
             </div>

@@ -1,0 +1,9 @@
+[
+  { "value": "Group", "label": "Group" },
+  { "value": "Private", "label": "Private" },
+  { "value": "Adventure", "label": "Adventure" },
+  { "value": "Luxury", "label": "Luxury" },
+  { "value": "Cultural", "label": "Cultural" },
+  { "value": "Beach", "label": "Beach" },
+  { "value": "Eco", "label": "Eco" }
+]
