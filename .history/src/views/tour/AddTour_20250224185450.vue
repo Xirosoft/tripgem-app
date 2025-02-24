@@ -26,17 +26,12 @@ const formData = ref({
   tour_start_time: '',
   tour_end_time: '',
   regular_price_adult: 0,
-  net_price_adult: { amount: 0, include_park_fee: true },
-  local_net_price_adult: { amount: 0, include_park_fee: true },
+  net_price_adult: { amount: 0, include_park_fee: true, park_fee: 0 },
+  local_net_price_adult: { amount: 0, include_park_fee: true, park_fee: 0 },
   regular_price_child: 0,
-  net_price_child: { amount: 0, include_park_fee: true },
-  local_net_price_child: { amount: 0, include_park_fee: true },
-  park_fee: {
-    price_child_park_fee: 0,
-    price_adult_park_fee: 0,
-    local_price_adult_park_fee: 0,
-    local_price_child_park_fee: 0,
-  },
+  net_price_child: { amount: 0, include_park_fee: true, park_fee: 0 },
+  local_net_price_child: { amount: 0, include_park_fee: true, park_fee: 0 },
+  park_fee: 0,
   discount: [], // Initialize as an empty array
   available_dates: [
     {
@@ -155,17 +150,12 @@ const clearForm = () => {
     tour_start_time: '',
     tour_end_time: '',
     regular_price_adult: 0,
-    net_price_adult: { amount: 0, include_park_fee: true },
-    local_net_price_adult: { amount: 0, include_park_fee: true },
+    net_price_adult: { amount: 0, include_park_fee: true, park_fee: 0 },
+    local_net_price_adult: { amount: 0, include_park_fee: true, park_fee: 0 },
     regular_price_child: 0,
-    net_price_child: { amount: 0, include_park_fee: true },
-    local_net_price_child: { amount: 0, include_park_fee: true },
-    park_fee: {
-      price_child_park_fee: 0,
-      price_adult_park_fee: 0,
-      local_price_adult_park_fee: 0,
-      local_price_child_park_fee: 0,
-    },
+    net_price_child: { amount: 0, include_park_fee: true, park_fee: 0 },
+    local_net_price_child: { amount: 0, include_park_fee: true, park_fee: 0 },
+    park_fee: 0,
     discount: [], // Initialize as an empty array
     available_dates: {
       from: '',
@@ -508,7 +498,7 @@ onMounted(() => {
                           class="form-control"
                           id="adult-park-fee"
                           placeholder="Park Fee"
-                          v-model="formData.park_fee.price_adult_park_fee"
+                          v-model="formData.net_price_adult.park_fee"
                           min="0"
                           step="0.01"
                         />
@@ -547,7 +537,7 @@ onMounted(() => {
                           class="form-control"
                           id="local-adult-park-fee"
                           placeholder="Park Fee"
-                          v-model="formData.park_fee.local_price_adult_park_fee"
+                          v-model="formData.local_net_price_adult.park_fee"
                           min="0"
                           step="0.01"
                         />
@@ -648,7 +638,7 @@ onMounted(() => {
                           class="form-control"
                           id="child-park-fee"
                           placeholder="Park Fee"
-                          v-model="formData.park_fee.price_child_park_fee"
+                          v-model="formData.net_price_child.park_fee"
                           min="0"
                           step="0.01"
                         />
@@ -687,7 +677,7 @@ onMounted(() => {
                           class="form-control"
                           id="local-child-park-fee"
                           placeholder="Park Fee"
-                          v-model="formData.park_fee.local_price_child_park_fee"
+                          v-model="formData.local_net_price_child.park_fee"
                           min="0"
                           step="0.01"
                         />
@@ -1340,9 +1330,6 @@ body .select2-container--default .select2-selection--single .select2-selection__
 }
 
 /* Dropzone */
-.dropzone .dz-preview .dz-details {
-  opacity: 1;
-}
 div#thumbnail {
   display: block;
   width: 100%;

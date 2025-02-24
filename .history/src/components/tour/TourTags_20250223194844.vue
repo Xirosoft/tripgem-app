@@ -9,7 +9,9 @@ import config from '../../config/config'
 const emit = defineEmits(['tags-change'])
 const tags = ref([]) // Holds all available tags
 const selectedTags1 = ref([]) // Holds selected tag IDs for first select
+const selectedTags2 = ref([]) // Holds selected tag IDs for second select
 const tagSelectRef1 = ref(null)
+const tagSelectRef2 = ref(null)
 const loadingTags = ref(false)
 
 // Fetch existing tags from the API
@@ -55,11 +57,15 @@ const addTag = async (tag) => {
 const initializeSelect2 = (selectRef, selectedTags) => {
   if (!selectRef.value) return
 
+  // console.log('Initializing Select2...')
+
   if ($.fn.select2 && $(selectRef.value).data('select2')) {
+    // console.log('Destroying previous Select2 instance...')
     $(selectRef.value).select2('destroy') // Destroy previous instance if exists
   }
 
   nextTick(() => {
+    // console.log('Setting up Select2 with tags:', tags.value)
     $(selectRef.value)
       .select2({
         tags: true,
@@ -77,6 +83,7 @@ const initializeSelect2 = (selectRef, selectedTags) => {
       // Handle selecting tags
       .on('select2:select', async (e) => {
         const data = e.params.data
+        // console.log('Tag selected:', data)
         if (data.newTag) {
           await addTag({ tag_name: data.text })
         }
@@ -89,6 +96,7 @@ const initializeSelect2 = (selectRef, selectedTags) => {
       // Handle unselecting tags
       .on('select2:unselect', (e) => {
         const data = e.params.data
+        // console.log('Tag unselected:', data)
         selectedTags.value = selectedTags.value.filter((id) => id !== data.id)
         emitTagsChange()
       })
@@ -96,31 +104,38 @@ const initializeSelect2 = (selectRef, selectedTags) => {
 }
 
 const emitTagsChange = () => {
-  const selectedTagsData = selectedTags1.value.map((tagId) => {
-    const tag = tags.value.find((t) => t.id === tagId)
-    return { id: tag.id, name: tag.text }
-  })
-  emit('tags-change', selectedTagsData)
+  emit('tags-change', selectedTags1.value)
 }
 
 // Run on mount
 onMounted(async () => {
+  // console.log('Fetching tags...')
   await fetchTags()
   nextTick(() => {
+    // console.log('Tags fetched:', tags.value)
     initializeSelect2(tagSelectRef1, selectedTags1)
+    // initializeSelect2(tagSelectRef2, selectedTags2)
   })
 })
 
 // Watch for changes in tags and reinitialize Select2
 watch(tags, () => {
+  // console.log('Tags updated:', tags.value)
   nextTick(() => {
     initializeSelect2(tagSelectRef1, selectedTags1)
+    // initializeSelect2(tagSelectRef2, selectedTags2)
   })
 })
 
 // Watch for changes in selectedTags and update Select2 UI
 watch(selectedTags1, () => {
+  console.log('Selected tags updated for first select:', selectedTags1.value)
   $(tagSelectRef1.value).val(selectedTags1.value).trigger('change')
+})
+
+watch(selectedTags2, () => {
+  console.log('Selected tags updated for second select:', selectedTags2.value)
+  $(tagSelectRef2.value).val(selectedTags2.value).trigger('change')
 })
 </script>
 

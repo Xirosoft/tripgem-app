@@ -1,5 +1,4 @@
 <script setup>
-const emit = defineEmits(['category-change'])
 import axios from 'axios'
 import $ from 'jquery'
 import 'select2'
@@ -102,10 +101,7 @@ const initializeSelect2 = () => {
 }
 
 const emitCategoryChange = () => {
-  const selectedCategoryData = categories.value.find(
-    (category) => category.category_id.toString() === selectedCategory.value,
-  )
-  emit('category-change', selectedCategoryData)
+  emit('category-change', selectedCategory.value)
 }
 
 onMounted(async () => {

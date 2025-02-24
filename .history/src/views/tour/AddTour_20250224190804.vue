@@ -1340,9 +1340,6 @@ body .select2-container--default .select2-selection--single .select2-selection__
 }
 
 /* Dropzone */
-.dropzone .dz-preview .dz-details {
-  opacity: 1;
-}
 div#thumbnail {
   display: block;
   width: 100%;

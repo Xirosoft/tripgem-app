@@ -124,7 +124,7 @@ watch(
         :disabled="loadingUsers"
       >
         <option value="">Select User</option>
-        <option v-for="user in users" :key="user.user_id" :value="user.user_id">
+        <option v-for="user in users" :key="user.id" :value="user.id">
           {{ user.first_name }} {{ user.last_name }}
         </option>
       </select>

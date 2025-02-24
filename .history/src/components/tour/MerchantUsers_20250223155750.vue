@@ -1,5 +1,4 @@
 <script setup>
-const emit = defineEmits(['merchant-user-change'])
 import axios from 'axios'
 import $ from 'jquery'
 import 'select2'
@@ -124,7 +123,7 @@ watch(
         :disabled="loadingUsers"
       >
         <option value="">Select User</option>
-        <option v-for="user in users" :key="user.user_id" :value="user.user_id">
+        <option v-for="user in users" :key="user.id" :value="user.id">
           {{ user.first_name }} {{ user.last_name }}
         </option>
       </select>

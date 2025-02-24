@@ -31,12 +31,7 @@ const formData = ref({
   regular_price_child: 0,
   net_price_child: { amount: 0, include_park_fee: true },
   local_net_price_child: { amount: 0, include_park_fee: true },
-  park_fee: {
-    price_child_park_fee: 0,
-    price_adult_park_fee: 0,
-    local_price_adult_park_fee: 0,
-    local_price_child_park_fee: 0,
-  },
+  park_fee: 0,
   discount: [], // Initialize as an empty array
   available_dates: [
     {
@@ -160,12 +155,7 @@ const clearForm = () => {
     regular_price_child: 0,
     net_price_child: { amount: 0, include_park_fee: true },
     local_net_price_child: { amount: 0, include_park_fee: true },
-    park_fee: {
-      price_child_park_fee: 0,
-      price_adult_park_fee: 0,
-      local_price_adult_park_fee: 0,
-      local_price_child_park_fee: 0,
-    },
+    park_fee: 0,
     discount: [], // Initialize as an empty array
     available_dates: {
       from: '',
@@ -494,11 +484,7 @@ onMounted(() => {
                           class="btn btn-outline-secondary"
                           @click="toggleParkFee('net_price_adult')"
                         >
-                          {{
-                            formData.net_price_adult.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
+                          {{ formData.net_price_adult.include_park_fee ? 'Include Park Fee' : 'Exclude Park Fee' }}
                         </button>
                       </div>
                       <div v-if="!formData.net_price_adult.include_park_fee" class="mt-2">
@@ -508,16 +494,14 @@ onMounted(() => {
                           class="form-control"
                           id="adult-park-fee"
                           placeholder="Park Fee"
-                          v-model="formData.park_fee.price_adult_park_fee"
+                          v-model="formData.park_fee"
                           min="0"
                           step="0.01"
                         />
                       </div>
                     </div>
                     <div class="col-12 mb-3">
-                      <label class="form-label" for="local-adult-net-price"
-                        >Local Net Price(Thai People)</label
-                      >
+                      <label class="form-label" for="local-adult-net-price">Local Net Price(Thai People)</label>
                       <div class="input-group">
                         <input
                           type="number"
@@ -533,11 +517,7 @@ onMounted(() => {
                           class="btn btn-outline-secondary"
                           @click="toggleParkFee('local_net_price_adult')"
                         >
-                          {{
-                            formData.local_net_price_adult.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
+                          {{ formData.local_net_price_adult.include_park_fee ? 'Include Park Fee' : 'Exclude Park Fee' }}
                         </button>
                       </div>
                       <div v-if="!formData.local_net_price_adult.include_park_fee" class="mt-2">
@@ -547,7 +527,7 @@ onMounted(() => {
                           class="form-control"
                           id="local-adult-park-fee"
                           placeholder="Park Fee"
-                          v-model="formData.park_fee.local_price_adult_park_fee"
+                          v-model="formData.park_fee"
                           min="0"
                           step="0.01"
                         />
@@ -634,11 +614,7 @@ onMounted(() => {
                           class="btn btn-outline-secondary"
                           @click="toggleParkFee('net_price_child')"
                         >
-                          {{
-                            formData.net_price_child.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
+                          {{ formData.net_price_child.include_park_fee ? 'Include Park Fee' : 'Exclude Park Fee' }}
                         </button>
                       </div>
                       <div v-if="!formData.net_price_child.include_park_fee" class="mt-2">
@@ -648,16 +624,14 @@ onMounted(() => {
                           class="form-control"
                           id="child-park-fee"
                           placeholder="Park Fee"
-                          v-model="formData.park_fee.price_child_park_fee"
+                          v-model="formData.park_fee"
                           min="0"
                           step="0.01"
                         />
                       </div>
                     </div>
                     <div class="col-12 mb-3">
-                      <label class="form-label" for="local-child-net-price"
-                        >Local Net Price (For Thai People)</label
-                      >
+                      <label class="form-label" for="local-child-net-price">Local Net Price (For Thai People)</label>
                       <div class="input-group">
                         <input
                           type="number"
@@ -673,11 +647,7 @@ onMounted(() => {
                           class="btn btn-outline-secondary"
                           @click="toggleParkFee('local_net_price_child')"
                         >
-                          {{
-                            formData.local_net_price_child.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
+                          {{ formData.local_net_price_child.include_park_fee ? 'Include Park Fee' : 'Exclude Park Fee' }}
                         </button>
                       </div>
                       <div v-if="!formData.local_net_price_child.include_park_fee" class="mt-2">
@@ -687,7 +657,7 @@ onMounted(() => {
                           class="form-control"
                           id="local-child-park-fee"
                           placeholder="Park Fee"
-                          v-model="formData.park_fee.local_price_child_park_fee"
+                          v-model="formData.park_fee"
                           min="0"
                           step="0.01"
                         />
@@ -798,42 +768,6 @@ onMounted(() => {
                             <p class="h4 needsclick pt-3 mb-2">Drag and drop your videos here</p>
                             <p class="h6 text-muted d-block fw-normal mb-2">or</p>
                             <span
-                              class="note needsclick btn btn-sm btn-label-primary"
-                              id="btnBrowse"
-                              >Browse videos</span
-                            >
-                          </div>
-                          <div class="fallback">
-                            <input name="video_gallery" type="file" multiple />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- /Options -->
-            </div>
-          </div>
-        </div>
-        <!-- /Gallery -->
-
-        <!-- Tour Schedule & Capacity -->
-        <div class="card mb-6">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Tour Schedule & Capacity</h5>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <!-- Navigation -->
-              <div class="col-12 col-md-4 col-xl-5 col-xxl-4 mx-auto card-separator">
-                <div class="d-flex justify-content-between flex-column mb-4 mb-md-0 pe-md-4">
-                  <div class="nav-align-left">
-                    <ul class="nav nav-pills flex-column w-100">
-                      <li class="nav-item">
-                        <button
-                          class="nav-link active"
-                          data-bs-toggle="tab"
                           data-bs-target="#tour_schedule"
                         >
                           <i class="ti ti-clock ti-sm me-1_5"></i>
@@ -1340,9 +1274,6 @@ body .select2-container--default .select2-selection--single .select2-selection__
 }
 
 /* Dropzone */
-.dropzone .dz-preview .dz-details {
-  opacity: 1;
-}
 div#thumbnail {
   display: block;
   width: 100%;

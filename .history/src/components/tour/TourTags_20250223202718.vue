@@ -9,7 +9,9 @@ import config from '../../config/config'
 const emit = defineEmits(['tags-change'])
 const tags = ref([]) // Holds all available tags
 const selectedTags1 = ref([]) // Holds selected tag IDs for first select
+const selectedTags2 = ref([]) // Holds selected tag IDs for second select
 const tagSelectRef1 = ref(null)
+const tagSelectRef2 = ref(null)
 const loadingTags = ref(false)
 
 // Fetch existing tags from the API
@@ -108,6 +110,7 @@ onMounted(async () => {
   await fetchTags()
   nextTick(() => {
     initializeSelect2(tagSelectRef1, selectedTags1)
+    // initializeSelect2(tagSelectRef2, selectedTags2)
   })
 })
 
@@ -115,12 +118,19 @@ onMounted(async () => {
 watch(tags, () => {
   nextTick(() => {
     initializeSelect2(tagSelectRef1, selectedTags1)
+    // initializeSelect2(tagSelectRef2, selectedTags2)
   })
 })
 
 // Watch for changes in selectedTags and update Select2 UI
 watch(selectedTags1, () => {
+  console.log('Selected tags updated for first select:', selectedTags1.value)
   $(tagSelectRef1.value).val(selectedTags1.value).trigger('change')
+})
+
+watch(selectedTags2, () => {
+  console.log('Selected tags updated for second select:', selectedTags2.value)
+  $(tagSelectRef2.value).val(selectedTags2.value).trigger('change')
 })
 </script>
 

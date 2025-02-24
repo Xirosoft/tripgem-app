@@ -6,10 +6,7 @@ import 'select2/dist/css/select2.css'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import config from '../../config/config'
 
-const emit = defineEmits(['location-change'])
-
 const locations = ref([])
-const selectedLocation = ref(null)
 const selectedParentLocation = ref(null)
 const locationSelectRef = ref(null)
 const showAddLocationForm = ref(false)
@@ -85,55 +82,25 @@ const getIndentedLocationName = (location) => {
   return `${indent}${location.location_name}`
 }
 
-const initializeSelect2 = () => {
-  if (!locationSelectRef.value) return
-
-  if ($.fn.select2 && $(locationSelectRef.value).data('select2')) {
-    $(locationSelectRef.value).select2('destroy') // Destroy previous instance if exists
+const handleLocationChange = (event) => {
+  const selectedLocation = event.target.value
+  const locationData = {
+    location_id: selectedLocation.id,
+    location_name: selectedLocation.name,
+    parent_location: selectedLocation.parent,
   }
-
-  nextTick(() => {
-    $(locationSelectRef.value)
-      .select2({
-        data: locations.value.map((location) => ({
-          id: location.location_id.toString(),
-          text: location.location_name,
-        })),
-      })
-      .val(selectedLocation.value)
-      .trigger('change')
-
-      // Handle selecting location
-      .on('select2:select', (e) => {
-        const data = e.params.data
-        selectedLocation.value = data.id
-        emitLocationChange()
-      })
-  })
-}
-
-const emitLocationChange = () => {
-  const selectedLocationData = locations.value.find(
-    (location) => location.location_id.toString() === selectedLocation.value,
-  )
-  emit('location-change', selectedLocationData)
+  // Emit the location data to the parent component
+  emit('location-change', locationData)
 }
 
 onMounted(async () => {
   await fetchLocations()
-  nextTick(() => {
-    initializeSelect2()
-  })
 })
 
 watch(locations, () => {
   nextTick(() => {
-    initializeSelect2()
+    $(locationSelectRef.value).select2()
   })
-})
-
-watch(selectedLocation, () => {
-  $(locationSelectRef.value).val(selectedLocation.value).trigger('change')
 })
 </script>
 
@@ -147,13 +114,10 @@ watch(selectedLocation, () => {
         class="select2 form-select"
         data-placeholder="Location"
         ref="locationSelectRef"
+        @change="handleLocationChange($event)"
       >
         <option value="">Select Location</option>
-        <option
-          v-for="location in locations"
-          :key="location.location_id"
-          :value="location.location_id"
-        >
+        <option v-for="location in locations" :key="location.location_id" :value="location">
           {{ getIndentedLocationName(location) }}
         </option>
       </select>

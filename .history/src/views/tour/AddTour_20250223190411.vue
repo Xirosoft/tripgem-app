@@ -26,18 +26,9 @@ const formData = ref({
   tour_start_time: '',
   tour_end_time: '',
   regular_price_adult: 0,
-  net_price_adult: { amount: 0, include_park_fee: true },
-  local_net_price_adult: { amount: 0, include_park_fee: true },
+  net_price_adult: 0,
   regular_price_child: 0,
-  net_price_child: { amount: 0, include_park_fee: true },
-  local_net_price_child: { amount: 0, include_park_fee: true },
-  park_fee: {
-    price_child_park_fee: 0,
-    price_adult_park_fee: 0,
-    local_price_adult_park_fee: 0,
-    local_price_child_park_fee: 0,
-  },
-  discount: [], // Initialize as an empty array
+  net_price_child: 0,
   available_dates: [
     {
       from: '',
@@ -68,8 +59,8 @@ const formData = ref({
   tour_type: '',
   currency: [],
   tour_meta: [],
-  pick_up_time: [{ from: '', to: '', location: '', charge: 0 }],
-  drop_time: [{ from: '', to: '', location: '', charge: 0 }],
+  pick_up_time: [{ from: '', to: '' }],
+  drop_time: [{ from: '', to: '' }],
   pickup_location_details: '',
   dropoff_location_details: '',
   tags: [],
@@ -84,20 +75,6 @@ const handleMerchantUserChange = (merchantId, userId) => {
   formData.value.merchant_id = merchantId
   formData.value.user_id = userId
   console.log('Merchant ID:', merchantId, 'User ID:', userId)
-}
-
-const handleLocationChange = (locationData) => {
-  formData.value.location = locationData
-    ? [{ id: locationData.location_id, name: locationData.location_name }]
-    : []
-}
-
-const handleCategoryChange = (category) => {
-  formData.value.category = category
-}
-
-const handleTagsChange = (tags) => {
-  formData.value.tags = tags
 }
 
 const addMetaField = () => {
@@ -116,34 +93,6 @@ const removeAvailableDate = (index) => {
   formData.value.available_dates.splice(index, 1)
 }
 
-const addPickUpLocation = () => {
-  formData.value.pick_up_time.push({ from: '', to: '', location: '', charge: 0 })
-}
-
-const removePickUpLocation = (index) => {
-  formData.value.pick_up_time.splice(index, 1)
-}
-
-const addDropLocation = () => {
-  formData.value.drop_time.push({ from: '', to: '', location: '', charge: 0 })
-}
-
-const removeDropLocation = (index) => {
-  formData.value.drop_time.splice(index, 1)
-}
-
-const addDiscount = (target) => {
-  formData.value.discount.push({ name: '', type: '', amount: 0, target })
-}
-
-const removeDiscount = (index) => {
-  formData.value.discount.splice(index, 1)
-}
-
-const toggleParkFee = (target) => {
-  formData.value[target].include_park_fee = !formData.value[target].include_park_fee
-}
-
 const clearForm = () => {
   formData.value = {
     merchant_id: '',
@@ -155,18 +104,9 @@ const clearForm = () => {
     tour_start_time: '',
     tour_end_time: '',
     regular_price_adult: 0,
-    net_price_adult: { amount: 0, include_park_fee: true },
-    local_net_price_adult: { amount: 0, include_park_fee: true },
+    net_price_adult: 0,
     regular_price_child: 0,
-    net_price_child: { amount: 0, include_park_fee: true },
-    local_net_price_child: { amount: 0, include_park_fee: true },
-    park_fee: {
-      price_child_park_fee: 0,
-      price_adult_park_fee: 0,
-      local_price_adult_park_fee: 0,
-      local_price_child_park_fee: 0,
-    },
-    discount: [], // Initialize as an empty array
+    net_price_child: 0,
     available_dates: {
       from: '',
       to: '',
@@ -187,8 +127,8 @@ const clearForm = () => {
     currency: [],
     status: 'draft',
     tour_meta: [],
-    pick_up_time: [{ from: '', to: '', location: '', charge: 0 }],
-    drop_time: [{ from: '', to: '', location: '', charge: 0 }],
+    pick_up_time: [{ from: '', to: '' }],
+    drop_time: [{ from: '', to: '' }],
     pickup_location_details: '',
     dropoff_location_details: '',
     duration: '',
@@ -479,127 +419,29 @@ onMounted(() => {
                     </div>
                     <div class="col-12 mb-3">
                       <label class="form-label" for="adult-net-price">Net Price</label>
-                      <div class="input-group">
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="adult-net-price"
-                          placeholder="Net Price"
-                          v-model="formData.net_price_adult.amount"
-                          min="0"
-                          step="0.01"
-                        />
-                        <button
-                          type="button"
-                          class="btn btn-outline-secondary"
-                          @click="toggleParkFee('net_price_adult')"
-                        >
-                          {{
-                            formData.net_price_adult.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
-                        </button>
-                      </div>
-                      <div v-if="!formData.net_price_adult.include_park_fee" class="mt-2">
-                        <label class="form-label" for="adult-park-fee">Park Fee</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="adult-park-fee"
-                          placeholder="Park Fee"
-                          v-model="formData.park_fee.price_adult_park_fee"
-                          min="0"
-                          step="0.01"
-                        />
-                      </div>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="adult-net-price"
+                        placeholder="Net Price"
+                        v-model="formData.net_price_adult"
+                        min="0"
+                        step="0.01"
+                      />
                     </div>
-                    <div class="col-12 mb-3">
-                      <label class="form-label" for="local-adult-net-price"
-                        >Local Net Price(Thai People)</label
+                    <div class="col-12">
+                      <label class="form-label" for="adult-discounted-price"
+                        >Discounted Price</label
                       >
-                      <div class="input-group">
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="local-adult-net-price"
-                          placeholder="Local Net Price"
-                          v-model="formData.local_net_price_adult.amount"
-                          min="0"
-                          step="0.01"
-                        />
-                        <button
-                          type="button"
-                          class="btn btn-outline-secondary"
-                          @click="toggleParkFee('local_net_price_adult')"
-                        >
-                          {{
-                            formData.local_net_price_adult.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
-                        </button>
-                      </div>
-                      <div v-if="!formData.local_net_price_adult.include_park_fee" class="mt-2">
-                        <label class="form-label" for="local-adult-park-fee">Park Fee</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="local-adult-park-fee"
-                          placeholder="Park Fee"
-                          v-model="formData.park_fee.local_price_adult_park_fee"
-                          min="0"
-                          step="0.01"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-12 mb-3">
-                      <label class="form-label" for="adult-discount">Discount</label>
-                      <div
-                        v-for="(discount, index) in formData.discount.filter(
-                          (d) => d.target === 'adult',
-                        )"
-                        :key="index"
-                        class="row mb-3"
-                      >
-                        <div class="col-4">
-                          <input
-                            type="text"
-                            class="form-control"
-                            v-model="discount.name"
-                            placeholder="Discount Name"
-                          />
-                        </div>
-                        <div class="col-4">
-                          <select class="form-control" v-model="discount.type">
-                            <option value="percentage">Percentage</option>
-                            <option value="fixed">Fixed Amount</option>
-                          </select>
-                        </div>
-                        <div class="col-3">
-                          <input
-                            type="number"
-                            class="form-control"
-                            v-model="discount.amount"
-                            placeholder="Amount"
-                            min="0"
-                            step="0.01"
-                          />
-                        </div>
-                        <div class="col-1 d-flex align-items-end">
-                          <button
-                            type="button"
-                            class="btn btn-danger"
-                            @click="removeDiscount(index)"
-                          >
-                            x
-                          </button>
-                        </div>
-                      </div>
-                      <button type="button" class="btn btn-primary" @click="addDiscount('adult')">
-                        <i class="ti ti-plus ti-xs me-2"></i>
-                        Add Discount
-                      </button>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="adult-discounted-price"
+                        placeholder="Discounted Price"
+                        v-model="formData.discount_percentage"
+                        min="0"
+                        step="0.01"
+                      />
                     </div>
                   </div>
                   <!-- Child Price Tab -->
@@ -619,79 +461,15 @@ onMounted(() => {
                     </div>
                     <div class="col-12 mb-3">
                       <label class="form-label" for="child-net-price">Net Price</label>
-                      <div class="input-group">
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="child-net-price"
-                          placeholder="Net Price"
-                          v-model="formData.net_price_child.amount"
-                          min="0"
-                          step="0.01"
-                        />
-                        <button
-                          type="button"
-                          class="btn btn-outline-secondary"
-                          @click="toggleParkFee('net_price_child')"
-                        >
-                          {{
-                            formData.net_price_child.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
-                        </button>
-                      </div>
-                      <div v-if="!formData.net_price_child.include_park_fee" class="mt-2">
-                        <label class="form-label" for="child-park-fee">Park Fee</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="child-park-fee"
-                          placeholder="Park Fee"
-                          v-model="formData.park_fee.price_child_park_fee"
-                          min="0"
-                          step="0.01"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-12 mb-3">
-                      <label class="form-label" for="local-child-net-price"
-                        >Local Net Price (For Thai People)</label
-                      >
-                      <div class="input-group">
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="local-child-net-price"
-                          placeholder="Net Price"
-                          v-model="formData.local_net_price_child.amount"
-                          min="0"
-                          step="0.01"
-                        />
-                        <button
-                          type="button"
-                          class="btn btn-outline-secondary"
-                          @click="toggleParkFee('local_net_price_child')"
-                        >
-                          {{
-                            formData.local_net_price_child.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
-                        </button>
-                      </div>
-                      <div v-if="!formData.local_net_price_child.include_park_fee" class="mt-2">
-                        <label class="form-label" for="local-child-park-fee">Park Fee</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="local-child-park-fee"
-                          placeholder="Park Fee"
-                          v-model="formData.park_fee.local_price_child_park_fee"
-                          min="0"
-                          step="0.01"
-                        />
-                      </div>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="child-net-price"
+                        placeholder="Net Price"
+                        v-model="formData.net_price_child"
+                        min="0"
+                        step="0.01"
+                      />
                     </div>
                   </div>
                   <div class="tab-pane fade" id="age_rules" role="tabpanel">
@@ -809,16 +587,16 @@ onMounted(() => {
                         </div>
                       </div>
                     </div>
+                    <!-- /Media -->
                   </div>
                 </div>
               </div>
-              <!-- /Options -->
+              <!-- /Options-->
             </div>
           </div>
         </div>
         <!-- /Gallery -->
-
-        <!-- Tour Schedule & Capacity -->
+        <!-- Inventory -->
         <div class="card mb-6">
           <div class="card-header">
             <h5 class="card-title mb-0">Tour Schedule & Capacity</h5>
@@ -904,114 +682,47 @@ onMounted(() => {
                     </div>
                   </div>
                   <div class="tab-pane fade" id="pickupTime" role="tabpanel">
+                    <div class="mb-6 mt-6">
+                      <label class="form-label" for="tour-cancellation-policy"
+                        >Cancellation Policy</label
+                      >
+                      <textarea
+                        type="text"
+                        class="form-control"
+                        id="tour-cancellation-policy"
+                        placeholder="Cancellation Policy"
+                        v-model="formData.cancellation_policy"
+                        aria-label="Tour cancellation policy"
+                      ></textarea>
+                    </div>
                     <h6 class="text-body">Tour Pickup Time Range</h6>
                     <div
                       v-for="(time, index) in formData.pick_up_time"
                       :key="index"
                       class="row mb-4"
                     >
-                      <div class="col-md-3">
+                      <div class="col-md-6">
                         <label class="form-label">From</label>
                         <input type="time" class="form-control" v-model="time.from" />
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-6">
                         <label class="form-label">To</label>
                         <input type="time" class="form-control" v-model="time.to" />
                       </div>
-                      <div class="col-md-3">
-                        <label class="form-label">Location</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="time.location"
-                          placeholder="Location"
-                        />
-                      </div>
-                      <div class="col-md-2">
-                        <label class="form-label">Charge</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          v-model="time.charge"
-                          placeholder="Charge"
-                        />
-                      </div>
-                      <div class="col-md-1 d-flex align-items-end">
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removePickUpLocation(index)"
-                        >
-                          x
-                        </button>
-                      </div>
-                    </div>
-                    <button type="button" class="btn btn-primary" @click="addPickUpLocation">
-                      <i class="ti ti-plus ti-xs me-2"></i>
-                      Add Pickup Location
-                    </button>
-                    <div class="mb-3">
-                      <label class="form-label">Pickup Location Details</label>
-                      <textarea
-                        class="form-control"
-                        v-model="formData.pickup_location_details"
-                        placeholder="Enter pickup location details"
-                        rows="3"
-                      ></textarea>
                     </div>
                   </div>
                   <!-- Drop-off Time Tab -->
                   <div class="tab-pane fade" id="dropoffTime" role="tabpanel">
                     <h6 class="mb-3 text-body">Tour Drop-off Time Range</h6>
                     <div v-for="(time, index) in formData.drop_time" :key="index" class="row mb-4">
-                      <div class="col-md-3">
+                      <div class="col-md-6">
                         <label class="form-label">From</label>
                         <input type="time" class="form-control" v-model="time.from" />
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-6">
                         <label class="form-label">To</label>
                         <input type="time" class="form-control" v-model="time.to" />
                       </div>
-                      <div class="col-md-3">
-                        <label class="form-label">Location</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="time.location"
-                          placeholder="Location"
-                        />
-                      </div>
-                      <div class="col-md-2">
-                        <label class="form-label">Charge</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          v-model="time.charge"
-                          placeholder="Charge"
-                        />
-                      </div>
-                      <div class="col-md-1 d-flex align-items-end">
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removeDropLocation(index)"
-                        >
-                          x
-                        </button>
-                      </div>
-                    </div>
-                    <button type="button" class="btn btn-primary" @click="addDropLocation">
-                      <i class="ti ti-plus ti-xs me-2"></i>
-                      Add Drop Location
-                    </button>
-                    <div class="mb-3">
-                      <label class="form-label">Drop Location Details</label>
-                      <textarea
-                        class="form-control"
-                        v-model="formData.dropoff_location_details"
-                        placeholder="Enter Drop location details"
-                        rows="3"
-                      ></textarea>
                     </div>
                   </div>
                   <!-- Tour Dates Tab -->
@@ -1153,15 +864,12 @@ onMounted(() => {
         <div class="card mb-6">
           <div class="card-body">
             <!-- Base Price -->
+            <!-- Instock switch -->
             <div class="d-flex justify-content-between align-items-center pt-2">
               <span class="mb-0">Booking Availability</span>
               <div class="w-25 d-flex justify-content-end">
                 <div class="form-check form-switch me-n3">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    v-model="formData.booking_enabled"
-                  />
+                  <input type="checkbox" class="form-check-input" />
                 </div>
               </div>
             </div>
@@ -1291,9 +999,11 @@ onMounted(() => {
           </div>
           <div class="card-body">
             <MerchantUsers @merchant-user-change="handleMerchantUserChange" />
-            <TourLocation @location-change="handleLocationChange" />
-            <TourCategory @category-change="handleCategoryChange" />
-            <TourTags @tags-change="handleTagsChange" />
+            <!-- Merchants -->
+
+            <TourLocation />
+            <TourCategory />
+            <TourTags />
           </div>
         </div>
         <!-- /Organize Card -->
@@ -1337,57 +1047,5 @@ body .select2-container .select2-selection--single {
 body .select2-container--default .select2-selection--single .select2-selection__arrow {
   height: 36px;
   right: 7px;
-}
-
-/* Dropzone */
-.dropzone .dz-preview .dz-details {
-  opacity: 1;
-}
-div#thumbnail {
-  display: block;
-  width: 100%;
-}
-.dz-preview.dz-image-preview {
-  width: 100%;
-  display: block;
-  text-align: center;
-  padding: 10px;
-  margin: 0;
-}
-span.dz-nopreview,
-.dz-filename,
-.dz-size {
-  display: none;
-}
-a.dz-remove {
-  position: absolute;
-  z-index: 999;
-}
-
-div#image_gallery,
-div#video_gallery {
-  display: flex;
-}
-.dropzone .dz-preview .dz-details {
-  padding: 6px;
-}
-
-.dz-preview.dz-image-preview {
-  overflow: hidden;
-}
-.dz-preview.dz-image-preview img {
-  width: 100%;
-  height: 130px;
-  object-fit: cover;
-}
-div#thumbnail .dz-preview.dz-image-preview img {
-  width: 100%;
-  height: 170px;
-  object-fit: cover;
-}
-.dropzone .dz-preview .dz-remove {
-  background: #fff;
-  padding: 3px 6px;
-  border-radius: 4px;
 }
 </style>
