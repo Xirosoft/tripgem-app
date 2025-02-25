@@ -1,7 +1,5 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
-
-import jQuery from 'jquery'
 import Quill from 'quill'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -13,8 +11,7 @@ import TourTags from '../../components/tour/edit/TourTags.vue'
 import { useEditTourStore } from '../../stores/tour/EditTour'
 import { initializeAddTour } from '../../stores/tour/initializeAddTour'
 import { DragAndDropUpload, initializeDropzone } from '../../utils/DropzoneFileUpload'
-const $ = jQuery
-window.$ = window.jQuery = jQuery
+
 const userId = useAuthStore().userId
 const editTourStore = useEditTourStore()
 const toast = useToast()
