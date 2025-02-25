@@ -258,7 +258,7 @@ const loadTourDetails = async () => {
     formData.value.tour_type = tourDetails.tour_type || ''
     formData.value.transport_types = tourDetails.transport_types || ''
 
-    console.log(formData.value.tour_type)
+    console.log(formData)
 
     $('#status-org')
       .val(formData.value.status.charAt(0).toUpperCase() + formData.value.status.slice(1))
