@@ -234,27 +234,6 @@ const loadTourDetails = async () => {
       typeof tourDetails.park_fee === 'string'
         ? JSON.parse(tourDetails.park_fee)
         : tourDetails.park_fee
-    formData.value.pick_up_time =
-      typeof tourDetails.pick_up_time === 'string'
-        ? JSON.parse(tourDetails.pick_up_time)
-        : tourDetails.pick_up_time
-    formData.value.available_dates =
-      typeof tourDetails.available_dates === 'string'
-        ? JSON.parse(tourDetails.available_dates)
-        : tourDetails.available_dates
-    formData.value.drop_time =
-      typeof tourDetails.drop_time === 'string'
-        ? JSON.parse(tourDetails.drop_time)
-        : tourDetails.drop_time
-    formData.value.tour_meta =
-      typeof tourDetails.tour_meta === 'string'
-        ? JSON.parse(tourDetails.tour_meta)
-        : tourDetails.tour_meta
-    formData.value.available_days =
-      typeof tourDetails.available_days === 'string'
-        ? JSON.parse(tourDetails.available_days)
-        : tourDetails.available_days
-    formData.value.status = tourDetails.status || 'draft'
 
     // Initialize select2 with existing data
     setTimeout(() => {
@@ -374,7 +353,6 @@ onMounted(async () => {
   try {
     const response = await import('../../utils/json/tourTypes.json')
     tourTypes.value = response.default
-    console.log(tourTypes.value)
   } catch (error) {
     console.error('Failed to load tour types:', error)
   }
@@ -1348,9 +1326,7 @@ onMounted(async () => {
             data-placeholder="Select Tour Type"
             v-model="formData.tour_type"
           >
-            <option v-for="type in tourTypes" :key="type.value" :value="type.value">
-              {{ type.value }}
-            </option>
+            <option v-for="type in tourTypes" :key="type" :value="type">{{ type }}</option>
           </select>
         </div>
         <div class="mb-6 col ecommerce-select2-dropdown">
@@ -1361,13 +1337,7 @@ onMounted(async () => {
             data-placeholder="Select Transportation"
             v-model="formData.transport_types"
           >
-            <option
-              v-for="transport in transportTypes"
-              :key="transport.value"
-              :value="transport.value"
-            >
-              {{ transport.label }}
-            </option>
+            <option v-for="type in transportTypes" :key="type" :value="type">{{ type }}</option>
           </select>
         </div>
         <div class="mb-6 col ecommerce-select2-dropdown">
@@ -1379,12 +1349,8 @@ onMounted(async () => {
             multiple
             v-model="formData.languages_supported"
           >
-            <option
-              v-for="language in guideLanguages"
-              :key="language.value"
-              :value="language.value"
-            >
-              {{ language.label }}
+            <option v-for="language in guideLanguages" :key="language" :value="language">
+              {{ language }}
             </option>
           </select>
         </div>
@@ -1397,8 +1363,8 @@ onMounted(async () => {
             multiple
             v-model="formData.currency"
           >
-            <option v-for="currency in currencies" :key="currency.value" :value="currency.value">
-              {{ currency.label }}
+            <option v-for="currency in currencies" :key="currency" :value="currency">
+              {{ currency }}
             </option>
           </select>
         </div>

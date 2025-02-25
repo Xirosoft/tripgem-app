@@ -254,7 +254,6 @@ const loadTourDetails = async () => {
       typeof tourDetails.available_days === 'string'
         ? JSON.parse(tourDetails.available_days)
         : tourDetails.available_days
-    formData.value.status = tourDetails.status || 'draft'
 
     // Initialize select2 with existing data
     setTimeout(() => {
@@ -1361,12 +1360,8 @@ onMounted(async () => {
             data-placeholder="Select Transportation"
             v-model="formData.transport_types"
           >
-            <option
-              v-for="transport in transportTypes"
-              :key="transport.value"
-              :value="transport.value"
-            >
-              {{ transport.label }}
+            <option v-for="type in transportTypes" :key="type.value" :value="type.value">
+              {{ type }}
             </option>
           </select>
         </div>
@@ -1379,12 +1374,8 @@ onMounted(async () => {
             multiple
             v-model="formData.languages_supported"
           >
-            <option
-              v-for="language in guideLanguages"
-              :key="language.value"
-              :value="language.value"
-            >
-              {{ language.label }}
+            <option v-for="language in guideLanguages" :key="language" :value="language">
+              {{ language }}
             </option>
           </select>
         </div>
@@ -1397,8 +1388,8 @@ onMounted(async () => {
             multiple
             v-model="formData.currency"
           >
-            <option v-for="currency in currencies" :key="currency.value" :value="currency.value">
-              {{ currency.label }}
+            <option v-for="currency in currencies" :key="currency" :value="currency">
+              {{ currency }}
             </option>
           </select>
         </div>

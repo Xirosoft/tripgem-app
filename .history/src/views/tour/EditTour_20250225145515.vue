@@ -254,7 +254,6 @@ const loadTourDetails = async () => {
       typeof tourDetails.available_days === 'string'
         ? JSON.parse(tourDetails.available_days)
         : tourDetails.available_days
-    formData.value.status = tourDetails.status || 'draft'
 
     // Initialize select2 with existing data
     setTimeout(() => {
@@ -1397,8 +1396,8 @@ onMounted(async () => {
             multiple
             v-model="formData.currency"
           >
-            <option v-for="currency in currencies" :key="currency.value" :value="currency.value">
-              {{ currency.label }}
+            <option v-for="currency in currencies" :key="currency" :value="currency">
+              {{ currency }}
             </option>
           </select>
         </div>
