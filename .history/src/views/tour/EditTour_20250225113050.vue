@@ -19,6 +19,7 @@ const editTourStore = useEditTourStore()
 const toast = useToast()
 const router = useRouter()
 const route = useRoute()
+
 const formData = ref({
   merchant_id: '',
   user_id: userId,
@@ -212,19 +213,22 @@ const loadTourDetails = async () => {
     console.log('Tour ID:', tourId)
 
     const tourDetails = await editTourStore.fetchTourDetails(tourId)
-    if (!tourDetails) {
-      throw new Error('Failed to fetch tour details')
-    }
-
     formData.value = { ...formData.value, ...tourDetails }
     // Ensure select dropdowns are updated with existing data
+    console.log(tourDetails.tour_name)
+
     formData.value.languages_supported = tourDetails.languages_supported || []
     formData.value.currency = tourDetails.currency || []
     formData.value.tour_name = tourDetails.tour_name || ''
     formData.value.subheading = tourDetails.subheading || ''
     formData.value.highlights = tourDetails.highlights || ''
     formData.value.cancellation_policy = tourDetails.cancellation_policy || ''
-    formData.value.discount = Array.isArray(tourDetails.discount) ? tourDetails.discount : []
+
+    // Initialize select2 with existing data
+    setTimeout(() => {
+      $('#language').val(formData.value.languages_supported).trigger('change')
+      $('#currency').val(formData.value.currency).trigger('change')
+    }, 0)
   } catch (error) {
     toast.error('Failed to load tour details: ' + error.message)
   }
@@ -294,7 +298,7 @@ const handleVideoGalleryUpload = async (videoFiles) => {
 onMounted(async () => {
   console.log('Route params:', route.params)
   initializeAddTour()
-  await loadTourDetails()
+  loadTourDetails()
 
   // Initialize Quill editor for itinerary
   const itineraryEditor = new Quill('.tour-itinerary', {

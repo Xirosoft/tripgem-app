@@ -212,10 +212,6 @@ const loadTourDetails = async () => {
     console.log('Tour ID:', tourId)
 
     const tourDetails = await editTourStore.fetchTourDetails(tourId)
-    if (!tourDetails) {
-      throw new Error('Failed to fetch tour details')
-    }
-
     formData.value = { ...formData.value, ...tourDetails }
     // Ensure select dropdowns are updated with existing data
     formData.value.languages_supported = tourDetails.languages_supported || []
@@ -224,7 +220,14 @@ const loadTourDetails = async () => {
     formData.value.subheading = tourDetails.subheading || ''
     formData.value.highlights = tourDetails.highlights || ''
     formData.value.cancellation_policy = tourDetails.cancellation_policy || ''
-    formData.value.discount = Array.isArray(tourDetails.discount) ? tourDetails.discount : []
+    setTimeout(() => {
+      formData.value.tour_name = tourDetails.tour_name
+    }, 1000)
+    // Initialize select2 with existing data
+    setTimeout(() => {
+      $('#language').val(formData.value.languages_supported).trigger('change')
+      $('#currency').val(formData.value.currency).trigger('change')
+    }, 0)
   } catch (error) {
     toast.error('Failed to load tour details: ' + error.message)
   }
@@ -625,13 +628,7 @@ onMounted(async () => {
                     <div class="col-12 mb-3">
                       <label class="form-label" for="adult-discount">Discount</label>
                       <br />
-                      <div
-                        v-for="(discount, index) in formData.discount.filter(
-                          (d) => d.target === 'adult',
-                        )"
-                        :key="index"
-                        class="row mb-3"
-                      >
+                      <div class="row mb-3">
                         <div class="col-4">
                           <input
                             type="text"

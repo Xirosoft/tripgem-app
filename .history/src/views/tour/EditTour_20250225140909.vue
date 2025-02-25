@@ -224,7 +224,12 @@ const loadTourDetails = async () => {
     formData.value.subheading = tourDetails.subheading || ''
     formData.value.highlights = tourDetails.highlights || ''
     formData.value.cancellation_policy = tourDetails.cancellation_policy || ''
-    formData.value.discount = Array.isArray(tourDetails.discount) ? tourDetails.discount : []
+
+    // Initialize select2 with existing data
+    setTimeout(() => {
+      $('#language').val(formData.value.languages_supported).trigger('change')
+      $('#currency').val(formData.value.currency).trigger('change')
+    }, 0)
   } catch (error) {
     toast.error('Failed to load tour details: ' + error.message)
   }
