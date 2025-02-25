@@ -989,7 +989,7 @@ onMounted(async () => {
               <!-- /Navigation -->
               <!-- Options -->
               <div class="col-12 col-md-8 col-xl-7 col-xxl-8 pt-6 pt-md-0">
-                <div class="tab-content p-0 mt-4">
+                <div class="tab-content p-0 ps-md-4">
                   <!-- Pickup Time Tab -->
                   <div class="tab-pane fade show active" id="tour_schedule" role="tabpanel">
                     <h6 class="text-body">Tour Start end time</h6>
@@ -1023,114 +1023,50 @@ onMounted(async () => {
                   </div>
                   <div class="tab-pane fade" id="pickupTime" role="tabpanel">
                     <h6 class="text-body">Tour Pickup Time Range</h6>
-                    <div
-                      v-for="(time, index) in formData.pick_up_time"
-                      :key="index"
-                      class="row mb-4"
-                    >
-                      <div class="col-md-3">
-                        <label class="form-label">From</label>
-                        <input type="time" class="form-control" v-model="time.from" />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">To</label>
-                        <input type="time" class="form-control" v-model="time.to" />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">Location</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="time.location"
-                          placeholder="Location"
-                        />
-                      </div>
-                      <div class="col-md-2">
-                        <label class="form-label">Charge</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          v-model="time.charge"
-                          placeholder="Charge"
-                        />
-                      </div>
-                      <div class="col-md-1 d-flex align-items-end">
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removePickUpLocation(index)"
-                        >
-                          x
-                        </button>
-                      </div>
+                    <div v-for="(pickup, index) in formData.pick_up_time" :key="index" class="mb-3">
+                      <label class="form-label">From</label>
+                      <input type="time" class="form-control" v-model="pickup.from" />
+                      <label class="form-label">To</label>
+                      <input type="time" class="form-control" v-model="pickup.to" />
+                      <label class="form-label">Location</label>
+                      <input type="text" class="form-control" v-model="pickup.location" />
+                      <label class="form-label">Charge</label>
+                      <input type="number" class="form-control" v-model="pickup.charge" />
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="removePickUpLocation(index)"
+                      >
+                        Remove
+                      </button>
                     </div>
                     <button type="button" class="btn btn-primary" @click="addPickUpLocation">
-                      <i class="ti ti-plus ti-xs me-2"></i>
                       Add Pickup Location
                     </button>
-                    <div class="mb-3">
-                      <label class="form-label">Pickup Location Details</label>
-                      <textarea
-                        class="form-control"
-                        v-model="formData.pickup_location_details"
-                        placeholder="Enter pickup location details"
-                        rows="3"
-                      ></textarea>
-                    </div>
                   </div>
                   <!-- Drop-off Time Tab -->
                   <div class="tab-pane fade" id="dropoffTime" role="tabpanel">
                     <h6 class="mb-3 text-body">Tour Drop-off Time Range</h6>
-                    <div v-for="(time, index) in formData.drop_time" :key="index" class="row mb-4">
-                      <div class="col-md-3">
-                        <label class="form-label">From</label>
-                        <input type="time" class="form-control" v-model="time.from" />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">To</label>
-                        <input type="time" class="form-control" v-model="time.to" />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">Location</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="time.location"
-                          placeholder="Location"
-                        />
-                      </div>
-                      <div class="col-md-2">
-                        <label class="form-label">Charge</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          v-model="time.charge"
-                          placeholder="Charge"
-                        />
-                      </div>
-                      <div class="col-md-1 d-flex align-items-end">
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removeDropLocation(index)"
-                        >
-                          x
-                        </button>
-                      </div>
+                    <div v-for="(drop, index) in formData.drop_time" :key="index" class="mb-3">
+                      <label class="form-label">From</label>
+                      <input type="time" class="form-control" v-model="drop.from" />
+                      <label class="form-label">To</label>
+                      <input type="time" class="form-control" v-model="drop.to" />
+                      <label class="form-label">Location</label>
+                      <input type="text" class="form-control" v-model="drop.location" />
+                      <label class="form-label">Charge</label>
+                      <input type="number" class="form-control" v-model="drop.charge" />
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="removeDropLocation(index)"
+                      >
+                        Remove
+                      </button>
                     </div>
                     <button type="button" class="btn btn-primary" @click="addDropLocation">
-                      <i class="ti ti-plus ti-xs me-2"></i>
-                      Add Drop Location
+                      Add Drop-off Location
                     </button>
-                    <div class="mb-3">
-                      <label class="form-label">Drop Location Details</label>
-                      <textarea
-                        class="form-control"
-                        v-model="formData.dropoff_location_details"
-                        placeholder="Enter Drop location details"
-                        rows="3"
-                      ></textarea>
-                    </div>
                   </div>
                   <!-- Tour Dates Tab -->
                   <div class="tab-pane fade" id="tourDates" role="tabpanel">
@@ -1140,24 +1076,21 @@ onMounted(async () => {
                       :key="index"
                       class="row mb-4"
                     >
-                      <div class="col-md-5">
+                      <div class="col-md-6">
                         <label class="form-label">Start Date</label>
                         <input type="date" class="form-control" v-model="date.from" />
                       </div>
-                      <div class="col-md-5">
+                      <div class="col-md-6">
                         <label class="form-label">End Date</label>
                         <input type="date" class="form-control" v-model="date.to" />
                       </div>
-                      <div class="col-md-2">
-                        <label class="form-label"> </label>
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removeAvailableDate(index)"
-                        >
-                          Remove
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="removeAvailableDate(index)"
+                      >
+                        Remove
+                      </button>
                     </div>
                     <button type="button" class="btn btn-primary" @click="addAvailableDate">
                       Add Available Date

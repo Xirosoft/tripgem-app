@@ -1,24 +1,21 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
-import jQuery from 'jquery'
 import Quill from 'quill'
 import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import MerchantUsers from '../../components/tour/edit/MerchantUsers.vue'
-import TourCategory from '../../components/tour/edit/TourCategory.vue'
-import TourLocation from '../../components/tour/edit/TourLocation.vue'
-import TourTags from '../../components/tour/edit/TourTags.vue'
-import { useEditTourStore } from '../../stores/tour/EditTour'
+import MerchantUsers from '../../components/tour/add/MerchantUsers.vue'
+import TourCategory from '../../components/tour/add/TourCategory.vue'
+import TourLocation from '../../components/tour/add/TourLocation.vue'
+import TourTags from '../../components/tour/add/TourTags.vue'
+import { useToursStore } from '../../stores/tour/AddTour'
 import { initializeAddTour } from '../../stores/tour/initializeAddTour'
 import { DragAndDropUpload, initializeDropzone } from '../../utils/DropzoneFileUpload'
-const $ = jQuery
-window.$ = window.jQuery = jQuery
 const userId = useAuthStore().userId
-const editTourStore = useEditTourStore()
+
+const toursStore = useToursStore()
 const toast = useToast()
 const router = useRouter()
-const route = useRoute()
 const formData = ref({
   merchant_id: '',
   user_id: userId,
@@ -116,13 +113,13 @@ const removeMetaField = (index) => {
   formData.value.tour_meta.splice(index, 1)
 }
 
-const addAvailableDate = () => {
-  formData.value.available_dates.push({ from: '', to: '' })
-}
+// const addAvailableDate = () => {
+//   formData.value.available_dates.push({ from: '', to: '' })
+// }
 
-const removeAvailableDate = (index) => {
-  formData.value.available_dates.splice(index, 1)
-}
+// const removeAvailableDate = (index) => {
+//   formData.value.available_dates.splice(index, 1)
+// }
 
 const addPickUpLocation = () => {
   formData.value.pick_up_time.push({ from: '', to: '', location: '', charge: 0 })
@@ -203,45 +200,17 @@ const clearForm = () => {
   }
 }
 
-const loadTourDetails = async () => {
-  try {
-    const tourId = route.params.id
-    if (!tourId) {
-      throw new Error('Tour ID is missing')
-    }
-    console.log('Tour ID:', tourId)
-
-    const tourDetails = await editTourStore.fetchTourDetails(tourId)
-    formData.value = { ...formData.value, ...tourDetails }
-    // Ensure select dropdowns are updated with existing data
-    formData.value.languages_supported = tourDetails.languages_supported || []
-    formData.value.currency = tourDetails.currency || []
-
-    // Initialize select2 with existing data
-    setTimeout(() => {
-      $('#language').val(formData.value.languages_supported).trigger('change')
-      $('#currency').val(formData.value.currency).trigger('change')
-    }, 0)
-  } catch (error) {
-    toast.error('Failed to load tour details: ' + error.message)
-  }
-}
-
 const handleSubmit = async () => {
   try {
-    const tourId = route.params.id
-    if (!tourId) {
-      throw new Error('Tour ID is missing')
-    }
-    await editTourStore.updateTourDetails(tourId, formData.value)
-    toast.success('Tour updated successfully!', {
+    await toursStore.createTour(formData.value)
+    toast.success('Tour created successfully!', {
       position: 'top-right',
       duration: 5000,
     })
     clearForm()
     router.push('/all-tours')
   } catch (error) {
-    console.log('Failed to update tour: ' + error.message)
+    console.log('Failed to create tour: ' + error)
   }
 }
 
@@ -289,9 +258,7 @@ const handleVideoGalleryUpload = async (videoFiles) => {
 }
 
 onMounted(async () => {
-  console.log('Route params:', route.params)
   initializeAddTour()
-  await loadTourDetails()
 
   // Initialize Quill editor for itinerary
   const itineraryEditor = new Quill('.tour-itinerary', {
@@ -301,9 +268,6 @@ onMounted(async () => {
     placeholder: 'Tour Itinerary',
     theme: 'snow',
   })
-
-  // Set initial content for itinerary editor
-  itineraryEditor.root.innerHTML = formData.value.itinerary
 
   // Update formData.itinerary on editor change
   itineraryEditor.on('text-change', () => {
@@ -318,9 +282,6 @@ onMounted(async () => {
     placeholder: 'Tour Description',
     theme: 'snow',
   })
-
-  // Set initial content for description editor
-  descriptionEditor.root.innerHTML = formData.value.description
 
   // Update formData.description on editor change
   descriptionEditor.on('text-change', () => {
@@ -369,7 +330,7 @@ onMounted(async () => {
       class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4"
     >
       <div class="d-flex flex-column justify-content-center">
-        <h4 class="mb-1">Edit Tour</h4>
+        <h4 class="mb-1">Add a new Tour</h4>
         <p class="mb-0">Orders placed across your store</p>
       </div>
       <div class="d-flex align-content-center flex-wrap gap-4">
@@ -377,7 +338,7 @@ onMounted(async () => {
           <button class="btn btn-label-secondary">View Tour</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
-        <button type="submit" class="btn btn-primary" @click="handleSubmit">Update Tour</button>
+        <button type="submit" class="btn btn-primary" @click="handleSubmit">Publish Tour</button>
       </div>
     </div>
 
@@ -883,7 +844,7 @@ onMounted(async () => {
               <!-- /Navigation -->
               <!-- Options -->
               <div class="col-12 pt-6 pt-md-0">
-                <div class="tab-content p-0 mt-4">
+                <div class="tab-content p-0 mt-3">
                   <!-- photoGallery Tab -->
                   <div class="tab-pane fade show active" id="photoGallery" role="tabpanel">
                     <h6 class="text-body">You Can Upload multiple Photos</h6>
@@ -927,16 +888,16 @@ onMounted(async () => {
                         </div>
                       </div>
                     </div>
-                    <!-- /Media -->
                   </div>
                 </div>
               </div>
-              <!-- /Options-->
+              <!-- /Options -->
             </div>
           </div>
         </div>
         <!-- /Gallery -->
-        <!-- Inventory -->
+
+        <!-- Tour Schedule & Capacity -->
         <div class="card mb-6">
           <div class="card-header">
             <h5 class="card-title mb-0">Tour Schedule & Capacity</h5>
@@ -1148,27 +1109,15 @@ onMounted(async () => {
                         <label class="form-label">End Date</label>
                         <input type="date" class="form-control" v-model="date.to" />
                       </div>
-                      <div class="col-md-2">
-                        <label class="form-label"> </label>
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removeAvailableDate(index)"
-                        >
-                          Remove
-                        </button>
-                      </div>
                     </div>
-                    <button type="button" class="btn btn-primary" @click="addAvailableDate">
-                      Add Available Date
-                    </button>
+
                     <div class="mb-4">
                       <label class="form-label">Operating Days</label>
                       <div class="d-flex flex-wrap gap-2">
                         <div
-                          class="form-check"
                           v-for="(day, index) in formData.available_days"
                           :key="index"
+                          class="form-check"
                         >
                           <input
                             class="form-check-input"
@@ -1273,17 +1222,16 @@ onMounted(async () => {
             v-model="formData.status"
           >
             <option value="Published">Published</option>
-            <option value="Published" selected>Draft</option>
-            <option value="Scheduled">Scheduled</option>
+            <option value="Draft" selected>Draft</option>
+            <option value="Pending">Pending</option>
+            <option value="Trust">Trust</option>
             <option value="Inactive">Inactive</option>
           </select>
         </div>
-
         <!-- Pricing Card -->
         <div class="card mb-6">
           <div class="card-body">
             <!-- Base Price -->
-            <!-- Instock switch -->
             <div class="d-flex justify-content-between align-items-center pt-2">
               <span class="mb-0">Booking Availability</span>
               <div class="w-25 d-flex justify-content-end">
@@ -1308,7 +1256,9 @@ onMounted(async () => {
             data-placeholder="Select Tour Type"
             v-model="formData.tour_type"
           >
-            <option v-for="type in tourTypes" :key="type" :value="type">{{ type }}</option>
+            <option v-for="type in tourTypes" :key="type.value" :value="type.value">
+              {{ type.label }}
+            </option>
           </select>
         </div>
         <div class="mb-6 col ecommerce-select2-dropdown">
@@ -1319,7 +1269,9 @@ onMounted(async () => {
             data-placeholder="Select Transportation"
             v-model="formData.transport_types"
           >
-            <option v-for="type in transportTypes" :key="type" :value="type">{{ type }}</option>
+            <option v-for="type in transportTypes" :key="type.value" :value="type.value">
+              {{ type.label }}
+            </option>
           </select>
         </div>
         <div class="mb-6 col ecommerce-select2-dropdown">
@@ -1331,8 +1283,12 @@ onMounted(async () => {
             multiple
             v-model="formData.languages_supported"
           >
-            <option v-for="language in guideLanguages" :key="language" :value="language">
-              {{ language }}
+            <option
+              v-for="language in guideLanguages"
+              :key="language.value"
+              :value="language.value"
+            >
+              {{ language.label }}
             </option>
           </select>
         </div>
@@ -1345,8 +1301,8 @@ onMounted(async () => {
             multiple
             v-model="formData.currency"
           >
-            <option v-for="currency in currencies" :key="currency" :value="currency">
-              {{ currency }}
+            <option v-for="currency in currencies" :key="currency.value" :value="currency.value">
+              {{ currency.label }}
             </option>
           </select>
         </div>
@@ -1357,14 +1313,10 @@ onMounted(async () => {
             <h5 class="card-title mb-0">Organize</h5>
           </div>
           <div class="card-body">
-            <MerchantUsers
-              :selectedMerchantId="formData.merchant_id"
-              :selectedUserId="formData.user_id"
-              @merchant-user-change="handleMerchantUserChange"
-            />
-            <TourLocation :selectedLocationId="formData.location_id" />
-            <TourCategory :selectedCategoryId="formData.category_id" />
-            <TourTags :selectedTags="formData.tags" />
+            <MerchantUsers @merchant-user-change="handleMerchantUserChange" />
+            <TourLocation @location-change="handleLocationChange" />
+            <TourCategory @category-change="handleCategoryChange" />
+            <TourTags @tags-change="handleTagsChange" />
           </div>
         </div>
         <!-- /Organize Card -->
@@ -1408,5 +1360,65 @@ body .select2-container .select2-selection--single {
 body .select2-container--default .select2-selection--single .select2-selection__arrow {
   height: 36px;
   right: 7px;
+}
+ul.nav.nav-pills.display-inline.w-100 {
+  display: flex;
+  align-content: center;
+  flex-direction: row;
+}
+
+/* Dropzone */
+.dropzone .dz-preview .dz-details {
+  opacity: 1 !important;
+}
+.dz-message.needsclick {
+  width: 100%;
+}
+div#thumbnail {
+  display: block;
+  width: 100%;
+}
+.dz-preview.dz-image-preview {
+  width: 100%;
+  display: block;
+  text-align: center;
+  padding: 10px;
+  margin: 0;
+}
+span.dz-nopreview,
+.dz-filename,
+.dz-size {
+  display: none;
+}
+a.dz-remove {
+  position: absolute;
+  z-index: 999;
+}
+
+div#image_gallery,
+div#video_gallery {
+  display: flex;
+}
+.dropzone .dz-preview .dz-details {
+  padding: 6px;
+}
+
+.dz-preview.dz-image-preview {
+  overflow: hidden;
+}
+.dz-preview.dz-image-preview img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+}
+div#thumbnail .dz-preview.dz-image-preview img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+}
+.dropzone .dz-preview .dz-remove {
+  background: #fff;
+  padding: 3px 6px;
+  border-radius: 4px;
 }
 </style>

@@ -1140,24 +1140,21 @@ onMounted(async () => {
                       :key="index"
                       class="row mb-4"
                     >
-                      <div class="col-md-5">
+                      <div class="col-md-6">
                         <label class="form-label">Start Date</label>
                         <input type="date" class="form-control" v-model="date.from" />
                       </div>
-                      <div class="col-md-5">
+                      <div class="col-md-6">
                         <label class="form-label">End Date</label>
                         <input type="date" class="form-control" v-model="date.to" />
                       </div>
-                      <div class="col-md-2">
-                        <label class="form-label"> </label>
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removeAvailableDate(index)"
-                        >
-                          Remove
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="removeAvailableDate(index)"
+                      >
+                        Remove
+                      </button>
                     </div>
                     <button type="button" class="btn btn-primary" @click="addAvailableDate">
                       Add Available Date

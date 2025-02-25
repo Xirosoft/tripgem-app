@@ -1149,7 +1149,6 @@ onMounted(async () => {
                         <input type="date" class="form-control" v-model="date.to" />
                       </div>
                       <div class="col-md-2">
-                        <label class="form-label"> </label>
                         <button
                           type="button"
                           class="btn btn-danger"

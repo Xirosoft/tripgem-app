@@ -543,130 +543,87 @@ onMounted(async () => {
                     </div>
                     <div class="col-12 mb-3">
                       <label class="form-label" for="adult-net-price">Net Price</label>
-                      <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="adult-net-price"
+                        placeholder="Net Price"
+                        v-model="formData.net_price_adult.amount"
+                        min="0"
+                        step="0.01"
+                      />
+                      <div class="form-check">
                         <input
-                          type="number"
-                          class="form-control"
-                          id="adult-net-price"
-                          placeholder="Net Price"
-                          v-model="formData.net_price_adult.amount"
-                          min="0"
-                          step="0.01"
+                          class="form-check-input"
+                          type="checkbox"
+                          id="include-park-fee-adult"
+                          v-model="formData.net_price_adult.include_park_fee"
                         />
-                        <button
-                          type="button"
-                          class="btn btn-outline-secondary"
-                          @click="toggleParkFee('net_price_adult')"
-                        >
-                          {{
-                            formData.net_price_adult.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
-                        </button>
-                      </div>
-                      <div v-if="!formData.net_price_adult.include_park_fee" class="mt-2">
-                        <label class="form-label" for="adult-park-fee">National Park fee</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="adult-park-fee"
-                          placeholder="Enter Park Fee"
-                          v-model="formData.park_fee.price_adult_park_fee"
-                          min="0"
-                          step="0.01"
-                        />
+                        <label class="form-check-label" for="include-park-fee-adult">
+                          Include Park Fee
+                        </label>
                       </div>
                     </div>
                     <div class="col-12 mb-3">
-                      <label class="form-label" for="local-adult-net-price"
-                        >Local Net Price(Thai People)</label
-                      >
-                      <div class="input-group">
+                      <label class="form-label" for="local-net-price-adult">Local Net Price</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="local-net-price-adult"
+                        placeholder="Local Net Price"
+                        v-model="formData.local_net_price_adult.amount"
+                        min="0"
+                        step="0.01"
+                      />
+                      <div class="form-check">
                         <input
-                          type="number"
-                          class="form-control"
-                          id="local-adult-net-price"
-                          placeholder="Local Net Price"
-                          v-model="formData.local_net_price_adult.amount"
-                          min="0"
-                          step="0.01"
+                          class="form-check-input"
+                          type="checkbox"
+                          id="include-local-park-fee-adult"
+                          v-model="formData.local_net_price_adult.include_park_fee"
                         />
-                        <button
-                          type="button"
-                          class="btn btn-outline-secondary"
-                          @click="toggleParkFee('local_net_price_adult')"
-                        >
-                          {{
-                            formData.local_net_price_adult.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
-                        </button>
-                      </div>
-                      <div v-if="!formData.local_net_price_adult.include_park_fee" class="mt-2">
-                        <label class="form-label" for="local-adult-park-fee"
-                          >National Park fee</label
-                        >
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="local-adult-park-fee"
-                          placeholder="Enter Park Fee"
-                          v-model="formData.park_fee.local_price_adult_park_fee"
-                          min="0"
-                          step="0.01"
-                        />
+                        <label class="form-check-label" for="include-local-park-fee-adult">
+                          Include Park Fee
+                        </label>
                       </div>
                     </div>
                     <div class="col-12 mb-3">
-                      <label class="form-label" for="adult-discount">Discount</label>
-                      <br />
-                      <div
-                        v-for="(discount, index) in formData.discount.filter(
-                          (d) => d.target === 'adult',
-                        )"
-                        :key="index"
-                        class="row mb-3"
+                      <label class="form-label" for="adult-discounted-price"
+                        >Discounted Price</label
                       >
-                        <div class="col-4">
-                          <input
-                            type="text"
-                            class="form-control"
-                            v-model="discount.name"
-                            placeholder="Discount Name"
-                          />
-                        </div>
-                        <div class="col-4">
-                          <select class="form-control" v-model="discount.type">
-                            <option value="percentage">Percentage</option>
-                            <option value="fixed">Fixed Amount</option>
-                          </select>
-                        </div>
-                        <div class="col-3">
-                          <input
-                            type="number"
-                            class="form-control"
-                            v-model="discount.amount"
-                            placeholder="Amount"
-                            min="0"
-                            step="0.01"
-                          />
-                        </div>
-                        <div class="col-1 d-flex align-items-end">
-                          <button
-                            type="button"
-                            class="btn btn-danger"
-                            @click="removeDiscount(index)"
-                          >
-                            x
-                          </button>
-                        </div>
-                      </div>
-                      <button type="button" class="btn btn-primary" @click="addDiscount('adult')">
-                        <i class="ti ti-plus ti-xs me-2"></i>
-                        Add Discount
-                      </button>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="adult-discounted-price"
+                        placeholder="Discounted Price"
+                        v-model="formData.discount_percentage"
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
+                    <div class="col-12 mb-3">
+                      <label class="form-label" for="adult-park-fee">Park Fee</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="adult-park-fee"
+                        placeholder="Park Fee"
+                        v-model="formData.park_fee.price_adult_park_fee"
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
+                    <div class="col-12 mb-3">
+                      <label class="form-label" for="local-adult-park-fee">Local Park Fee</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="local-adult-park-fee"
+                        placeholder="Local Park Fee"
+                        v-model="formData.park_fee.local_price_adult_park_fee"
+                        min="0"
+                        step="0.01"
+                      />
                     </div>
                   </div>
                   <!-- Child Price Tab -->
@@ -686,130 +643,73 @@ onMounted(async () => {
                     </div>
                     <div class="col-12 mb-3">
                       <label class="form-label" for="child-net-price">Net Price</label>
-                      <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="child-net-price"
+                        placeholder="Net Price"
+                        v-model="formData.net_price_child.amount"
+                        min="0"
+                        step="0.01"
+                      />
+                      <div class="form-check">
                         <input
-                          type="number"
-                          class="form-control"
-                          id="child-net-price"
-                          placeholder="Net Price"
-                          v-model="formData.net_price_child.amount"
-                          min="0"
-                          step="0.01"
+                          class="form-check-input"
+                          type="checkbox"
+                          id="include-park-fee-child"
+                          v-model="formData.net_price_child.include_park_fee"
                         />
-                        <button
-                          type="button"
-                          class="btn btn-outline-secondary"
-                          @click="toggleParkFee('net_price_child')"
-                        >
-                          {{
-                            formData.net_price_child.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
-                        </button>
-                      </div>
-                      <div v-if="!formData.net_price_child.include_park_fee" class="mt-2">
-                        <label class="form-label" for="child-park-fee">National Park fee</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="child-park-fee"
-                          placeholder="Enter Park Fee"
-                          v-model="formData.park_fee.price_child_park_fee"
-                          min="0"
-                          step="0.01"
-                        />
+                        <label class="form-check-label" for="include-park-fee-child">
+                          Include Park Fee
+                        </label>
                       </div>
                     </div>
                     <div class="col-12 mb-3">
-                      <label class="form-label" for="local-child-net-price"
-                        >Local Net Price (For Thai People)</label
-                      >
-                      <div class="input-group">
+                      <label class="form-label" for="local-net-price-child">Local Net Price</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="local-net-price-child"
+                        placeholder="Local Net Price"
+                        v-model="formData.local_net_price_child.amount"
+                        min="0"
+                        step="0.01"
+                      />
+                      <div class="form-check">
                         <input
-                          type="number"
-                          class="form-control"
-                          id="local-child-net-price"
-                          placeholder="Net Price"
-                          v-model="formData.local_net_price_child.amount"
-                          min="0"
-                          step="0.01"
+                          class="form-check-input"
+                          type="checkbox"
+                          id="include-local-park-fee-child"
+                          v-model="formData.local_net_price_child.include_park_fee"
                         />
-                        <button
-                          type="button"
-                          class="btn btn-outline-secondary"
-                          @click="toggleParkFee('local_net_price_child')"
-                        >
-                          {{
-                            formData.local_net_price_child.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
-                        </button>
-                      </div>
-                      <div v-if="!formData.local_net_price_child.include_park_fee" class="mt-2">
-                        <label class="form-label" for="local-child-park-fee"
-                          >National Park fee</label
-                        >
-                        <input
-                          type="number"
-                          class="form-control"
-                          id="local-child-park-fee"
-                          placeholder="Enter Park Fee"
-                          v-model="formData.park_fee.local_price_child_park_fee"
-                          min="0"
-                          step="0.01"
-                        />
+                        <label class="form-check-label" for="include-local-park-fee-child">
+                          Include Park Fee
+                        </label>
                       </div>
                     </div>
                     <div class="col-12 mb-3">
-                      <label class="form-label" for="child-discount">Discount</label>
-                      <br />
-                      <div
-                        v-for="(discount, index) in formData.discount.filter(
-                          (d) => d.target === 'child',
-                        )"
-                        :key="index"
-                        class="row mb-3"
-                      >
-                        <div class="col-4">
-                          <input
-                            type="text"
-                            class="form-control"
-                            v-model="discount.name"
-                            placeholder="Discount Name"
-                          />
-                        </div>
-                        <div class="col-4">
-                          <select class="form-control" v-model="discount.type">
-                            <option value="percentage">Percentage</option>
-                            <option value="fixed">Fixed Amount</option>
-                          </select>
-                        </div>
-                        <div class="col-3">
-                          <input
-                            type="number"
-                            class="form-control"
-                            v-model="discount.amount"
-                            placeholder="Amount"
-                            min="0"
-                            step="0.01"
-                          />
-                        </div>
-                        <div class="col-1 d-flex align-items-end">
-                          <button
-                            type="button"
-                            class="btn btn-danger"
-                            @click="removeDiscount(index)"
-                          >
-                            x
-                          </button>
-                        </div>
-                      </div>
-                      <button type="button" class="btn btn-primary" @click="addDiscount('child')">
-                        <i class="ti ti-plus ti-xs me-2"></i>
-                        Add Discount
-                      </button>
+                      <label class="form-label" for="child-park-fee">Park Fee</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="child-park-fee"
+                        placeholder="Park Fee"
+                        v-model="formData.park_fee.price_child_park_fee"
+                        min="0"
+                        step="0.01"
+                      />
+                    </div>
+                    <div class="col-12 mb-3">
+                      <label class="form-label" for="local-child-park-fee">Local Park Fee</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="local-child-park-fee"
+                        placeholder="Local Park Fee"
+                        v-model="formData.park_fee.local_price_child_park_fee"
+                        min="0"
+                        step="0.01"
+                      />
                     </div>
                   </div>
                   <div class="tab-pane fade" id="age_rules" role="tabpanel">
@@ -883,7 +783,7 @@ onMounted(async () => {
               <!-- /Navigation -->
               <!-- Options -->
               <div class="col-12 pt-6 pt-md-0">
-                <div class="tab-content p-0 mt-4">
+                <div class="tab-content p-0 ps-md-4">
                   <!-- photoGallery Tab -->
                   <div class="tab-pane fade show active" id="photoGallery" role="tabpanel">
                     <h6 class="text-body">You Can Upload multiple Photos</h6>
@@ -989,7 +889,7 @@ onMounted(async () => {
               <!-- /Navigation -->
               <!-- Options -->
               <div class="col-12 col-md-8 col-xl-7 col-xxl-8 pt-6 pt-md-0">
-                <div class="tab-content p-0 mt-4">
+                <div class="tab-content p-0 ps-md-4">
                   <!-- Pickup Time Tab -->
                   <div class="tab-pane fade show active" id="tour_schedule" role="tabpanel">
                     <h6 class="text-body">Tour Start end time</h6>
@@ -1023,114 +923,50 @@ onMounted(async () => {
                   </div>
                   <div class="tab-pane fade" id="pickupTime" role="tabpanel">
                     <h6 class="text-body">Tour Pickup Time Range</h6>
-                    <div
-                      v-for="(time, index) in formData.pick_up_time"
-                      :key="index"
-                      class="row mb-4"
-                    >
-                      <div class="col-md-3">
-                        <label class="form-label">From</label>
-                        <input type="time" class="form-control" v-model="time.from" />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">To</label>
-                        <input type="time" class="form-control" v-model="time.to" />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">Location</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="time.location"
-                          placeholder="Location"
-                        />
-                      </div>
-                      <div class="col-md-2">
-                        <label class="form-label">Charge</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          v-model="time.charge"
-                          placeholder="Charge"
-                        />
-                      </div>
-                      <div class="col-md-1 d-flex align-items-end">
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removePickUpLocation(index)"
-                        >
-                          x
-                        </button>
-                      </div>
+                    <div v-for="(pickup, index) in formData.pick_up_time" :key="index" class="mb-3">
+                      <label class="form-label">From</label>
+                      <input type="time" class="form-control" v-model="pickup.from" />
+                      <label class="form-label">To</label>
+                      <input type="time" class="form-control" v-model="pickup.to" />
+                      <label class="form-label">Location</label>
+                      <input type="text" class="form-control" v-model="pickup.location" />
+                      <label class="form-label">Charge</label>
+                      <input type="number" class="form-control" v-model="pickup.charge" />
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="removePickUpLocation(index)"
+                      >
+                        Remove
+                      </button>
                     </div>
                     <button type="button" class="btn btn-primary" @click="addPickUpLocation">
-                      <i class="ti ti-plus ti-xs me-2"></i>
                       Add Pickup Location
                     </button>
-                    <div class="mb-3">
-                      <label class="form-label">Pickup Location Details</label>
-                      <textarea
-                        class="form-control"
-                        v-model="formData.pickup_location_details"
-                        placeholder="Enter pickup location details"
-                        rows="3"
-                      ></textarea>
-                    </div>
                   </div>
                   <!-- Drop-off Time Tab -->
                   <div class="tab-pane fade" id="dropoffTime" role="tabpanel">
                     <h6 class="mb-3 text-body">Tour Drop-off Time Range</h6>
-                    <div v-for="(time, index) in formData.drop_time" :key="index" class="row mb-4">
-                      <div class="col-md-3">
-                        <label class="form-label">From</label>
-                        <input type="time" class="form-control" v-model="time.from" />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">To</label>
-                        <input type="time" class="form-control" v-model="time.to" />
-                      </div>
-                      <div class="col-md-3">
-                        <label class="form-label">Location</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          v-model="time.location"
-                          placeholder="Location"
-                        />
-                      </div>
-                      <div class="col-md-2">
-                        <label class="form-label">Charge</label>
-                        <input
-                          type="number"
-                          class="form-control"
-                          v-model="time.charge"
-                          placeholder="Charge"
-                        />
-                      </div>
-                      <div class="col-md-1 d-flex align-items-end">
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removeDropLocation(index)"
-                        >
-                          x
-                        </button>
-                      </div>
+                    <div v-for="(drop, index) in formData.drop_time" :key="index" class="mb-3">
+                      <label class="form-label">From</label>
+                      <input type="time" class="form-control" v-model="drop.from" />
+                      <label class="form-label">To</label>
+                      <input type="time" class="form-control" v-model="drop.to" />
+                      <label class="form-label">Location</label>
+                      <input type="text" class="form-control" v-model="drop.location" />
+                      <label class="form-label">Charge</label>
+                      <input type="number" class="form-control" v-model="drop.charge" />
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="removeDropLocation(index)"
+                      >
+                        Remove
+                      </button>
                     </div>
                     <button type="button" class="btn btn-primary" @click="addDropLocation">
-                      <i class="ti ti-plus ti-xs me-2"></i>
-                      Add Drop Location
+                      Add Drop-off Location
                     </button>
-                    <div class="mb-3">
-                      <label class="form-label">Drop Location Details</label>
-                      <textarea
-                        class="form-control"
-                        v-model="formData.dropoff_location_details"
-                        placeholder="Enter Drop location details"
-                        rows="3"
-                      ></textarea>
-                    </div>
                   </div>
                   <!-- Tour Dates Tab -->
                   <div class="tab-pane fade" id="tourDates" role="tabpanel">
@@ -1140,24 +976,21 @@ onMounted(async () => {
                       :key="index"
                       class="row mb-4"
                     >
-                      <div class="col-md-5">
+                      <div class="col-md-6">
                         <label class="form-label">Start Date</label>
                         <input type="date" class="form-control" v-model="date.from" />
                       </div>
-                      <div class="col-md-5">
+                      <div class="col-md-6">
                         <label class="form-label">End Date</label>
                         <input type="date" class="form-control" v-model="date.to" />
                       </div>
-                      <div class="col-md-2">
-                        <label class="form-label"> </label>
-                        <button
-                          type="button"
-                          class="btn btn-danger"
-                          @click="removeAvailableDate(index)"
-                        >
-                          Remove
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        @click="removeAvailableDate(index)"
+                      >
+                        Remove
+                      </button>
                     </div>
                     <button type="button" class="btn btn-primary" @click="addAvailableDate">
                       Add Available Date

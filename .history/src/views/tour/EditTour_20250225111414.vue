@@ -399,7 +399,7 @@ onMounted(async () => {
                 class="form-control"
                 id="tour-title"
                 placeholder="Tour title"
-                v-model="formData.tour_name"
+                v-model="formData.tour_title"
                 aria-label="Tour title"
               />
             </div>
