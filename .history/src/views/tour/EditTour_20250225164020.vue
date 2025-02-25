@@ -274,6 +274,11 @@ const loadTourDetails = async () => {
             formData.value.transport_types?.slice(1).toLowerCase(),
         )
         .trigger('change')
+      console.log(
+        formData.value.transport_types?.charAt(0).toUpperCase() +
+          formData.value.transport_types?.slice(1).toLowerCase(),
+      )
+
       $('#status-org')
         .val(formData.value.status?.charAt(0).toUpperCase() + formData.value.status?.slice(1))
         .trigger('change')

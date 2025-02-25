@@ -244,36 +244,19 @@ const loadTourDetails = async () => {
     formData.value.tour_type = tourDetails.tour_type || ''
     formData.value.transport_types = tourDetails.transport_types
 
-    console.log(formData.value.transport_types)
+      $('#status-org')
+      console.log(formData.value.)
 
     // Initialize select2 with existing data
     setTimeout(() => {
       $('#language')
-        .val(
-          formData.value.languages_supported?.map(
-            (lang) => lang?.charAt(0).toUpperCase() + lang?.slice(1).toLowerCase(),
-          ),
-        )
+        .val(formData.value.languages_supported?.map((lang) => lang?.toUpperCase()))
         .trigger('change')
       $('#currency')
-        .val(
-          formData.value.currency?.map(
-            (curr) => curr?.charAt(0).toUpperCase() + curr?.slice(1).toLowerCase(),
-          ),
-        )
+        .val(formData.value.currency?.map((curr) => curr?.toUpperCase()))
         .trigger('change')
-      $('#tour-type')
-        .val(
-          formData.value.tour_type?.charAt(0).toUpperCase() +
-            formData.value.tour_type?.slice(1).toLowerCase(),
-        )
-        .trigger('change')
-      $('#transport-type')
-        .val(
-          formData.value.transport_types?.charAt(0).toUpperCase() +
-            formData.value.transport_types?.slice(1).toLowerCase(),
-        )
-        .trigger('change')
+      $('#tour-type').val(formData.value.tour_type?.toUpperCase()).trigger('change')
+      $('#transport-type').val(formData.value.transport_types?.toUpperCase()).trigger('change')
       $('#status-org')
         .val(formData.value.status?.charAt(0).toUpperCase() + formData.value.status?.slice(1))
         .trigger('change')
