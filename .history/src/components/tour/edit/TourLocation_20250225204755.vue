@@ -7,7 +7,7 @@ import { nextTick, onMounted, ref, watch } from 'vue'
 import config from '../../../config/config'
 
 const locations = ref([])
-const currentLocation = ref(null)
+// const selectedLocation = ref(null)
 const selectedParentLocation = ref(null)
 const locationSelectRef = ref(null)
 const showAddLocationForm = ref(false)
@@ -104,7 +104,7 @@ watch(
   () => props.selectedLocation,
   (newLocation) => {
     if (newLocation) {
-      currentLocation.value = newLocation
+      selectedLocation.value = newLocation
       nextTick(() => {
         $('#location')
           .val(
@@ -120,6 +120,14 @@ watch(
 onMounted(async () => {
   await fetchLocations()
   initializeSelect2()
+  console.log(selectedLocation)
+
+  // $('#location')
+  //   .val(
+  //     locations.value.find((location) => location.location_name === selectedLocation.value)
+  //       ?.location_id || '',
+  //   )
+  //   .trigger('change')
 })
 </script>
 

@@ -9,7 +9,7 @@ import config from '../../../config/config'
 
 const categories = ref([])
 const selectedParentCategory = ref(null)
-const currentCategory = ref(null)
+const selectedCategory = ref(null)
 const categorySelectRef = ref(null)
 const showAddCategoryForm = ref(false)
 const loadingCategories = ref(false)
@@ -89,13 +89,13 @@ const initializeSelect2 = () => {
           text: category.category_name,
         })),
       })
-      .val(currentCategory.value)
+      .val(selectedCategory.value)
       .trigger('change')
 
       // Handle selecting category
       .on('select2:select', (e) => {
         const data = e.params.data
-        currentCategory.value = data.id
+        selectedCategory.value = data.id
         emitCategoryChange()
       })
   })
@@ -103,29 +103,26 @@ const initializeSelect2 = () => {
 
 const emitCategoryChange = () => {
   const selectedCategoryData = categories.value.find(
-    (category) => category.category_id.toString() === currentCategory.value,
+    (category) => category.category_id.toString() === selectedCategory.value,
   )
   emit('category-change', selectedCategoryData)
 }
 
 const props = defineProps({
-  selectedCategory: String,
+  selectedCategory: Array,
 })
 
 watch(
   () => props.selectedCategory,
   (newCategory) => {
     if (newCategory) {
-      currentCategory.value = newCategory
+      selectedCategory.value = newCategory
 
-      // console.log('newCategory:', newCategory)
+      console.log('newCategory:', newCategory)
 
       nextTick(() => {
-        $(categorySelectRef.value)
-          .val(
-            categories.value.find((category) => category.category_name === newCategory)
-              ?.category_id || '',
-          )
+        $('#category')
+          .val(newCategory.map((cat) => cat.id))
           .trigger('change')
       })
     }
@@ -143,6 +140,10 @@ watch(categories, () => {
   nextTick(() => {
     initializeSelect2()
   })
+})
+
+watch(selectedCategory, () => {
+  $(categorySelectRef.value).val(selectedCategory.value).trigger('change')
 })
 </script>
 

@@ -89,7 +89,7 @@ const guideLanguages = ref([])
 const currencies = ref([])
 
 const FilterLocation = ref('')
-const FilterCategory = ref('')
+const FilterCategory = ref([])
 const FilterTags = ref([])
 
 const handleMerchantUserChange = (merchantId, userId) => {
@@ -97,6 +97,20 @@ const handleMerchantUserChange = (merchantId, userId) => {
   formData.value.user_id = userId
   console.log('Merchant ID:', merchantId, 'User ID:', userId)
 }
+
+// const handleLocationChange = (locationData) => {
+//   formData.value.location = locationData
+//     ? [{ id: locationData.location_id, name: locationData.location_name }]
+//     : []
+// }
+
+// const handleCategoryChange = (category) => {
+//   formData.value.category = category
+// }
+
+// const handleTagsChange = (tags) => {
+//   formData.value.tags = tags
+// }
 
 const addMetaField = () => {
   formData.value.tour_meta.push({ key: '', value: '' })
@@ -243,18 +257,15 @@ const loadTourDetails = async () => {
       FilterLocation.value = formData.value.location[0].name
     }
 
-    if (formData.value.category.category_name.length > 0) {
-      FilterCategory.value = formData.value.category.category_name
+    if (formData.value.category.length > 0) {
+      FilterCategory.value = formData.value.category
     }
-
-    // console.log(formData.value.category)
-    // console.log(FilterCategory.value)
 
     if (formData.value.tags.length > 0) {
       FilterTags.value = formData.value.tags
     }
 
-    // console.log('Selected sending Location: ', FilterLocation.value)
+    console.log('Selected sending Location: ', FilterLocation.value)
 
     // Initialize select2 with existing data
     setTimeout(() => {

@@ -254,7 +254,7 @@ const loadTourDetails = async () => {
       FilterTags.value = formData.value.tags
     }
 
-    // console.log('Selected sending Location: ', FilterLocation.value)
+    console.log('Selected sending Location: ', FilterLocation.value)
 
     // Initialize select2 with existing data
     setTimeout(() => {

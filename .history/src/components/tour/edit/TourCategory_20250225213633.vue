@@ -118,7 +118,7 @@ watch(
     if (newCategory) {
       currentCategory.value = newCategory
 
-      // console.log('newCategory:', newCategory)
+      console.log('newCategory:', newCategory)
 
       nextTick(() => {
         $(categorySelectRef.value)

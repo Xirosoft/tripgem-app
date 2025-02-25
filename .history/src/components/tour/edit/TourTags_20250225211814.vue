@@ -122,11 +122,14 @@ watch(tags, () => {
   })
 })
 
+// Watch for changes in selectedTags and update Select2 UI
+watch(selectedTags1, () => {
+  $(tagSelectRef1.value).val(selectedTags1.value).trigger('change')
+})
+
 watch(
   () => props.selectedTags,
   (newTags) => {
-    console.log('newTags:', newTags)
-
     if (newTags) {
       selectedTags1.value = newTags.map((tag) => tag.id)
       nextTick(() => {

@@ -88,10 +88,6 @@ const transportTypes = ref([])
 const guideLanguages = ref([])
 const currencies = ref([])
 
-const FilterLocation = ref('')
-const FilterCategory = ref('')
-const FilterTags = ref([])
-
 const handleMerchantUserChange = (merchantId, userId) => {
   formData.value.merchant_id = merchantId
   formData.value.user_id = userId
@@ -238,23 +234,9 @@ const loadTourDetails = async () => {
     formData.value.location = parseJsonField(tourDetails.location)
     formData.value.category = parseJsonField(tourDetails.category)
     formData.value.tags = parseJsonField(tourDetails.tags)
+    formData.value.location[0].name
 
-    if (formData.value.location.length > 0) {
-      FilterLocation.value = formData.value.location[0].name
-    }
-
-    if (formData.value.category.category_name.length > 0) {
-      FilterCategory.value = formData.value.category.category_name
-    }
-
-    // console.log(formData.value.category)
-    // console.log(FilterCategory.value)
-
-    if (formData.value.tags.length > 0) {
-      FilterTags.value = formData.value.tags
-    }
-
-    // console.log('Selected sending Location: ', FilterLocation.value)
+    console.log(formData.value.location[0].name)
 
     // Initialize select2 with existing data
     setTimeout(() => {
@@ -1443,10 +1425,9 @@ onMounted(async () => {
               :selectedUserId="formData.user_id"
               @merchant-user-change="handleMerchantUserChange"
             />
-
-            <TourLocation :selectedLocation="FilterLocation" />
-            <TourCategory :selectedCategory="FilterCategory" />
-            <TourTags :selectedTags="FilterTags" />
+            <TourLocation :selectedLocation="formData.location" />
+            <TourCategory :selectedCategory="formData.category" />
+            <TourTags :selectedTags="formData.tags" />
           </div>
         </div>
         <!-- /Organize Card -->

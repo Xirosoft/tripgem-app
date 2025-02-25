@@ -3,11 +3,10 @@ import axios from 'axios'
 import $ from 'jquery'
 import 'select2'
 import 'select2/dist/css/select2.css'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import config from '../../../config/config'
 
 const locations = ref([])
-const currentLocation = ref(null)
 const selectedParentLocation = ref(null)
 const locationSelectRef = ref(null)
 const showAddLocationForm = ref(false)
@@ -96,30 +95,14 @@ const initializeSelect2 = () => {
   })
 }
 
-const props = defineProps({
-  selectedLocation: String,
-})
-
-watch(
-  () => props.selectedLocation,
-  (newLocation) => {
-    if (newLocation) {
-      currentLocation.value = newLocation
-      nextTick(() => {
-        $('#location')
-          .val(
-            locations.value.find((location) => location.location_name === newLocation)
-              ?.location_id || '',
-          )
-          .trigger('change')
-      })
-    }
-  },
-)
-
 onMounted(async () => {
   await fetchLocations()
   initializeSelect2()
+  console.log(selectedLocation)
+
+  $('#location')
+    .val(locations.value.find((location) => location.location_name === 'Phuket')?.location_id || '')
+    .trigger('change')
 })
 </script>
 

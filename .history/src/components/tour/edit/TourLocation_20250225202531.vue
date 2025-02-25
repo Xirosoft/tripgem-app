@@ -6,8 +6,12 @@ import 'select2/dist/css/select2.css'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import config from '../../../config/config'
 
+const props = defineProps({
+  selectedLocation: String,
+})
+
 const locations = ref([])
-const currentLocation = ref(null)
+// const selectedLocation = ref(null)
 const selectedParentLocation = ref(null)
 const locationSelectRef = ref(null)
 const showAddLocationForm = ref(false)
@@ -84,43 +88,54 @@ const getIndentedLocationName = (location) => {
 
 const initializeSelect2 = () => {
   if (!locationSelectRef.value) return
-  nextTick(() => {
-    $(locationSelectRef.value)
-      .select2({
-        data: locations.value.map((location) => ({
-          id: location.location_id.toString(),
-          text: location.location_name,
-        })),
-      })
-      .trigger('change')
-  })
+
+  if ($.fn.select2 && $(locationSelectRef.value).data('select2')) {
+    $(locationSelectRef.value).select2('destroy') // Destroy previous instance if exists
+  }
+
+  // nextTick(() => {
+  //   $(locationSelectRef.value)
+  //     .select2({
+  //       data: locations.value.map((location) => ({
+  //         id: location.location_id.toString(),
+  //         text: location.location_name,
+  //       })),
+  //     })
+  //     .trigger('change')
+  // })
 }
 
-const props = defineProps({
-  selectedLocation: String,
+onMounted(async () => {
+  await fetchLocations()
+  console.log('Locations:', locations.value)
+  console.log('Selected Location:', props.selectedLocation) // Log the selected location
+
+  $('#location').val('Phuket').trigger('change')
+  nextTick(() => {
+    initializeSelect2()
+  })
+})
+
+watch(locations, () => {
+  nextTick(() => {
+    initializeSelect2()
+  })
 })
 
 watch(
   () => props.selectedLocation,
-  (newLocation) => {
-    if (newLocation) {
-      currentLocation.value = newLocation
+  (newVal) => {
+    console.log('Selected Location changed:', newVal)
+    if (newVal) {
       nextTick(() => {
         $('#location')
-          .val(
-            locations.value.find((location) => location.location_name === newLocation)
-              ?.location_id || '',
-          )
+          .val(newVal.charAt(0).toUpperCase() + newVal.slice(1))
           .trigger('change')
       })
     }
   },
+  { immediate: true },
 )
-
-onMounted(async () => {
-  await fetchLocations()
-  initializeSelect2()
-})
 </script>
 
 <template>

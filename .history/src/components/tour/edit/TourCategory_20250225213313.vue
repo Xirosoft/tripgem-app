@@ -109,7 +109,7 @@ const emitCategoryChange = () => {
 }
 
 const props = defineProps({
-  selectedCategory: String,
+  selectedCategory: Array,
 })
 
 watch(
@@ -118,10 +118,10 @@ watch(
     if (newCategory) {
       currentCategory.value = newCategory
 
-      // console.log('newCategory:', newCategory)
+      console.log('newCategory:', newCategory)
 
       nextTick(() => {
-        $(categorySelectRef.value)
+        $('#category')
           .val(
             categories.value.find((category) => category.category_name === newCategory)
               ?.category_id || '',
@@ -143,6 +143,10 @@ watch(categories, () => {
   nextTick(() => {
     initializeSelect2()
   })
+})
+
+watch(currentCategory, () => {
+  $(categorySelectRef.value).val(currentCategory.value).trigger('change')
 })
 </script>
 

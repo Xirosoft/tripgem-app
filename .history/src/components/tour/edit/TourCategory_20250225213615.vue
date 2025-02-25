@@ -13,6 +13,7 @@ const currentCategory = ref(null)
 const categorySelectRef = ref(null)
 const showAddCategoryForm = ref(false)
 const loadingCategories = ref(false)
+const newCategory = ref(null)
 
 const sortCategories = (categories) => {
   const sortedCategories = []
@@ -118,7 +119,7 @@ watch(
     if (newCategory) {
       currentCategory.value = newCategory
 
-      // console.log('newCategory:', newCategory)
+      console.log('newCategory:', newCategory)
 
       nextTick(() => {
         $(categorySelectRef.value)

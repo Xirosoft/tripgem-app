@@ -88,15 +88,25 @@ const transportTypes = ref([])
 const guideLanguages = ref([])
 const currencies = ref([])
 
-const FilterLocation = ref('')
-const FilterCategory = ref('')
-const FilterTags = ref([])
-
 const handleMerchantUserChange = (merchantId, userId) => {
   formData.value.merchant_id = merchantId
   formData.value.user_id = userId
   console.log('Merchant ID:', merchantId, 'User ID:', userId)
 }
+
+// const handleLocationChange = (locationData) => {
+//   formData.value.location = locationData
+//     ? [{ id: locationData.location_id, name: locationData.location_name }]
+//     : []
+// }
+
+// const handleCategoryChange = (category) => {
+//   formData.value.category = category
+// }
+
+// const handleTagsChange = (tags) => {
+//   formData.value.tags = tags
+// }
 
 const addMetaField = () => {
   formData.value.tour_meta.push({ key: '', value: '' })
@@ -239,22 +249,9 @@ const loadTourDetails = async () => {
     formData.value.category = parseJsonField(tourDetails.category)
     formData.value.tags = parseJsonField(tourDetails.tags)
 
-    if (formData.value.location.length > 0) {
-      FilterLocation.value = formData.value.location[0].name
-    }
+    const location = formData.value.location[0].name
 
-    if (formData.value.category.category_name.length > 0) {
-      FilterCategory.value = formData.value.category.category_name
-    }
-
-    // console.log(formData.value.category)
-    // console.log(FilterCategory.value)
-
-    if (formData.value.tags.length > 0) {
-      FilterTags.value = formData.value.tags
-    }
-
-    // console.log('Selected sending Location: ', FilterLocation.value)
+    console.log(formData.value)
 
     // Initialize select2 with existing data
     setTimeout(() => {
@@ -355,7 +352,7 @@ const handleVideoGalleryUpload = async (videoFiles) => {
 }
 
 onMounted(async () => {
-  // console.log('Route params:', route.params)
+  console.log('Route params:', route.params)
   initializeAddTour()
   await loadTourDetails()
 
@@ -403,7 +400,7 @@ onMounted(async () => {
   try {
     const response = await import('../../utils/json/tourTypes.json')
     tourTypes.value = response.default
-    // console.log(tourTypes.value)
+    console.log(tourTypes.value)
   } catch (error) {
     console.error('Failed to load tour types:', error)
   }
@@ -1443,10 +1440,9 @@ onMounted(async () => {
               :selectedUserId="formData.user_id"
               @merchant-user-change="handleMerchantUserChange"
             />
-
-            <TourLocation :selectedLocation="FilterLocation" />
-            <TourCategory :selectedCategory="FilterCategory" />
-            <TourTags :selectedTags="FilterTags" />
+            <TourLocation :selectedLocation="location" />
+            <TourCategory :selectedCategory="formData.category" />
+            <TourTags :selectedTags="formData.tags" />
           </div>
         </div>
         <!-- /Organize Card -->

@@ -6,8 +6,12 @@ import 'select2/dist/css/select2.css'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import config from '../../../config/config'
 
+const props = defineProps({
+  selectedLocation: String,
+})
+
 const locations = ref([])
-const currentLocation = ref(null)
+// const selectedLocation = ref(null)
 const selectedParentLocation = ref(null)
 const locationSelectRef = ref(null)
 const showAddLocationForm = ref(false)
@@ -84,6 +88,11 @@ const getIndentedLocationName = (location) => {
 
 const initializeSelect2 = () => {
   if (!locationSelectRef.value) return
+
+  if ($.fn.select2 && $(locationSelectRef.value).data('select2')) {
+    $(locationSelectRef.value).select2('destroy') // Destroy previous instance if exists
+  }
+
   nextTick(() => {
     $(locationSelectRef.value)
       .select2({
@@ -96,30 +105,19 @@ const initializeSelect2 = () => {
   })
 }
 
-const props = defineProps({
-  selectedLocation: String,
-})
-
-watch(
-  () => props.selectedLocation,
-  (newLocation) => {
-    if (newLocation) {
-      currentLocation.value = newLocation
-      nextTick(() => {
-        $('#location')
-          .val(
-            locations.value.find((location) => location.location_name === newLocation)
-              ?.location_id || '',
-          )
-          .trigger('change')
-      })
-    }
-  },
-)
-
 onMounted(async () => {
   await fetchLocations()
-  initializeSelect2()
+  console.log('Locations:', locations.value)
+  console.log('Selected Location:', props.selectedLocation) // Log the selected location
+  nextTick(() => {
+    initializeSelect2()
+  })
+})
+
+watch(locations, () => {
+  nextTick(() => {
+    initializeSelect2()
+  })
 })
 </script>
 

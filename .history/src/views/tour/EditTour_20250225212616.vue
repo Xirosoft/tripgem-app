@@ -247,14 +247,14 @@ const loadTourDetails = async () => {
       FilterCategory.value = formData.value.category.category_name
     }
 
-    // console.log(formData.value.category)
-    // console.log(FilterCategory.value)
+    console.log(formData.value.category.category_name)
+    console.log(FilterCategory.value)
 
     if (formData.value.tags.length > 0) {
       FilterTags.value = formData.value.tags
     }
 
-    // console.log('Selected sending Location: ', FilterLocation.value)
+    console.log('Selected sending Location: ', FilterLocation.value)
 
     // Initialize select2 with existing data
     setTimeout(() => {

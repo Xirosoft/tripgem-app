@@ -125,8 +125,6 @@ watch(tags, () => {
 watch(
   () => props.selectedTags,
   (newTags) => {
-    console.log('newTags:', newTags)
-
     if (newTags) {
       selectedTags1.value = newTags.map((tag) => tag.id)
       nextTick(() => {

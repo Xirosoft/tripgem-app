@@ -236,25 +236,24 @@ const loadTourDetails = async () => {
     formData.value.merchant_id = tourDetails.merchant_id || ''
     formData.value.user_id = tourDetails.user_id || ''
     formData.value.location = parseJsonField(tourDetails.location)
-    formData.value.category = parseJsonField(tourDetails.category)
+    formData.value.category = tourDetails.category
     formData.value.tags = parseJsonField(tourDetails.tags)
 
     if (formData.value.location.length > 0) {
       FilterLocation.value = formData.value.location[0].name
     }
 
-    if (formData.value.category.category_name.length > 0) {
-      FilterCategory.value = formData.value.category.category_name
+    if (formData.value.category.length > 0) {
+      FilterCategory.value = formData.value.category
     }
 
-    // console.log(formData.value.category)
-    // console.log(FilterCategory.value)
+    console.log(FilterCategory.value)
 
     if (formData.value.tags.length > 0) {
       FilterTags.value = formData.value.tags
     }
 
-    // console.log('Selected sending Location: ', FilterLocation.value)
+    console.log('Selected sending Location: ', FilterLocation.value)
 
     // Initialize select2 with existing data
     setTimeout(() => {

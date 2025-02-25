@@ -6,14 +6,17 @@ import 'select2/dist/css/select2.css'
 import { nextTick, onMounted, ref, watch } from 'vue'
 import config from '../../../config/config'
 
+const emit = defineEmits(['location-change'])
+
 const locations = ref([])
-const currentLocation = ref(null)
+const selectedLocation = ref(null)
 const selectedParentLocation = ref(null)
 const locationSelectRef = ref(null)
 const showAddLocationForm = ref(false)
 const newLocationName = ref('')
 const newLocationSlug = ref('')
 const newLocationAddress = ref('')
+
 const loadingLocations = ref(false)
 
 const sortLocations = (locations) => {
@@ -84,6 +87,11 @@ const getIndentedLocationName = (location) => {
 
 const initializeSelect2 = () => {
   if (!locationSelectRef.value) return
+
+  if ($.fn.select2 && $(locationSelectRef.value).data('select2')) {
+    $(locationSelectRef.value).select2('destroy') // Destroy previous instance if exists
+  }
+
   nextTick(() => {
     $(locationSelectRef.value)
       .select2({
@@ -92,34 +100,51 @@ const initializeSelect2 = () => {
           text: location.location_name,
         })),
       })
+      .val(selectedLocation.value) // Set initial value
       .trigger('change')
+
+      // Handle selecting location
+      .on('select2:select', (e) => {
+        const data = e.params.data
+        selectedLocation.value = data.id
+        emitLocationChange()
+      })
   })
 }
 
-const props = defineProps({
-  selectedLocation: String,
-})
-
-watch(
-  () => props.selectedLocation,
-  (newLocation) => {
-    if (newLocation) {
-      currentLocation.value = newLocation
-      nextTick(() => {
-        $('#location')
-          .val(
-            locations.value.find((location) => location.location_name === newLocation)
-              ?.location_id || '',
-          )
-          .trigger('change')
-      })
-    }
-  },
-)
+const emitLocationChange = () => {
+  const selectedLocationData = locations.value.find(
+    (location) => location.location_id.toString() === selectedLocation.value,
+  )
+  emit('location-change', selectedLocationData)
+}
 
 onMounted(async () => {
   await fetchLocations()
-  initializeSelect2()
+
+  nextTick(() => {
+    initializeSelect2()
+  })
+  console.log('selectedLocation:', selectedLocation.value)
+})
+
+watch(locations, () => {
+  console.log('selectedLocation:', selectedLocation.value)
+  nextTick(() => {
+    initializeSelect2()
+  })
+})
+
+watch(selectedLocation, () => {
+  console.log('selectedLocation:', selectedLocation.value)
+  // $('#currency')
+  //       .val(
+  //         formData.value.currency?.map(
+  //           (curr) => curr?.charAt(0).toUpperCase() + curr?.slice(1).toLowerCase(),
+  //         ),
+  //       )
+  //       .trigger('change')
+  $(locationSelectRef.value).val(selectedLocation.value).trigger('change')
 })
 </script>
 
