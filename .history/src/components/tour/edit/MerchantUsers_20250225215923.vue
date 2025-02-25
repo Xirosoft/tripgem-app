@@ -70,23 +70,19 @@ onMounted(async () => {
       .on('change', function () {
         selectedUser.value = $(this).val()
       })
-    // Trigger change to set initial values
-    $(merchantSelectRef.value).val(props.selectedMerchantId).trigger('change')
-    $(userSelectRef.value).val(props.selectedUserId).trigger('change')
   })
 })
 
 watch(
   () => selectedMerchant.value,
   async (newMerchantId) => {
+    console.log('newMerchantId:', newMerchantId)
+
     if (newMerchantId) {
       await fetchUsersByMerchantId(newMerchantId)
-      nextTick(() => {
-        $(userSelectRef.value).val(props.selectedUserId).trigger('change')
-      })
     }
     nextTick(() => {
-      if ($(userSelectRef.value).hasClass('select2-hidden-accessible')) {
+      if ($.fn.select2) {
         $(userSelectRef.value).select2('destroy').select2()
       }
     })
@@ -106,8 +102,6 @@ watch(
   () => props.selectedMerchantId,
   (newVal) => {
     selectedMerchant.value = newVal
-    console.log('newVal:', newVal)
-
     nextTick(() => {
       $(merchantSelectRef.value).val(newVal).trigger('change')
     })
@@ -115,7 +109,16 @@ watch(
   { immediate: true },
 )
 
-watch({ immediate: true })
+watch(
+  () => props.selectedUserId,
+  (newVal) => {
+    selectedUser.value = newVal
+    nextTick(() => {
+      $(userSelectRef.value).val(newVal).trigger('change')
+    })
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

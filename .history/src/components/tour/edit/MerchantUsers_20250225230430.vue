@@ -72,17 +72,22 @@ onMounted(async () => {
       })
     // Trigger change to set initial values
     $(merchantSelectRef.value).val(props.selectedMerchantId).trigger('change')
-    $(userSelectRef.value).val(props.selectedUserId).trigger('change')
   })
 })
 
 watch(
   () => selectedMerchant.value,
   async (newMerchantId) => {
+    // console.log('newMerchantId:', newMerchantId)
     if (newMerchantId) {
       await fetchUsersByMerchantId(newMerchantId)
       nextTick(() => {
         $(userSelectRef.value).val(props.selectedUserId).trigger('change')
+      })
+    } else {
+      users.value = []
+      nextTick(() => {
+        $(userSelectRef.value).val(null).trigger('change')
       })
     }
     nextTick(() => {
@@ -104,18 +109,30 @@ watch(
 // Watch for prop changes to set initial values
 watch(
   () => props.selectedMerchantId,
-  (newVal) => {
+  async (newVal) => {
     selectedMerchant.value = newVal
     console.log('newVal:', newVal)
-
-    nextTick(() => {
-      $(merchantSelectRef.value).val(newVal).trigger('change')
-    })
+    if (newVal) {
+      await fetchUsersByMerchantId(newVal)
+      nextTick(() => {
+        $(merchantSelectRef.value).val(newVal).trigger('change')
+        $(userSelectRef.value).val(props.selectedUserId).trigger('change')
+      })
+    }
   },
   { immediate: true },
 )
 
-watch({ immediate: true })
+onMounted(
+  () => props.selectedUserId,
+  (newVal) => {
+    selectedUser.value = newVal
+    nextTick(() => {
+      $(userSelectRef.value).val(newVal).trigger('change')
+    })
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

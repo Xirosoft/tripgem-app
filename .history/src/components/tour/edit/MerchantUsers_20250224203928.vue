@@ -1,8 +1,4 @@
 <script setup>
-const props = defineProps({
-  selectedMerchantId: String,
-  selectedUserId: String,
-})
 const emit = defineEmits(['merchant-user-change'])
 import axios from 'axios'
 import $ from 'jquery'
@@ -70,25 +66,19 @@ onMounted(async () => {
       .on('change', function () {
         selectedUser.value = $(this).val()
       })
-    // Trigger change to set initial values
-    $(merchantSelectRef.value).val(props.selectedMerchantId).trigger('change')
-    $(userSelectRef.value).val(props.selectedUserId).trigger('change')
   })
 })
 
 watch(
   () => selectedMerchant.value,
   async (newMerchantId) => {
+    console.log('newMerchantId:', newMerchantId)
+
     if (newMerchantId) {
       await fetchUsersByMerchantId(newMerchantId)
-      nextTick(() => {
-        $(userSelectRef.value).val(props.selectedUserId).trigger('change')
-      })
     }
     nextTick(() => {
-      if ($(userSelectRef.value).hasClass('select2-hidden-accessible')) {
-        $(userSelectRef.value).select2('destroy').select2()
-      }
+      $(userSelectRef.value).select2('destroy').select2()
     })
     emitMerchantUserChange()
   },
@@ -100,22 +90,6 @@ watch(
     emitMerchantUserChange()
   },
 )
-
-// Watch for prop changes to set initial values
-watch(
-  () => props.selectedMerchantId,
-  (newVal) => {
-    selectedMerchant.value = newVal
-    console.log('newVal:', newVal)
-
-    nextTick(() => {
-      $(merchantSelectRef.value).val(newVal).trigger('change')
-    })
-  },
-  { immediate: true },
-)
-
-watch({ immediate: true })
 </script>
 
 <template>

@@ -79,6 +79,7 @@ onMounted(async () => {
 watch(
   () => selectedMerchant.value,
   async (newMerchantId) => {
+    // console.log('newMerchantId:', newMerchantId)
     if (newMerchantId) {
       await fetchUsersByMerchantId(newMerchantId)
       nextTick(() => {

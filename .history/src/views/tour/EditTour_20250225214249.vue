@@ -95,7 +95,7 @@ const FilterTags = ref([])
 const handleMerchantUserChange = (merchantId, userId) => {
   formData.value.merchant_id = merchantId
   formData.value.user_id = userId
-  // console.log('Merchant ID:', merchantId, 'User ID:', userId)
+  console.log('Merchant ID:', merchantId, 'User ID:', userId)
 }
 
 const addMetaField = () => {
@@ -360,9 +360,6 @@ onMounted(async () => {
   // console.log('Route params:', route.params)
   initializeAddTour()
   await loadTourDetails()
-
-  // Set selected merchant and user
-  handleMerchantUserChange(formData.value.merchant_id, formData.value.user_id)
 
   // Initialize Quill editor for itinerary
   const itineraryEditor = new Quill('.tour-itinerary', {

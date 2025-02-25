@@ -95,7 +95,7 @@ const FilterTags = ref([])
 const handleMerchantUserChange = (merchantId, userId) => {
   formData.value.merchant_id = merchantId
   formData.value.user_id = userId
-  // console.log('Merchant ID:', merchantId, 'User ID:', userId)
+  console.log('Merchant ID:', merchantId, 'User ID:', userId)
 }
 
 const addMetaField = () => {

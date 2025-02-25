@@ -79,6 +79,7 @@ onMounted(async () => {
 watch(
   () => selectedMerchant.value,
   async (newMerchantId) => {
+    // console.log('newMerchantId:', newMerchantId)
     if (newMerchantId) {
       await fetchUsersByMerchantId(newMerchantId)
       nextTick(() => {
@@ -115,7 +116,16 @@ watch(
   { immediate: true },
 )
 
-watch({ immediate: true })
+watch(
+  () => props.selectedUserId,
+  (newVal) => {
+    selectedUser.value = newVal
+    setTimeout(() => {
+      $(userSelectRef.value).val(newVal).trigger('change')
+    }, 10)
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
