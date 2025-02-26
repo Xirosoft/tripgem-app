@@ -308,8 +308,8 @@ const handleSubmit = async () => {
       position: 'top-right',
       duration: 5000,
     })
-    // clearForm()
-    // router.push('/all-tours')
+    clearForm()
+    router.push('/all-tours')
   } catch (error) {
     console.log('Failed to update tour: ' + error.message)
   }
@@ -1423,11 +1423,10 @@ onMounted(async () => {
             data-placeholder="Select Status"
             v-model="formData.status"
           >
-            <option value="published">Published</option>
+            <option value="Published">Published</option>
             <option value="Draft">Draft</option>
             <option value="Scheduled">Scheduled</option>
             <option value="Inactive">Inactive</option>
-            <option value="Trust">Trust</option>
           </select>
         </div>
 

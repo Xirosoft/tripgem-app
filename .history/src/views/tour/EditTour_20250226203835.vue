@@ -358,20 +358,20 @@ const handleVideoGalleryUpload = async (videoFiles) => {
   }
 }
 
-const removeThumbnail = () => {
-  formData.value.thumbnail = ''
-  document.querySelector('#thumbnail .dz-preview').remove()
-}
+// const removeThumbnail = () => {
+//   formData.value.thumbnail = ''
+//   document.querySelector('#thumbnail .dz-preview').remove()
+// }
 
-const removeImageFromGallery = (index) => {
-  formData.value.image_gallery.splice(index, 1)
-  document.querySelectorAll('#image_gallery .dz-preview')[index].remove()
-}
+// const removeImageFromGallery = (index) => {
+//   formData.value.image_gallery.splice(index, 1)
+//   document.querySelectorAll('#image_gallery .dz-preview')[index].remove()
+// }
 
-const removeVideoFromGallery = (index) => {
-  formData.value.video_gallery.splice(index, 1)
-  document.querySelectorAll('#video_gallery .dz-preview')[index].remove()
-}
+// const removeVideoFromGallery = (index) => {
+//   formData.value.video_gallery.splice(index, 1)
+//   document.querySelectorAll('#video_gallery .dz-preview')[index].remove()
+// }
 
 onMounted(async () => {
   // console.log('Route params:', route.params)

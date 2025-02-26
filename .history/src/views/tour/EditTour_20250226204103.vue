@@ -288,9 +288,9 @@ const loadTourDetails = async () => {
             formData.value.transport_types?.slice(1).toLowerCase(),
         )
         .trigger('change')
-      $('#status-org')
-        .val(formData.value.status?.charAt(0).toUpperCase() + formData.value.status?.slice(1))
-        .trigger('change')
+      // $('#status-org')
+      //   .val(formData.value.status?.charAt(0).toUpperCase() + formData.value.status?.slice(1))
+      //   .trigger('change')
     }, 0)
   } catch (error) {
     toast.error('Failed to load tour details: ' + error.message)
@@ -358,20 +358,20 @@ const handleVideoGalleryUpload = async (videoFiles) => {
   }
 }
 
-const removeThumbnail = () => {
-  formData.value.thumbnail = ''
-  document.querySelector('#thumbnail .dz-preview').remove()
-}
+// const removeThumbnail = () => {
+//   formData.value.thumbnail = ''
+//   document.querySelector('#thumbnail .dz-preview').remove()
+// }
 
-const removeImageFromGallery = (index) => {
-  formData.value.image_gallery.splice(index, 1)
-  document.querySelectorAll('#image_gallery .dz-preview')[index].remove()
-}
+// const removeImageFromGallery = (index) => {
+//   formData.value.image_gallery.splice(index, 1)
+//   document.querySelectorAll('#image_gallery .dz-preview')[index].remove()
+// }
 
-const removeVideoFromGallery = (index) => {
-  formData.value.video_gallery.splice(index, 1)
-  document.querySelectorAll('#video_gallery .dz-preview')[index].remove()
-}
+// const removeVideoFromGallery = (index) => {
+//   formData.value.video_gallery.splice(index, 1)
+//   document.querySelectorAll('#video_gallery .dz-preview')[index].remove()
+// }
 
 onMounted(async () => {
   // console.log('Route params:', route.params)

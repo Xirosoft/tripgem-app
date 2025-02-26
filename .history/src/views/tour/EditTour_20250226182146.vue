@@ -183,7 +183,7 @@ const clearForm = () => {
     discount_percentage: 0,
     tour_type: '',
     currency: [],
-    status: '',
+    status: 'draft',
     tour_meta: [],
     pick_up_time: [{ from: '', to: '', location: '', charge: 0 }],
     drop_time: [{ from: '', to: '', location: '', charge: 0 }],
@@ -308,8 +308,8 @@ const handleSubmit = async () => {
       position: 'top-right',
       duration: 5000,
     })
-    // clearForm()
-    // router.push('/all-tours')
+    clearForm()
+    router.push('/all-tours')
   } catch (error) {
     console.log('Failed to update tour: ' + error.message)
   }
@@ -356,21 +356,6 @@ const handleVideoGalleryUpload = async (videoFiles) => {
     console.error(error)
     // toast.error('Failed to upload videos', error)
   }
-}
-
-const removeThumbnail = () => {
-  formData.value.thumbnail = ''
-  document.querySelector('#thumbnail .dz-preview').remove()
-}
-
-const removeImageFromGallery = (index) => {
-  formData.value.image_gallery.splice(index, 1)
-  document.querySelectorAll('#image_gallery .dz-preview')[index].remove()
-}
-
-const removeVideoFromGallery = (index) => {
-  formData.value.video_gallery.splice(index, 1)
-  document.querySelectorAll('#video_gallery .dz-preview')[index].remove()
 }
 
 onMounted(async () => {
@@ -432,7 +417,6 @@ onMounted(async () => {
         <div class="dz-size"><span>1 MB</span></div>
         <div class="dz-filename"><span>${formData.value.thumbnail.split('/').pop()}</span></div>
       </div>
-      <button type="button" class="btn btn-danger dz-remove" @click="removeThumbnail">Remove</button>
     `
     document
       .querySelector('#thumbnail .dz-message')
@@ -440,7 +424,7 @@ onMounted(async () => {
   }
 
   // Display existing images in the gallery
-  formData.value.image_gallery.forEach((image, index) => {
+  formData.value.image_gallery.forEach((image) => {
     const imagePreview = document.createElement('div')
     imagePreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
     const imageUrl = typeof image === 'string' ? image : image.url || ''
@@ -452,7 +436,6 @@ onMounted(async () => {
         <div class="dz-size"><span>1 MB</span></div>
         <div class="dz-filename"><span>${imageUrl.split('/').pop()}</span></div>
       </div>
-      <button type="button" class="btn btn-danger dz-remove" @click="removeImageFromGallery(${index})">Remove</button>
     `
     document
       .querySelector('#image_gallery .dz-message')
@@ -460,7 +443,7 @@ onMounted(async () => {
   })
 
   // Display existing videos in the gallery
-  formData.value.video_gallery.forEach((video, index) => {
+  formData.value.video_gallery.forEach((video) => {
     const videoPreview = document.createElement('div')
     videoPreview.classList.add('dz-preview', 'dz-processing', 'dz-video-preview', 'dz-complete')
     const videoUrl = typeof video === 'string' ? video : video.url || ''
@@ -475,7 +458,6 @@ onMounted(async () => {
         <div class="dz-size"><span>1 MB</span></div>
         <div class="dz-filename"><span>${videoUrl.split('/').pop()}</span></div>
       </div>
-      <button type="button" class="btn btn-danger dz-remove" @click="removeVideoFromGallery(${index})">Remove</button>
     `
     document
       .querySelector('#video_gallery .dz-message')
@@ -1423,11 +1405,10 @@ onMounted(async () => {
             data-placeholder="Select Status"
             v-model="formData.status"
           >
-            <option value="published">Published</option>
+            <option value="Published">Published</option>
             <option value="Draft">Draft</option>
             <option value="Scheduled">Scheduled</option>
             <option value="Inactive">Inactive</option>
-            <option value="Trust">Trust</option>
           </select>
         </div>
 
@@ -1443,8 +1424,7 @@ onMounted(async () => {
                   <input
                     type="checkbox"
                     class="form-check-input"
-                    :checked="Boolean(formData.booking_enabled)"
-                    @change="formData.booking_enabled = $event.target.checked ? 1 : 0"
+                    v-model="formData.booking_enabled"
                   />
                 </div>
               </div>

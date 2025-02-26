@@ -1423,7 +1423,7 @@ onMounted(async () => {
             data-placeholder="Select Status"
             v-model="formData.status"
           >
-            <option value="published">Published</option>
+            <option value="Published">Published</option>
             <option value="Draft">Draft</option>
             <option value="Scheduled">Scheduled</option>
             <option value="Inactive">Inactive</option>
