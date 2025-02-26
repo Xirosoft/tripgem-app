@@ -129,7 +129,7 @@ watch(
     nextTick(() => {
       setTimeout(() => {
         $(userSelectRef.value).val(newVal).trigger('change')
-      }, 100)
+      }, 200)
     })
   },
   { immediate: true },

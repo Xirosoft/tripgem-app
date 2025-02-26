@@ -127,9 +127,7 @@ watch(
   (newVal) => {
     selectedUser.value = newVal
     nextTick(() => {
-      setTimeout(() => {
-        $(userSelectRef.value).val(newVal).trigger('change')
-      }, 100)
+      $(userSelectRef.value).val(newVal).trigger('change')
     })
   },
   { immediate: true },

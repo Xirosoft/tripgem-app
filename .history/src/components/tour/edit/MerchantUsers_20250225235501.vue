@@ -72,7 +72,6 @@ onMounted(async () => {
       })
     // Trigger change to set initial values
     $(merchantSelectRef.value).val(props.selectedMerchantId).trigger('change')
-    $(userSelectRef.value).val(props.selectedUserId).trigger('change')
   })
 })
 
@@ -127,9 +126,7 @@ watch(
   (newVal) => {
     selectedUser.value = newVal
     nextTick(() => {
-      setTimeout(() => {
-        $(userSelectRef.value).val(newVal).trigger('change')
-      }, 100)
+      $(userSelectRef.value).val(newVal).trigger('change')
     })
   },
   { immediate: true },

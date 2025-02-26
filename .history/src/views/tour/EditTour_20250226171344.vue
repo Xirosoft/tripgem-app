@@ -238,7 +238,7 @@ const loadTourDetails = async () => {
     formData.value.location = parseJsonField(tourDetails.location)
     formData.value.category = parseJsonField(tourDetails.category)
     formData.value.tags = parseJsonField(tourDetails.tags)
-    formData.value.image_gallery = parseJsonField(formData.value.image_gallery)
+    formData.value.image_gallery = parseJsonField(tourDetails.image_gallery)
 
     if (formData.value.location.length > 0) {
       FilterLocation.value = formData.value.location[0].name
@@ -247,9 +247,6 @@ const loadTourDetails = async () => {
     if (formData.value.category.category_name.length > 0) {
       FilterCategory.value = formData.value.category.category_name
     }
-
-    // console.log(formData.value.category)
-    // console.log(FilterCategory.value)
 
     if (formData.value.tags.length > 0) {
       FilterTags.value = formData.value.tags
@@ -424,23 +421,27 @@ onMounted(async () => {
 
   // Display existing images in the gallery
   formData.value.image_gallery.forEach((image) => {
-    const imagePreview = document.createElement('div')
-    imagePreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
-    const imageUrl = typeof image === 'string' ? image : image.url || ''
-    imagePreview.innerHTML = `
-      <div class="dz-image">
-        <img src="${imageUrl}" alt="Gallery Image" />
-      </div>
-      <div class="dz-details">
-        <div class="dz-size"><span>1 MB</span></div>
-        <div class="dz-filename"><span>${imageUrl.split('/').pop()}</span></div>
-      </div>
-    `
-    document
-      .querySelector('#image_gallery .dz-message')
-      .insertAdjacentElement('beforebegin', imagePreview)
+    if (typeof image === 'string') {
+      const imagePreview = document.createElement('div')
+      imagePreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
+      imagePreview.innerHTML = `
+        <div class="dz-image">
+          <img src="${image}" alt="Gallery Image" />
+        </div>
+        <div class="dz-details">
+          <div class="dz-size"><span>1 MB</span></div>
+          <div class="dz-filename"><span>${image.split('/').pop()}</span></div>
+        </div>
+      `
+      document
+        .querySelector('#image_gallery .dz-message')
+        .insertAdjacentElement('beforebegin', imagePreview)
+    }
   })
 
+  try {
+    const response = await import('../../utils/json/tourTypes.json')
+    tourTypes.value = response.default
   try {
     const response = await import('../../utils/json/tourTypes.json')
     tourTypes.value = response.default

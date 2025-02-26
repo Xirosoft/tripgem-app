@@ -426,14 +426,13 @@ onMounted(async () => {
   formData.value.image_gallery.forEach((image) => {
     const imagePreview = document.createElement('div')
     imagePreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
-    const imageUrl = typeof image === 'string' ? image : image.url || ''
     imagePreview.innerHTML = `
       <div class="dz-image">
-        <img src="${imageUrl}" alt="Gallery Image" />
+        <img src="${image}" alt="Gallery Image" />
       </div>
       <div class="dz-details">
         <div class="dz-size"><span>1 MB</span></div>
-        <div class="dz-filename"><span>${imageUrl.split('/').pop()}</span></div>
+        <div class="dz-filename"><span>${image.split('/').pop()}</span></div>
       </div>
     `
     document
