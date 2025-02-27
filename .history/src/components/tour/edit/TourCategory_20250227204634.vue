@@ -3,7 +3,7 @@ import axios from 'axios'
 import $ from 'jquery'
 import 'select2'
 import 'select2/dist/css/select2.css'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import config from '../../../config/config'
 
 const emit = defineEmits(['category-change'])
@@ -19,8 +19,6 @@ const newCategoryDescription = ref('')
 const loadingCategories = ref(false)
 
 const sortCategories = (categories) => {
-  if (!categories) return []
-
   const sortedCategories = []
   const categoryMap = new Map()
 
@@ -55,11 +53,7 @@ const fetchCategories = async () => {
     const response = await axios.get(`${config.apiUrl}/tour/categories/view`, {
       headers: config.getHeaders(),
     })
-    if (response.data && response.data) {
-      categories.value = sortCategories(response.data)
-    } else {
-      console.error('Invalid response format:', response.data)
-    }
+    categories.value = sortCategories(response.data)
   } catch (error) {
     console.error('Error fetching categories:', error)
   } finally {
@@ -100,6 +94,7 @@ const initializeSelect2 = () => {
           (category) => category.category_id.toString() === selectedId,
         )
         currentCategory.value = selectedCategory ? selectedCategory.category_name : null
+        console.log('Selected Category:', selectedCategory)
         emit('category-change', selectedCategory)
       })
       .val(
@@ -107,29 +102,14 @@ const initializeSelect2 = () => {
           ?.category_id || '',
       )
       .trigger('change')
+
+    console.log('Selected Category:', props.selectedCategory)
   })
 }
 
 const props = defineProps({
   selectedCategory: String,
 })
-
-watch(
-  () => props.selectedCategory,
-  (newCategory) => {
-    if (newCategory) {
-      currentCategory.value = newCategory
-      nextTick(() => {
-        const selectedCategory = categories.value.find(
-          (category) => category.category_name === newCategory,
-        )
-        $(categorySelectRef.value)
-          .val(selectedCategory ? selectedCategory.category_id.toString() : '')
-          .trigger('change')
-      })
-    }
-  },
-)
 
 onMounted(async () => {
   await fetchCategories()
@@ -138,88 +118,86 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <!-- Collection -->
-    <div class="mb-6 col ecommerce-select2-dropdown">
-      <label class="form-label mb-1" for="collection">Category</label>
-      <select
-        id="collection"
-        class="select2 form-select"
-        data-placeholder="Category"
-        ref="categorySelectRef"
+  <!-- Collection -->
+  <div class="mb-6 col ecommerce-select2-dropdown">
+    <label class="form-label mb-1" for="collection">Category</label>
+    <select
+      id="collection"
+      class="select2 form-select"
+      data-placeholder="Category"
+      ref="categorySelectRef"
+    >
+      <option value="">Select Category</option>
+      <option
+        v-for="category in categories"
+        :key="category.category_id"
+        :value="category.category_id"
       >
-        <option value="">Select Category</option>
-        <option
-          v-for="category in categories"
-          :key="category.category_id"
-          :value="category.category_id"
-        >
-          {{ getIndentedCategoryName(category) }}
-        </option>
-      </select>
-    </div>
-    <!-- Toggle Add Category Form -->
-    <div class="mb-6 col">
-      <a
-        @click="showAddCategoryForm = !showAddCategoryForm"
-        href="javascript:void(0)"
-        class="btn-link"
-      >
-        {{ showAddCategoryForm ? 'Hide Add Category Form' : 'Add New Category' }}
-      </a>
-    </div>
-    <!-- Add Category Form -->
-    <div v-if="showAddCategoryForm" class="mb-6 col">
-      <label class="form-label mb-1" for="new-category">Add New Category</label>
-      <input
-        id="new-category"
-        v-model="newCategoryName"
-        class="form-control"
-        placeholder="Category Name"
-      />
-      <input
-        id="new-category-slug"
-        v-model="newCategorySlug"
-        class="form-control mt-2"
-        placeholder="Category Slug"
-      />
-      <input
-        id="new-category-description"
-        v-model="newCategoryDescription"
-        class="form-control mt-2"
-        placeholder="Category Description"
-      />
-      <select
-        id="parent-category"
-        v-model="selectedParentCategory"
-        class="form-select mt-2"
-        data-placeholder="Select Parent Category"
-      >
-        <option value="">Select Parent Category</option>
-        <option
-          v-for="category in categories"
-          :key="category.category_id"
-          :value="category.category_id"
-        >
-          {{ getIndentedCategoryName(category) }}
-        </option>
-      </select>
-      <button
-        @click="
-          addCategory({
-            category_name: newCategoryName,
-            category_slug: newCategorySlug,
-            category_description: newCategoryDescription,
-            parent_id: selectedParentCategory,
-          })
-        "
-        class="btn btn-primary mt-2"
-      >
-        Add Category
-      </button>
-    </div>
-    <!-- Status -->
+        {{ getIndentedCategoryName(category) }}
+      </option>
+    </select>
   </div>
+  <!-- Toggle Add Category Form -->
+  <div class="mb-6 col">
+    <a
+      @click="showAddCategoryForm = !showAddCategoryForm"
+      href="javascript:void(0)"
+      class="btn-link"
+    >
+      {{ showAddCategoryForm ? 'Hide Add Category Form' : 'Add New Category' }}
+    </a>
+  </div>
+  <!-- Add Category Form -->
+  <div v-if="showAddCategoryForm" class="mb-6 col">
+    <label class="form-label mb-1" for="new-category">Add New Category</label>
+    <input
+      id="new-category"
+      v-model="newCategoryName"
+      class="form-control"
+      placeholder="Category Name"
+    />
+    <input
+      id="new-category-slug"
+      v-model="newCategorySlug"
+      class="form-control mt-2"
+      placeholder="Category Slug"
+    />
+    <input
+      id="new-category-description"
+      v-model="newCategoryDescription"
+      class="form-control mt-2"
+      placeholder="Category Description"
+    />
+    <select
+      id="parent-category"
+      v-model="selectedParentCategory"
+      class="form-select mt-2"
+      data-placeholder="Select Parent Category"
+    >
+      <option value="">Select Parent Category</option>
+      <option
+        v-for="category in categories"
+        :key="category.category_id"
+        :value="category.category_id"
+      >
+        {{ getIndentedCategoryName(category) }}
+      </option>
+    </select>
+    <button
+      @click="
+        addCategory({
+          category_name: newCategoryName,
+          category_slug: newCategorySlug,
+          category_description: newCategoryDescription,
+          parent_id: selectedParentCategory,
+        })
+      "
+      class="btn btn-primary mt-2"
+    >
+      Add Category
+    </button>
+  </div>
+  <!-- Status -->
 </template>
 
 <style>

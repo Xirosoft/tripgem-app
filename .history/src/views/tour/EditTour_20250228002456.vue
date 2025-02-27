@@ -248,8 +248,8 @@ const loadTourDetails = async () => {
       console.log(FilterLocation.value)
     }
 
-    if (formData.value.category.length > 0 && formData.value.category[0].category_name) {
-      FilterCategory.value = formData.value.category[0].category_name
+    if (formData.value.category.category_name.length > 0) {
+      FilterCategory.value = formData.value.category.category_name
       console.log('Category:', FilterCategory.value)
     }
 
