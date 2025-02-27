@@ -1,0 +1,14 @@
+[
+  { "value": "Car", "label": "Car" },
+  { "value": "Bus", "label": "Bus" },
+  { "value": "Train", "label": "Train" },
+  { "value": "Flight", "label": "Flight" },
+  { "value": "Boat", "label": "Boat" },
+  { "value": "Bicycle", "label": "Bicycle" },
+  { "value": "Motorbike", "label": "Motorbike" },
+  { "value": "Ferry", "label": "Ferry" },
+  { "value": "speedboat", "label": "Speedboat" },
+  { "value": "catamaran", "label": "Catamaran" },
+  { "value": "Longtail Boat", "label": "Longtail Boat" },
+  { "value": "Van", "label": "Van" }
+]
