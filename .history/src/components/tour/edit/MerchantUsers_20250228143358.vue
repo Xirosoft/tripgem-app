@@ -141,7 +141,7 @@ watch(
         setTimeout(() => {
           console.log('Setting user select value to:', newVal)
           $(userSelectRef.value).val(newVal).trigger('change')
-        }, 1000)
+        }, 100)
       })
     }
   },

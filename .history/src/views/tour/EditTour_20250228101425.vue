@@ -92,13 +92,11 @@ const FilterCategory = ref([])
 const FilterTags = ref([])
 
 const handleMerchantUserChange = (merchantId, userId) => {
-  console.log('Merchant user change event:', merchantId, userId)
   formData.value.merchant_id = merchantId
   formData.value.user_id = userId
   // Ensure the selected user is updated
   nextTick(() => {
     setTimeout(() => {
-      console.log('Setting user select value to:', userId)
       $('#Users').val(userId).trigger('change')
     }, 100) // Add a delay to ensure the user list is fully populated
   })

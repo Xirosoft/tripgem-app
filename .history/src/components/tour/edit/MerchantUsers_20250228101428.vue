@@ -79,12 +79,10 @@ onMounted(async () => {
 watch(
   () => selectedMerchant.value,
   async (newMerchantId) => {
-    console.log('Merchant changed:', newMerchantId)
     if (newMerchantId) {
       await fetchUsersByMerchantId(newMerchantId)
       nextTick(() => {
         setTimeout(() => {
-          console.log('Setting user select value to:', props.selectedUserId)
           $(userSelectRef.value).val(props.selectedUserId).trigger('change')
         }, 100) // Add a delay to ensure the user list is fully populated
       })
@@ -105,8 +103,7 @@ watch(
 
 watch(
   () => selectedUser.value,
-  (newUserId) => {
-    console.log('User changed:', newUserId)
+  () => {
     emitMerchantUserChange()
   },
 )
@@ -115,16 +112,12 @@ watch(
 watch(
   () => props.selectedMerchantId,
   async (newVal) => {
-    console.log('Prop selectedMerchantId changed:', newVal)
     selectedMerchant.value = newVal
     if (newVal) {
       await fetchUsersByMerchantId(newVal)
       nextTick(() => {
         $(merchantSelectRef.value).val(newVal).trigger('change')
-        setTimeout(() => {
-          console.log('Setting user select value to:', props.selectedUserId)
-          $(userSelectRef.value).val(props.selectedUserId).trigger('change')
-        }, 100)
+        $(userSelectRef.value).val(props.selectedUserId).trigger('change')
       })
     }
   },
@@ -134,16 +127,12 @@ watch(
 watch(
   () => props.selectedUserId,
   (newVal) => {
-    console.log('Prop selectedUserId changed:', newVal)
-    if (newVal !== selectedUser.value) {
-      selectedUser.value = newVal
-      nextTick(() => {
-        setTimeout(() => {
-          console.log('Setting user select value to:', newVal)
-          $(userSelectRef.value).val(newVal).trigger('change')
-        }, 1000)
-      })
-    }
+    selectedUser.value = newVal
+    nextTick(() => {
+      setTimeout(() => {
+        $(userSelectRef.value).val(newVal).trigger('change')
+      }, 100)
+    })
   },
   { immediate: true },
 )

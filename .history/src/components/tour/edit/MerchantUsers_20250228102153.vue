@@ -135,15 +135,13 @@ watch(
   () => props.selectedUserId,
   (newVal) => {
     console.log('Prop selectedUserId changed:', newVal)
-    if (newVal !== selectedUser.value) {
-      selectedUser.value = newVal
-      nextTick(() => {
-        setTimeout(() => {
-          console.log('Setting user select value to:', newVal)
-          $(userSelectRef.value).val(newVal).trigger('change')
-        }, 1000)
-      })
-    }
+    selectedUser.value = newVal
+    nextTick(() => {
+      setTimeout(() => {
+        console.log('Setting user select value to:', newVal)
+        $(userSelectRef.value).val(newVal).trigger('change')
+      }, 100)
+    })
   },
   { immediate: true },
 )
