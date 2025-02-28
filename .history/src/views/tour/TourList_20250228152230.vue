@@ -56,10 +56,8 @@ export default {
               try {
                 const dates = JSON.parse(data)
                 // console.log('dates:', dates[0]['from'], dates[0]['to'])
-                return dates[0] && dates[0].from && dates[0].to
-                  ? `${dates[0].from} - ${dates[0].to}`
-                  : 'Date not available'
-              } catch {
+                return dates[0]['from'], dates[0]['to'] || 'Date not available'
+              } catch ( {
                 return 'No dates available'
               }
             },

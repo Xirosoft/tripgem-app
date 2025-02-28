@@ -59,7 +59,7 @@ export default {
                 return dates[0] && dates[0].from && dates[0].to
                   ? `${dates[0].from} - ${dates[0].to}`
                   : 'Date not available'
-              } catch {
+              } catch (_) {
                 return 'No dates available'
               }
             },
