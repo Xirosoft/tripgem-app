@@ -23,7 +23,6 @@ import TourCategory from '@/views/tour/TourCategory.vue'
 import TourList from '@/views/tour/TourList.vue'
 import TourLocation from '@/views/tour/TourLocation.vue'
 import TourTags from '@/views/tour/TourTags.vue'
-import ViewTour from '@/views/tour/ViewTour.vue'
 
 const routes = [
   {
@@ -171,10 +170,9 @@ const routes = [
     },
   },
   {
-    path: '/view-tour/:id',
+    path: '/view-tour',
     name: 'ViewTour',
-    component: ViewTour,
-    props: true,
+    component: AddTour,
     meta: {
       requiresAuth: true,
       permissions: 'read',

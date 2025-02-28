@@ -171,7 +171,7 @@ const routes = [
     },
   },
   {
-    path: '/view-tour/:id',
+    path: '/view-tour:id',
     name: 'ViewTour',
     component: ViewTour,
     props: true,

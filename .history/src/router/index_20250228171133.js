@@ -171,10 +171,9 @@ const routes = [
     },
   },
   {
-    path: '/view-tour/:id',
+    path: '/view-tour',
     name: 'ViewTour',
     component: ViewTour,
-    props: true,
     meta: {
       requiresAuth: true,
       permissions: 'read',

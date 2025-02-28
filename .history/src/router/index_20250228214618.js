@@ -222,6 +222,16 @@ const routes = [
       permissionName: 'tour_module',
     },
   },
+  {
+    path: '/all-boookings',
+    name: 'AllBookings',
+    component: AllBookings',,
+    meta: {
+      requiresAuth: true,
+      permissions: 'read',
+      permissionName: 'tour_module',
+    },
+  },
   { path: '/:pathMatch(.*)*', component: MiscError }, // Catch-all route
 ]
 

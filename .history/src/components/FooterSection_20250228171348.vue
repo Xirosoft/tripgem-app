@@ -22,6 +22,7 @@ export default {
         </div>
         <div class="d-none d-lg-inline-block">
           <a href="#" target="_blank" class="footer-link me-4">License</a>
+          <a href="#" target="_blank" class="footer-link me-4">More Themes</a>
           <a href="#" target="_blank" class="footer-link me-4">Documentation</a>
           <a href="#" target="_blank" class="footer-link d-none d-sm-inline-block">Support</a>
         </div>

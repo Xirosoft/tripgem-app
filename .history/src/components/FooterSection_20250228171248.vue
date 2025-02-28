@@ -17,11 +17,14 @@ export default {
         class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column"
       >
         <div class="text-body">
-          © {{ currentYear }} , made with ❤️ by
+          ©
+          {{ currentYear }}
+          , made with ❤️ by
           <a href="https://akerio.net" target="_blank" class="footer-link">Akerio</a>
         </div>
         <div class="d-none d-lg-inline-block">
-          <a href="#" target="_blank" class="footer-link me-4">License</a>
+          <a href="#" class="footer-link me-4" target="_blank">License</a>
+          <a href="#" target="_blank" class="footer-link me-4">More Themes</a>
           <a href="#" target="_blank" class="footer-link me-4">Documentation</a>
           <a href="#" target="_blank" class="footer-link d-none d-sm-inline-block">Support</a>
         </div>
