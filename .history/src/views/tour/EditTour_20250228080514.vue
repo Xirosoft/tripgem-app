@@ -393,42 +393,29 @@ const handleVideoGalleryUpload = async (videoFiles) => {
 
 const removeThumbnail = () => {
   formData.value.thumbnail = ''
-  nextTick(() => {
-    const thumbnailPreview = document.querySelector('#thumbnail .dz-preview')
-    if (thumbnailPreview) {
-      thumbnailPreview.remove()
-    }
-    // Reinitialize Dropzone for thumbnail
-    initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
-  })
+  const thumbnailPreview = document.querySelector('#thumbnail .dz-preview')
+  if (thumbnailPreview) {
+    thumbnailPreview.remove()
+  }
 }
 
 const removeImageFromGallery = (index) => {
   console.log('Index:', index)
 
   formData.value.image_gallery.splice(index, 1)
-  nextTick(() => {
-    const imagePreviews = document.querySelectorAll('#image_gallery .dz-preview')
-    if (imagePreviews[index]) {
-      imagePreviews[index].remove()
-    }
-  })
+  const imagePreviews = document.querySelectorAll('#image_gallery .dz-preview')
+  if (imagePreviews[index]) {
+    imagePreviews[index].remove()
+  }
 }
 
 const removeVideoFromGallery = (index) => {
   formData.value.video_gallery.splice(index, 1)
-  nextTick(() => {
-    const videoPreviews = document.querySelectorAll('#video_gallery .dz-preview')
-    if (videoPreviews[index]) {
-      videoPreviews[index].remove()
-    }
-  })
+  const videoPreviews = document.querySelectorAll('#video_gallery .dz-preview')
+  if (videoPreviews[index]) {
+    videoPreviews[index].remove()
+  }
 }
-
-// Make functions accessible in the template
-window.removeThumbnail = removeThumbnail
-window.removeImageFromGallery = removeImageFromGallery
-window.removeVideoFromGallery = removeVideoFromGallery
 
 onMounted(async () => {
   // console.log('Route params:', route.params)
@@ -473,9 +460,28 @@ onMounted(async () => {
   })
 
   // Initialize Dropzones
+  initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
   initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
   initializeDropzone('#video_gallery', handleVideoGalleryUpload, formData.value, toast, true)
-  initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
+
+  // Display existing thumbnail
+  if (formData.value.thumbnail) {
+    const thumbnailPreview = document.createElement('div')
+    thumbnailPreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
+    thumbnailPreview.innerHTML = `
+      <div class="dz-image">
+        <img src="${formData.value.thumbnail}" alt="Thumbnail" />
+      </div>
+      <div class="dz-details">
+        <div class="dz-size"><span>1 MB</span></div>
+        <div class="dz-filename"><span>${formData.value.thumbnail.split('/').pop()}</span></div>
+      </div>
+      <button type="button" class="btn btn-danger dz-remove" @click="removeThumbnail">Remove</button>
+    `
+    document
+      .querySelector('#thumbnail .dz-message')
+      .insertAdjacentElement('beforebegin', thumbnailPreview)
+  }
 
   // Display existing images in the gallery
   formData.value.image_gallery.forEach((image, index) => {
@@ -490,7 +496,7 @@ onMounted(async () => {
         <div class="dz-size"><span>1 MB</span></div>
         <div class="dz-filename"><span>${imageUrl.split('/').pop()}</span></div>
       </div>
-      <button type="button" class="btn btn-danger dz-remove" onclick="removeImageFromGallery(${index})">Remove</button>
+      <button type="button" class="btn btn-danger dz-remove" @click="removeImageFromGallery(${index})">Remove</button>
     `
     document
       .querySelector('#image_gallery .dz-message')
@@ -513,7 +519,7 @@ onMounted(async () => {
         <div class="dz-size"><span>1 MB</span></div>
         <div class="dz-filename"><span>${videoUrl.split('/').pop()}</span></div>
       </div>
-      <button type="button" class="btn btn-danger dz-remove" onclick="removeVideoFromGallery(${index})">Remove</button>
+      <button type="button" class="btn btn-danger dz-remove" @click="removeVideoFromGallery(${index})">Remove</button>
     `
     document
       .querySelector('#video_gallery .dz-message')
@@ -1580,13 +1586,12 @@ onMounted(async () => {
         <!-- /Organize Card -->
 
         <!-- Media -->
-
         <div class="card mb-6">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0 card-title">Thumbnail</h5>
           </div>
           <div class="card-body">
-            <div v-if="!formData.thumbnail" class="dropzone needsclick p-0" id="thumbnail">
+            <div class="dropzone needsclick p-0" id="thumbnail">
               <div class="dz-message needsclick">
                 <p class="h4 needsclick pt-3 mb-2">Drag and drop your image here</p>
                 <p class="h6 text-muted d-block fw-normal mb-2">or</p>
@@ -1596,22 +1601,6 @@ onMounted(async () => {
               </div>
               <div class="fallback">
                 <input name="thumbnail" type="file" />
-              </div>
-            </div>
-            <div v-else>
-              <div class="dz-preview dz-processing dz-image-preview dz-complete">
-                <div class="dz-image">
-                  <img :src="formData.thumbnail" alt="Thumbnail" />
-                </div>
-                <div class="dz-details">
-                  <div class="dz-size"><span>1 MB</span></div>
-                  <div class="dz-filename">
-                    <span>{{ formData.thumbnail.split('/').pop() }}</span>
-                  </div>
-                </div>
-                <button type="button" class="btn btn-danger dz-remove" @click="removeThumbnail">
-                  Remove
-                </button>
               </div>
             </div>
           </div>

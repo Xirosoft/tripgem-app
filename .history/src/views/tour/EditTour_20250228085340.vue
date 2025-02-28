@@ -473,9 +473,28 @@ onMounted(async () => {
   })
 
   // Initialize Dropzones
+  initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
   initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
   initializeDropzone('#video_gallery', handleVideoGalleryUpload, formData.value, toast, true)
-  initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
+
+  // Display existing thumbnail
+  if (formData.value.thumbnail) {
+    const thumbnailPreview = document.createElement('div')
+    thumbnailPreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
+    thumbnailPreview.innerHTML = `
+      <div class="dz-image">
+        <img src="${formData.value.thumbnail}" alt="Thumbnail" />
+      </div>
+      <div class="dz-details">
+        <div class="dz-size"><span>1 MB</span></div>
+        <div class="dz-filename"><span>${formData.value.thumbnail.split('/').pop()}</span></div>
+      </div>
+      <button type="button" class="btn btn-danger dz-remove" onclick="removeThumbnail()">Remove</button>
+    `
+    document
+      .querySelector('#thumbnail .dz-message')
+      .insertAdjacentElement('beforebegin', thumbnailPreview)
+  }
 
   // Display existing images in the gallery
   formData.value.image_gallery.forEach((image, index) => {
@@ -1580,7 +1599,22 @@ onMounted(async () => {
         <!-- /Organize Card -->
 
         <!-- Media -->
-
+        <div class="card mb-6">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 card-title">Thumbnail</h5>
+          </div>
+          <div class="card-body">
+            <div class="dropzone needsclick p-0" id="thumbnail">
+              <div class="dz-message needsclick">
+                <p class="h4 needsclick pt-3 mb-2">Drag and drop your image here</p>
+                <p class="h6 text-muted d-block fw-normal mb-2">or</p>
+                <span class="note needsclick btn btn-sm btn-label-primary" id="btnBrowse"
+                  >Browse image</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="card mb-6">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0 card-title">Thumbnail</h5>

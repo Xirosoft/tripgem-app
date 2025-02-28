@@ -475,7 +475,26 @@ onMounted(async () => {
   // Initialize Dropzones
   initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
   initializeDropzone('#video_gallery', handleVideoGalleryUpload, formData.value, toast, true)
-  initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
+  initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast, true), true)
+
+  // Display existing thumbnail
+  if (formData.value.thumbnail) {
+    const thumbnailPreview = document.createElement('div')
+    thumbnailPreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
+    thumbnailPreview.innerHTML = `
+      <div class="dz-image">
+        <img src="${formData.value.thumbnail}" alt="Thumbnail" />
+      </div>
+      <div class="dz-details">
+        <div class="dz-size"><span>1 MB</span></div>
+        <div class="dz-filename"><span>${formData.value.thumbnail.split('/').pop()}</span></div>
+      </div>
+      <button type="button" class="btn btn-danger dz-remove" onclick="removeThumbnail()">Remove</button>
+    `
+    document
+      .querySelector('#thumbnail .dz-message')
+      .insertAdjacentElement('beforebegin', thumbnailPreview)
+  }
 
   // Display existing images in the gallery
   formData.value.image_gallery.forEach((image, index) => {
@@ -1580,7 +1599,6 @@ onMounted(async () => {
         <!-- /Organize Card -->
 
         <!-- Media -->
-
         <div class="card mb-6">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0 card-title">Thumbnail</h5>
@@ -1616,6 +1634,99 @@ onMounted(async () => {
             </div>
           </div>
         </div>
+
+        <!-- Gallery Section -->
+        <div class="card mb-6">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Gallery Section</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <!-- Navigation -->
+              <div class="col-12 mx-auto card-separator">
+                <div class="d-flex justify-content-between flex-column mb-4 mb-md-0 pe-md-4">
+                  <div class="nav-align-left">
+                    <ul class="nav nav-pills display-inline w-100">
+                      <li class="nav-item">
+                        <button
+                          class="nav-link active"
+                          data-bs-toggle="tab"
+                          data-bs-target="#photoGallery"
+                        >
+                          <i class="ti ti-box ti-sm me-1_5"></i>
+                          <span class="align-middle">Photos</span>
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          class="nav-link"
+                          data-bs-toggle="tab"
+                          data-bs-target="#videoGallery"
+                        >
+                          <i class="ti ti-car ti-sm me-1_5"></i>
+                          <span class="align-middle">Videos</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- /Navigation -->
+              <!-- Options -->
+              <div class="col-12 pt-6 pt-md-0">
+                <div class="tab-content p-0 mt-4">
+                  <!-- photoGallery Tab -->
+                  <div class="tab-pane fade show active" id="photoGallery" role="tabpanel">
+                    <h6 class="text-body">You Can Upload multiple Photos</h6>
+                    <div class="card mb-6">
+                      <div class="card-body">
+                        <div class="dropzone needsclick p-0" id="image_gallery">
+                          <div class="dz-message needsclick">
+                            <p class="h4 needsclick pt-3 mb-2">Drag and drop your images here</p>
+                            <p class="h6 text-muted d-block fw-normal mb-2">or</p>
+                            <span
+                              class="note needsclick btn btn-sm btn-label-primary"
+                              id="btnBrowse"
+                              >Browse images</span
+                            >
+                          </div>
+                          <div class="fallback">
+                            <input name="image_gallery" type="file" multiple />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- videoGallery Tab -->
+                  <div class="tab-pane fade" id="videoGallery" role="tabpanel">
+                    <h6 class="mb-3 text-body">You can upload multiple videos</h6>
+                    <div class="card mb-6">
+                      <div class="card-body">
+                        <div class="dropzone needsclick p-0" id="video_gallery">
+                          <div class="dz-message needsclick">
+                            <p class="h4 needsclick pt-3 mb-2">Drag and drop your videos here</p>
+                            <p class="h6 text-muted d-block fw-normal mb-2">or</p>
+                            <span
+                              class="note needsclick btn btn-sm btn-label-primary"
+                              id="btnBrowse"
+                              >Browse videos</span
+                            >
+                          </div>
+                          <div class="fallback">
+                            <input name="video_gallery" type="file" multiple />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /Media -->
+                  </div>
+                </div>
+              </div>
+              <!-- /Options-->
+            </div>
+          </div>
+        </div>
+        <!-- /Gallery Section -->
       </div>
       <!-- /Second column -->
     </div>

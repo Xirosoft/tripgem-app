@@ -473,9 +473,28 @@ onMounted(async () => {
   })
 
   // Initialize Dropzones
+  initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
   initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
   initializeDropzone('#video_gallery', handleVideoGalleryUpload, formData.value, toast, true)
-  initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
+
+  // Display existing thumbnail
+  if (formData.value.thumbnail) {
+    const thumbnailPreview = document.createElement('div')
+    thumbnailPreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
+    thumbnailPreview.innerHTML = `
+      <div class="dz-image">
+        <img src="${formData.value.thumbnail}" alt="Thumbnail" />
+      </div>
+      <div class="dz-details">
+        <div class="dz-size"><span>1 MB</span></div>
+        <div class="dz-filename"><span>${formData.value.thumbnail.split('/').pop()}</span></div>
+      </div>
+      <button type="button" class="btn btn-danger dz-remove" onclick="removeThumbnail()">Remove</button>
+    `
+    document
+      .querySelector('#thumbnail .dz-message')
+      .insertAdjacentElement('beforebegin', thumbnailPreview)
+  }
 
   // Display existing images in the gallery
   formData.value.image_gallery.forEach((image, index) => {
