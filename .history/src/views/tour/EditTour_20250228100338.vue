@@ -365,7 +365,7 @@ const handleImageGalleryUpload = async (files) => {
     for (const file of files) {
       console.log('File:', file)
 
-      await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
+      const thumbnail = await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
       // console.log('URL:', url)
 
       // formData.value.image_gallery.push(thumbnail.url)
@@ -383,9 +383,9 @@ const handleVideoGalleryUpload = async (videoFiles) => {
 
   try {
     for (const file of videoFiles) {
-      await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
-      // formData.value.video_gallery.push(video.url)
-      // console.log('success in')
+      const video = await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
+      formData.value.video_gallery.push(video.url)
+      console.log('success in')
     }
   } catch (error) {
     console.error(error)

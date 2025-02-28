@@ -383,7 +383,7 @@ const handleVideoGalleryUpload = async (videoFiles) => {
 
   try {
     for (const file of videoFiles) {
-      await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
+      const video = await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
       // formData.value.video_gallery.push(video.url)
       // console.log('success in')
     }

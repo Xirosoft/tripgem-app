@@ -330,11 +330,11 @@ const handleSubmit = async () => {
     formData.value.languages_supported = $('#language').val()
     formData.value.currency = $('#currency').val()
 
-    // console.log('Form Location:', formData.value.location)
-    // console.log($('#location').val())
+    console.log('Form Location:', formData.value.location)
+    console.log($('#location').val())
 
-    // console.log('Form Category:', formData.value.category)
-    // console.log('Form Tags:', formData.value.tags)
+    console.log('Form Category:', formData.value.category)
+    console.log('Form Tags:', formData.value.tags)
 
     await editTourStore.updateTourDetails(tourId, formData.value)
     toast.success('Tour updated successfully!', {
@@ -363,12 +363,10 @@ const handleImageGalleryUpload = async (files) => {
 
   try {
     for (const file of files) {
-      console.log('File:', file)
-
-      await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
+      const thumbnail = await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
       // console.log('URL:', url)
 
-      // formData.value.image_gallery.push(thumbnail.url)
+      formData.value.image_gallery.push(thumbnail.url)
     }
     // toast.success('Images uploaded successfully')
   } catch (error) {
@@ -383,9 +381,9 @@ const handleVideoGalleryUpload = async (videoFiles) => {
 
   try {
     for (const file of videoFiles) {
-      await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
-      // formData.value.video_gallery.push(video.url)
-      // console.log('success in')
+      const video = await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
+      formData.value.video_gallery.push(video.url)
+      console.log('success in')
     }
   } catch (error) {
     console.error(error)

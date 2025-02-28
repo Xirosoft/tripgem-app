@@ -296,7 +296,7 @@ const loadTourDetails = async () => {
 }
 
 const handleLocationChange = (locationData) => {
-  // console.log('Location Data:', locationData)
+  console.log('Location Data:', locationData)
   formData.value.location = locationData
     ? [{ id: locationData.location_id, name: locationData.location_name }]
     : []
@@ -304,7 +304,7 @@ const handleLocationChange = (locationData) => {
 }
 
 const handleCategoryChange = (category) => {
-  // console.log('Category:', category)
+  console.log('Category:', category)
 
   formData.value.category = category
     ? [{ id: category.category_id, category_name: category.category_name }]
@@ -313,7 +313,7 @@ const handleCategoryChange = (category) => {
 }
 
 const handleTagsChange = (tags) => {
-  // console.log('Tags:', tags)
+  console.log('Tags:', tags)
   formData.value.tags = tags.map((tag) => ({ id: tag.id, tag_name: tag.name }))
 }
 
@@ -363,18 +363,15 @@ const handleImageGalleryUpload = async (files) => {
 
   try {
     for (const file of files) {
-      console.log('File:', file)
-
-      await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
-      // console.log('URL:', url)
-
-      // formData.value.image_gallery.push(thumbnail.url)
+      const thumbnail = await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
+      formData.value.image_gallery.push(thumbnail.url)
     }
-    // toast.success('Images uploaded successfully')
+    // Clear existing previews
+    document.querySelectorAll('#image_gallery .dz-preview').forEach((preview) => preview.remove())
+    // Display updated images in the gallery
+    displayImageGallery()
   } catch (error) {
     console.log('Error:', error)
-
-    // toast.error('Failed to upload images...', error)
   }
 }
 
@@ -383,14 +380,61 @@ const handleVideoGalleryUpload = async (videoFiles) => {
 
   try {
     for (const file of videoFiles) {
-      await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
-      // formData.value.video_gallery.push(video.url)
-      // console.log('success in')
+      const video = await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
+      formData.value.video_gallery.push(video.url)
     }
+    // Clear existing previews
+    document.querySelectorAll('#video_gallery .dz-preview').forEach((preview) => preview.remove())
+    // Display updated videos in the gallery
+    displayVideoGallery()
   } catch (error) {
     console.error(error)
-    // toast.error('Failed to upload videos', error)
   }
+}
+
+const displayImageGallery = () => {
+  formData.value.image_gallery.forEach((image, index) => {
+    const imagePreview = document.createElement('div')
+    imagePreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
+    const imageUrl = typeof image === 'string' ? image : image.url || ''
+    imagePreview.innerHTML = `
+      <div class="dz-image">
+        <img src="${imageUrl}" alt="Gallery Image" />
+      </div>
+      <div class="dz-details">
+        <div class="dz-size"><span>1 MB</span></div>
+        <div class="dz-filename"><span>${imageUrl.split('/').pop()}</span></div>
+      </div>
+      <button type="button" class="btn btn-danger dz-remove" onclick="removeImageFromGallery(${index})">Remove</button>
+    `
+    document
+      .querySelector('#image_gallery .dz-message')
+      .insertAdjacentElement('beforebegin', imagePreview)
+  })
+}
+
+const displayVideoGallery = () => {
+  formData.value.video_gallery.forEach((video, index) => {
+    const videoPreview = document.createElement('div')
+    videoPreview.classList.add('dz-preview', 'dz-processing', 'dz-video-preview', 'dz-complete')
+    const videoUrl = typeof video === 'string' ? video : video.url || ''
+    videoPreview.innerHTML = `
+      <div class="dz-video">
+        <video controls>
+          <source src="${videoUrl}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="dz-details">
+        <div class="dz-size"><span>1 MB</span></div>
+        <div class="dz-filename"><span>${videoUrl.split('/').pop()}</span></div>
+      </div>
+      <button type="button" class="btn btn-danger dz-remove" onclick="removeVideoFromGallery(${index})">Remove</button>
+    `
+    document
+      .querySelector('#video_gallery .dz-message')
+      .insertAdjacentElement('beforebegin', videoPreview)
+  })
 }
 
 const removeThumbnail = () => {
@@ -480,47 +524,10 @@ onMounted(async () => {
   initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
 
   // Display existing images in the gallery
-  formData.value.image_gallery.forEach((image, index) => {
-    const imagePreview = document.createElement('div')
-    imagePreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
-    const imageUrl = typeof image === 'string' ? image : image.url || ''
-    imagePreview.innerHTML = `
-      <div class="dz-image">
-        <img src="${imageUrl}" alt="Gallery Image" />
-      </div>
-      <div class="dz-details">
-        <div class="dz-size"><span>1 MB</span></div>
-        <div class="dz-filename"><span>${imageUrl.split('/').pop()}</span></div>
-      </div>
-      <button type="button" class="btn btn-danger dz-remove" onclick="removeImageFromGallery(${index})">Remove</button>
-    `
-    document
-      .querySelector('#image_gallery .dz-message')
-      .insertAdjacentElement('beforebegin', imagePreview)
-  })
+  displayImageGallery()
 
   // Display existing videos in the gallery
-  formData.value.video_gallery.forEach((video, index) => {
-    const videoPreview = document.createElement('div')
-    videoPreview.classList.add('dz-preview', 'dz-processing', 'dz-video-preview', 'dz-complete')
-    const videoUrl = typeof video === 'string' ? video : video.url || ''
-    videoPreview.innerHTML = `
-      <div class="dz-video">
-        <video controls>
-          <source src="${videoUrl}" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="dz-details">
-        <div class="dz-size"><span>1 MB</span></div>
-        <div class="dz-filename"><span>${videoUrl.split('/').pop()}</span></div>
-      </div>
-      <button type="button" class="btn btn-danger dz-remove" onclick="removeVideoFromGallery(${index})">Remove</button>
-    `
-    document
-      .querySelector('#video_gallery .dz-message')
-      .insertAdjacentElement('beforebegin', videoPreview)
-  })
+  displayVideoGallery()
 
   try {
     const response = await import('../../utils/json/tourTypes.json')
