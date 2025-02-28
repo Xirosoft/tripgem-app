@@ -345,8 +345,8 @@ const handleSubmit = async () => {
       position: 'top-right',
       duration: 5000,
     })
-    clearForm()
-    router.push('/all-tours')
+    // clearForm()
+    // router.push('/all-tours')
   } catch (error) {
     console.log('Failed to update tour: ' + error.message)
   }

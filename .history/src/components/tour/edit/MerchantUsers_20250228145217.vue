@@ -105,8 +105,8 @@ watch(
 
 watch(
   () => selectedUser.value,
-  () => {
-    // console.log('User changed:', newUserId)
+  (newUserId) => {
+    console.log('User changed:', newUserId)
     emitMerchantUserChange()
   },
 )

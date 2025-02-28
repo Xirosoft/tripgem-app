@@ -105,8 +105,8 @@ watch(
 
 watch(
   () => selectedUser.value,
-  () => {
-    // console.log('User changed:', newUserId)
+  (newUserId) => {
+    console.log('User changed:', newUserId)
     emitMerchantUserChange()
   },
 )
@@ -122,7 +122,7 @@ watch(
       nextTick(() => {
         $(merchantSelectRef.value).val(newVal).trigger('change')
         setTimeout(() => {
-          // console.log('Setting user select value to:', props.selectedUserId)
+          console.log('Setting user select value to:', props.selectedUserId)
           $(userSelectRef.value).val(props.selectedUserId).trigger('change')
         }, 100)
       })
