@@ -165,9 +165,21 @@ export default {
 
 <template>
   <div class="row pb-2 gap-3 gap-md-0">
-    <div class="col-md-3 tour_status"></div>
-    <div class="col-md-3 tour_location"></div>
-    <div class="col-md-3 tour_payment_method"></div>
+    <div class="col-md-2 tour_status"></div>
+    <div class="col-md-2 tour_location"></div>
+    <div class="col-md-2 tour_payment_method"></div>
+    <div class="col-md-4 product_date_range">
+      <input type="text" ref="startDate" class="form-control" placeholder="Start Date" />
+      <input type="text" ref="endDate" class="form-control mt-2" placeholder="End Date" />
+      <select class="form-select mt-2" v-model="presetDateRange" @change="onPresetDateRangeChange">
+        <option value="">Select Date Range</option>
+        <option value="today">Today</option>
+        <option value="yesterday">Yesterday</option>
+        <option value="lastWeek">Last Week</option>
+        <option value="lastMonth">Last Month</option>
+        <option value="thisMonth">This Month</option>
+      </select>
+    </div>
     <div class="col-md-2 d-flex align-items-center justify-content-md-end">
       <button class="dt-button add-new btn btn-primary" @click="$emit('add-booking')">
         <span>
@@ -175,28 +187,6 @@ export default {
           <span class="d-none d-sm-inline-block">Add Booking</span>
         </span>
       </button>
-    </div>
-    <div class="row product_date_range">
-      <div class="col-3">
-        <input type="text" ref="startDate" class="form-control" placeholder="Start Date" />
-      </div>
-      <div class="col-3">
-        <input type="text" ref="endDate" class="form-control mt-2" placeholder="End Date" />
-      </div>
-      <div class="col-3">
-        <select
-          class="form-select mt-2"
-          v-model="presetDateRange"
-          @change="onPresetDateRangeChange"
-        >
-          <option value="">Select Date Range</option>
-          <option value="today">Today</option>
-          <option value="yesterday">Yesterday</option>
-          <option value="lastWeek">Last Week</option>
-          <option value="lastMonth">Last Month</option>
-          <option value="thisMonth">This Month</option>
-        </select>
-      </div>
     </div>
   </div>
 </template>

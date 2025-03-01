@@ -1,88 +1,98 @@
 <script>
+import 'daterangepicker'
+import 'daterangepicker/daterangepicker.css'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import isBetween from 'dayjs/plugin/isBetween'
 import $ from 'jquery'
-import 'jquery-ui/themes/base/all.css'
-import 'jquery-ui/ui/widgets/datepicker'
+import moment from 'moment'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(isBetween)
+
+// Ensure moment is globally available
+window.moment = moment
 
 export default {
   name: 'FilterComponent',
   data() {
     return {
-      startDate: null,
-      endDate: null,
+      dateRange: [],
       presetDateRange: '',
     }
   },
-  mounted() {
-    this.initializeDatePickers()
-  },
+
   methods: {
-    initializeDatePickers() {
+    initializeDateRangePicker() {
       const self = this
-      $(this.$refs.startDate).datepicker({
-        dateFormat: 'yy-mm-dd',
-        onSelect(dateText) {
-          self.startDate = dateText
+      $(this.$refs.dateRangePicker).daterangepicker(
+        {
+          opens: 'left',
+          autoUpdateInput: false,
+          locale: {
+            cancelLabel: 'Clear',
+          },
+        },
+        function (start, end) {
+          self.dateRange = [start, end]
           self.onDateRangeChange()
         },
+      )
+
+      $(this.$refs.dateRangePicker).on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(
+          picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'),
+        )
       })
-      $(this.$refs.endDate).datepicker({
-        dateFormat: 'yy-mm-dd',
-        onSelect(dateText) {
-          self.endDate = dateText
-          self.onDateRangeChange()
-        },
+
+      $(this.$refs.dateRangePicker).on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('')
+        self.dateRange = []
+        self.onDateRangeChange()
       })
     },
     onDateRangeChange() {
-      console.log('Custom date range changed:', this.startDate, this.endDate)
+      console.log('Custom date range changed:', this.dateRange)
       this.filterByDateRange()
     },
     onPresetDateRangeChange() {
       console.log('Preset date range changed:', this.presetDateRange)
-      const today = dayjs()
+      const today = moment()
       let startDate, endDate
 
       switch (this.presetDateRange) {
         case 'today':
-          startDate = today.startOf('day').format('YYYY-MM-DD')
-          endDate = today.endOf('day').format('YYYY-MM-DD')
+          startDate = today.startOf('day')
+          endDate = today.endOf('day')
           break
         case 'yesterday':
-          startDate = today.subtract(1, 'day').startOf('day').format('YYYY-MM-DD')
-          endDate = today.subtract(1, 'day').endOf('day').format('YYYY-MM-DD')
+          startDate = today.subtract(1, 'day').startOf('day')
+          endDate = today.subtract(1, 'day').endOf('day')
           break
         case 'lastWeek':
-          startDate = today.subtract(1, 'week').startOf('week').format('YYYY-MM-DD')
-          endDate = today.subtract(1, 'week').endOf('week').format('YYYY-MM-DD')
+          startDate = today.subtract(1, 'week').startOf('week')
+          endDate = today.subtract(1, 'week').endOf('week')
           break
         case 'lastMonth':
-          startDate = today.subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
-          endDate = today.subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
+          startDate = today.subtract(1, 'month').startOf('month')
+          endDate = today.subtract(1, 'month').endOf('month')
           break
         case 'thisMonth':
-          startDate = today.startOf('month').format('YYYY-MM-DD')
-          endDate = today.endOf('month').format('YYYY-MM-DD')
+          startDate = today.startOf('month')
+          endDate = today.endOf('month')
           break
         default:
           startDate = null
           endDate = null
       }
 
-      this.startDate = startDate
-      this.endDate = endDate
-      console.log('Date range set to:', this.startDate, this.endDate)
+      this.dateRange = [startDate, endDate]
+      console.log('Date range set to:', this.dateRange)
       this.filterByDateRange()
     },
     filterByDateRange() {
       const table = $('#bookingsTable').DataTable()
-      const startDate = this.startDate ? dayjs(this.startDate) : null
-      const endDate = this.endDate ? dayjs(this.endDate) : null
+      const [startDate, endDate] = this.dateRange || []
 
       console.log('Filtering by date range:', startDate, endDate)
 
@@ -160,14 +170,28 @@ export default {
       })
     },
   },
+  mounted() {
+    this.initializeDateRangePicker()
+  },
 }
 </script>
 
 <template>
   <div class="row pb-2 gap-3 gap-md-0">
-    <div class="col-md-3 tour_status"></div>
-    <div class="col-md-3 tour_location"></div>
-    <div class="col-md-3 tour_payment_method"></div>
+    <div class="col-md-2 tour_status"></div>
+    <div class="col-md-2 tour_location"></div>
+    <div class="col-md-2 tour_payment_method"></div>
+    <div class="col-md-4 product_date_range">
+      <input type="text" ref="dateRangePicker" class="form-control" />
+      <select class="form-select mt-2" v-model="presetDateRange" @change="onPresetDateRangeChange">
+        <option value="">Select Date Range</option>
+        <option value="today">Today</option>
+        <option value="yesterday">Yesterday</option>
+        <option value="lastWeek">Last Week</option>
+        <option value="lastMonth">Last Month</option>
+        <option value="thisMonth">This Month</option>
+      </select>
+    </div>
     <div class="col-md-2 d-flex align-items-center justify-content-md-end">
       <button class="dt-button add-new btn btn-primary" @click="$emit('add-booking')">
         <span>
@@ -175,28 +199,6 @@ export default {
           <span class="d-none d-sm-inline-block">Add Booking</span>
         </span>
       </button>
-    </div>
-    <div class="row product_date_range">
-      <div class="col-3">
-        <input type="text" ref="startDate" class="form-control" placeholder="Start Date" />
-      </div>
-      <div class="col-3">
-        <input type="text" ref="endDate" class="form-control mt-2" placeholder="End Date" />
-      </div>
-      <div class="col-3">
-        <select
-          class="form-select mt-2"
-          v-model="presetDateRange"
-          @change="onPresetDateRangeChange"
-        >
-          <option value="">Select Date Range</option>
-          <option value="today">Today</option>
-          <option value="yesterday">Yesterday</option>
-          <option value="lastWeek">Last Week</option>
-          <option value="lastMonth">Last Month</option>
-          <option value="thisMonth">This Month</option>
-        </select>
-      </div>
     </div>
   </div>
 </template>
