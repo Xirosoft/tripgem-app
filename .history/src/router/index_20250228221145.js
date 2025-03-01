@@ -25,7 +25,7 @@ import TourLocation from '@/views/tour/TourLocation.vue'
 import TourTags from '@/views/tour/TourTags.vue'
 import ViewTour from '@/views/tour/ViewTour.vue'
 
-import AllBookings from '@/views/booking/AllBookings.vue'
+import AllBookings from '@/views/bookings/AllBookings.vue'
 
 const routes = [
   {
@@ -218,16 +218,6 @@ const routes = [
     path: '/tour-tags',
     name: 'TourTags',
     component: TourTags,
-    meta: {
-      requiresAuth: true,
-      permissions: 'read',
-      permissionName: 'tour_module',
-    },
-  },
-  {
-    path: '/all-boookings',
-    name: 'AllBookings',
-    component: AllBookings,
     meta: {
       requiresAuth: true,
       permissions: 'read',
