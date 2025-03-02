@@ -1,13 +1,13 @@
-import { usePermissionsStore } from '@/stores/permissions'; // Import usePermissionsStore
+import { usePermissionsStore } from '@/stores/permissions' // Import usePermissionsStore
 import AddMerchant from '@/views/merchant/AddMerchant.vue'
-import EditMerchant from '@/views/merchant/EditMerchant.vue'; // Import EditMerchant component
+import EditMerchant from '@/views/merchant/EditMerchant.vue' // Import EditMerchant component
 import MerchantsList from '@/views/merchant/MerchantsList.vue'
 import ViewMerchant from '@/views/merchant/ViewMerchant.vue'
 import PermissionsList from '@/views/permission/PermissionsList.vue'
 import RolesList from '@/views/role/RolesList.vue'
 import EditUser from '@/views/users/EditUser.vue'
 import UserList from '@/views/users/UserList.vue'
-import ViewUser from '@/views/users/ViewUser.vue'; // Import ViewUser component
+import ViewUser from '@/views/users/ViewUser.vue' // Import ViewUser component
 import { createRouter, createWebHistory } from 'vue-router'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import ForgetPassWord from '../views/ForgetPassWord.vue'
@@ -22,7 +22,6 @@ import EditTour from '@/views/tour/EditTour.vue'
 import TourCategory from '@/views/tour/TourCategory.vue'
 import TourList from '@/views/tour/TourList.vue'
 import TourLocation from '@/views/tour/TourLocation.vue'
-import TourSearch from '@/views/tour/TourSearch.vue'
 import TourTags from '@/views/tour/TourTags.vue'
 import ViewTour from '@/views/tour/ViewTour.vue'
 
@@ -227,9 +226,9 @@ const routes = [
     },
   },
   {
-    path: '/tour-search',
-    name: 'TourSearch',
-    component: TourSearch,
+    path: '/all-boookings',
+    name: 'AllBookings',
+    component: AllBookings,
     meta: {
       requiresAuth: true,
       permissions: 'read',
@@ -247,17 +246,7 @@ const routes = [
     },
   },
   {
-    path: '/all-bookings',
-    name: 'AllBookings',
-    component: AllBookings,
-    meta: {
-      requiresAuth: true,
-      permissions: 'read',
-      permissionName: 'tour_module',
-    },
-  },
-  {
-    path: '/add-booking',
+    path: '/add-boooking',
     name: 'AddBooking',
     component: AddBooking,
     meta: {
