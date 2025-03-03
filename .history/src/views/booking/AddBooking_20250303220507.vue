@@ -57,23 +57,20 @@ export default {
   },
   computed: {
     sidebarData() {
-      const discountAmount = Array.isArray(this.booking.discount)
-        ? this.booking.discount.reduce((total, discountName) => {
-            const discount = this.booking.discountDetails.find((d) => d.name === discountName)
-            if (discount) {
-              if (discount.type === 'fixed') {
-                return total + discount.amount
-              } else if (discount.type === 'percentage') {
-                const applicablePrice =
-                  discount.target === 'adult' ? this.booking.adult_price : this.booking.child_price
-                return total + (applicablePrice * discount.amount) / 100
-              }
-            }
-            return total
-          }, 0)
-        : 0
+      const discountAmount = this.booking.discount.reduce((total, discountName) => {
+        const discount = this.booking.discountDetails.find((d) => d.name === discountName)
+        if (discount) {
+          if (discount.type === 'fixed') {
+            return total + discount.amount
+          } else if (discount.type === 'percentage') {
+            const applicablePrice =
+              discount.target === 'adult' ? this.booking.adult_price : this.booking.child_price
+            return total + (applicablePrice * discount.amount) / 100
+          }
+        }
+        return total
+      }, 0)
 
-      const parkFee = this.calculateParkFee()
       return {
         adultTravelers: this.booking.num_traveler_adult || 0,
         childTravelers: this.booking.num_traveler_child || 0,
@@ -84,14 +81,12 @@ export default {
           (this.booking.num_traveler_infant || 0),
         totalPrice:
           (this.booking.adult_price || 0) * (this.booking.num_traveler_adult || 0) +
-          (this.booking.child_price || 0) * (this.booking.num_traveler_child || 0) +
-          parkFee,
+          (this.booking.child_price || 0) * (this.booking.num_traveler_child || 0),
         pickUpCharge: this.booking.selectedLocation ? this.booking.selectedLocation.charge || 0 : 0,
         dropOffCharge: this.booking.selectedDropLocation
           ? this.booking.selectedDropLocation.charge || 0
           : 0,
         discountAmount,
-        parkFee,
       }
     },
   },
@@ -121,11 +116,6 @@ export default {
 
         this.booking.pick_up_time = this.tour.pick_up_time
         this.booking.thumbnail = this.tour.thumbnail
-        this.booking.thumbnail = this.tour.thumbnail
-        this.booking.park_fee = JSON.parse(this.tour.park_fee)
-        console.log('Park Fee:', this.booking.park_fee)
-
-        this.booking.discount = this.tour.discount
         this.booking.discountDetails = JSON.parse(this.tour.discount)
         console.log('Discount:', this.booking.discountDetails)
         this.populateDiscountOptions() // Populate discount options after fetching tour data
@@ -234,7 +224,7 @@ export default {
       const discountSelect = $('#discount')
       discountSelect.empty()
       discountSelect.append(new Option('Select Discount', '', true, true))
-      this.booking.discountDetails.forEach((discount) => {
+      this.booking.discount.forEach((discount) => {
         const option = new Option(
           discount.name + ' - ฿' + discount.amount + ' - ' + discount.type,
           discount.name,
@@ -242,17 +232,6 @@ export default {
         discountSelect.append(option)
       })
       discountSelect.trigger('change')
-    },
-    calculateParkFee() {
-      if (!this.booking.park_fee) return 0
-      const parkFee = this.booking.park_fee
-      const isLocal = this.booking.nationality === 'Thailand'
-      const adultFee = isLocal ? parkFee.local_price_adult_park_fee : parkFee.price_adult_park_fee
-      const childFee = isLocal ? parkFee.local_price_child_park_fee : parkFee.price_child_park_fee
-      return (
-        adultFee * (this.booking.num_traveler_adult || 0) +
-        childFee * (this.booking.num_traveler_child || 0)
-      )
     },
   },
   mounted() {
@@ -267,7 +246,6 @@ export default {
         })
         .on('change', (e) => {
           this.booking.nationality = e.target.value
-          this.calculateParkFee()
         })
       $('#discount')
         .select2({
@@ -373,56 +351,15 @@ export default {
                             aria-label="Close"
                           ></button>
                           <br />
-                          <!-- <p><b>Price</b></p> -->
                           <div class="mt-md- mb-md-1">
                             <span class="text-primary">{{ booking.adult_price }}/</span>Adult
                           </div>
                           <div class="mt-md- mb-md-1">
                             <span class="text-primary">{{ booking.child_price }}/</span>Child
                           </div>
-                        </div>
-                      </div>
-                      <div class="col-12">
-                        <div v-if="booking.park_fee" class="row park-fee-block">
-                          <div class="col-md-6">
-                            <div class="col-md-4">
-                              <div class="d-flex flex-column">
-                                <span>Adult</span>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  value="1"
-                                  min="1"
-                                  max="5"
-                                />
-                              </div>
-                            </div>
-                            <div class="col-md-4">
-                              <div class="d-flex flex-column">
-                                <span>Child</span>
-                                <input
-                                  type="number"
-                                  class="form-control form-control-sm"
-                                  value="0"
-                                  min="0"
-                                  max="35"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <p class="mb-0 pb-0"><b>Park Fee</b></p>
-                            <div class="mt-md- mb-md-1">
-                              <span class="text-primary"
-                                >{{ calculateParkFee() / (booking.num_traveler_adult || 1) }}/</span
-                              >Adult
-                            </div>
-                            <div class="mt-md- mb-md-1">
-                              <span class="text-primary"
-                                >{{ calculateParkFee() / (booking.num_traveler_child || 1) }}/</span
-                              >Child
-                            </div>
-                          </div>
+                          <button type="button" class="btn btn-sm btn-label-primary waves-effect">
+                            Move to wishlist
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -437,7 +374,7 @@ export default {
                 <h5 class="mb-4">Personal Information</h5>
               </div>
               <div class="col-md-6 mb-6">
-                <label class="form-label" for="full_name">Full Name [Lead Traveler]</label>
+                <label class="form-label" for="full_name">Full Name</label>
                 <div class="input-group input-group-merge">
                   <span class="input-group-text"><i class="ti ti-user"></i></span>
                   <input
@@ -484,7 +421,6 @@ export default {
                     class="select2 form-select"
                     v-model="booking.nationality"
                     data-allow-clear="true"
-                    @change="calculateParkFee"
                   >
                     <option value="">Select</option>
                     <option value="Australia">Australia</option>
@@ -763,7 +699,6 @@ export default {
                 <option value="paypal">PayPal</option>
                 <option value="cash">Cash</option>
                 <option value="scan">Scan</option>
-                <option value="due">Due</option>
               </select>
             </div>
           </div>
@@ -855,7 +790,10 @@ export default {
             </dd>
 
             <dt class="col-6 fw-normal">Park Fee</dt>
-            <dd class="col-6 text-end">{{ sidebarData.parkFee }}</dd>
+            <dd class="col-6 text-end">
+              <s class="text-muted">$5.00</s>
+              <span class="badge bg-label-success ms-1">Free</span>
+            </dd>
 
             <dt class="col-6 fw-normal">Coupon Discount</dt>
             <dd class="col-6 text-end">-{{ sidebarData.discountAmount }}</dd>
