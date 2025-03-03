@@ -782,9 +782,8 @@ export default {
           </dl>
 
           <hr />
-
           <dt class="col-6 fw-normal">Coupon Discount</dt>
-          <dd class="col-6 text-end">234</dd>
+          <dd class="col-6 text-end"><a href="javascript:void(0)">Apply Coupon</a></dd>
 
           <hr class="mx-n6 my-6" />
           <dl class="row mb-0">

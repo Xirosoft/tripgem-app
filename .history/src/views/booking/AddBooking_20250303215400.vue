@@ -781,11 +781,6 @@ export default {
             </dd>
           </dl>
 
-          <hr />
-
-          <dt class="col-6 fw-normal">Coupon Discount</dt>
-          <dd class="col-6 text-end">234</dd>
-
           <hr class="mx-n6 my-6" />
           <dl class="row mb-0">
             <dt class="col-6 text-heading">Total</dt>

@@ -69,9 +69,7 @@ export default {
           (this.booking.adult_price || 0) * (this.booking.num_traveler_adult || 0) +
           (this.booking.child_price || 0) * (this.booking.num_traveler_child || 0),
         pickUpCharge: this.booking.selectedLocation ? this.booking.selectedLocation.charge || 0 : 0,
-        dropOffCharge: this.booking.selectedDropLocation
-          ? this.booking.selectedDropLocation.charge || 0
-          : 0,
+        dropOffCharge: this.booking.selectedDropLocation ? this.booking.selectedDropLocation.charge || 0 : 0,
       }
     },
   },
@@ -753,25 +751,21 @@ export default {
             <hr />
             <dt class="col-8 fw-normal">Total Travelers</dt>
             <dd class="col-4 text-end">{{ sidebarData.totalTravelers }}</dd>
+            <dt class="col-6 fw-normal">Coupon Discount</dt>
+            <dd class="col-6 text-end"><a href="javascript:void(0)">Apply Coupon</a></dd>
 
-            <dt class="col-6 fw-normal">Total Booking</dt>
+            <dt class="col-6 fw-normal">Order Total</dt>
             <dd class="col-6 text-end">{{ sidebarData.totalPrice }}</dd>
             <hr />
             <h6><b>Pick and Drop charge</b></h6>
-            <dt class="col-6 fw-normal">
-              Pick from {{ booking.selectedLocation?.location || 'N/A' }}
-            </dt>
+            <dt class="col-6 fw-normal">Pick from {{ booking.selectedLocation?.location || 'N/A' }}</dt>
             <dd class="col-6 text-end">
               <span>{{ sidebarData.pickUpCharge ? '฿' + sidebarData.pickUpCharge : 'Free' }}</span>
             </dd>
 
-            <dt class="col-6 fw-normal">
-              Drop To {{ booking.selectedDropLocation?.location || 'N/A' }}
-            </dt>
+            <dt class="col-6 fw-normal">Drop To {{ booking.selectedDropLocation?.location || 'N/A' }}</dt>
             <dd class="col-6 text-end">
-              <span>{{
-                sidebarData.dropOffCharge ? '฿' + sidebarData.dropOffCharge : 'Free'
-              }}</span>
+              <span>{{ sidebarData.dropOffCharge ? '฿' + sidebarData.dropOffCharge : 'Free' }}</span>
             </dd>
 
             <dt class="col-6 fw-normal">Park Fee</dt>
@@ -781,17 +775,10 @@ export default {
             </dd>
           </dl>
 
-          <hr />
-
-          <dt class="col-6 fw-normal">Coupon Discount</dt>
-          <dd class="col-6 text-end">234</dd>
-
           <hr class="mx-n6 my-6" />
           <dl class="row mb-0">
             <dt class="col-6 text-heading">Total</dt>
-            <dd class="col-6 fw-medium text-end text-heading mb-0">
-              {{ sidebarData.totalPrice + sidebarData.pickUpCharge + sidebarData.dropOffCharge }}
-            </dd>
+            <dd class="col-6 fw-medium text-end text-heading mb-0">{{ sidebarData.totalPrice + sidebarData.pickUpCharge + sidebarData.dropOffCharge }}</dd>
           </dl>
           <br />
           <br />

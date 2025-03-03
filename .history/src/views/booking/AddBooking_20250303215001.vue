@@ -753,8 +753,10 @@ export default {
             <hr />
             <dt class="col-8 fw-normal">Total Travelers</dt>
             <dd class="col-4 text-end">{{ sidebarData.totalTravelers }}</dd>
+            <dt class="col-6 fw-normal">Coupon Discount</dt>
+            <dd class="col-6 text-end"><a href="javascript:void(0)">Apply Coupon</a></dd>
 
-            <dt class="col-6 fw-normal">Total Booking</dt>
+            <dt class="col-6 fw-normal">Order Total</dt>
             <dd class="col-6 text-end">{{ sidebarData.totalPrice }}</dd>
             <hr />
             <h6><b>Pick and Drop charge</b></h6>
@@ -780,11 +782,6 @@ export default {
               <span class="badge bg-label-success ms-1">Free</span>
             </dd>
           </dl>
-
-          <hr />
-
-          <dt class="col-6 fw-normal">Coupon Discount</dt>
-          <dd class="col-6 text-end">234</dd>
 
           <hr class="mx-n6 my-6" />
           <dl class="row mb-0">

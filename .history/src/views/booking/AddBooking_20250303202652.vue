@@ -68,10 +68,6 @@ export default {
         totalPrice:
           (this.booking.adult_price || 0) * (this.booking.num_traveler_adult || 0) +
           (this.booking.child_price || 0) * (this.booking.num_traveler_child || 0),
-        pickUpCharge: this.booking.selectedLocation ? this.booking.selectedLocation.charge || 0 : 0,
-        dropOffCharge: this.booking.selectedDropLocation
-          ? this.booking.selectedDropLocation.charge || 0
-          : 0,
       }
     },
   },
@@ -92,13 +88,10 @@ export default {
         this.booking.merchant_id = this.tour.merchant_id
         this.booking.adult_price = this.tour.regular_price_adult
         this.booking.child_price = this.tour.regular_price_child
-
         this.booking.total_price = this.tour.total_price
         this.booking.location = this.tour.location
         this.booking.merchant_name = this.tour.merchant_name
         this.booking.user_name = this.tour.user_name
-        this.booking.available_seat = this.tour.available_seat
-
         this.booking.pick_up_time = this.tour.pick_up_time
         this.booking.thumbnail = this.tour.thumbnail
         this.booking.discount = JSON.parse(this.tour.discount)
@@ -256,7 +249,7 @@ export default {
     <div class="row">
       <!-- Personal Info Block -->
     </div>
-    <div class="row cart-page">
+    <div class="row">
       <div class="col-md-9">
         <div class="row">
           <div class="col-md-12">
@@ -277,8 +270,7 @@ export default {
                         <div class="text-muted mb-2 d-flex flex-wrap">
                           <span class="me-1">Oparetor:</span>
                           <a href="javascript:void(0)" class="me-4">{{ booking.merchant_name }}</a>
-                          <span class="badge bg-label-success">Available Seat </span>
-                          <b> {{ booking.available_seat }}</b>
+                          <span class="badge bg-label-success">Available Seat</span>
                         </div>
                         <div
                           class="read-only-ratings mb-2 jq-ry-container"
@@ -447,129 +439,6 @@ export default {
                   />
                 </div>
               </div>
-
-              <div class="col-md-4 mb-6">
-                <label class="form-label" for="pick_up_location">Pick Up Location</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-map-pin"></i></span>
-                  <select
-                    class="form-select"
-                    v-model="booking.selectedLocation"
-                    @change="updatePickupTimes"
-                    required
-                  >
-                    <option value="">Select Location</option>
-                    <option
-                      v-for="location in parsePickupLocations(booking.pick_up_time)"
-                      :key="location.location"
-                      :value="location"
-                    >
-                      {{ location.location }} ({{
-                        location.charge ? '฿' + location.charge : 'Free'
-                      }})
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-4 mb-6">
-                <label class="form-label" for="pick_up_time_from">Pick Up Time From</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-clock"></i></span>
-                  <input
-                    type="time"
-                    class="form-control"
-                    v-model="booking.pick_up_time_from"
-                    id="pick_up_time_from"
-                    required
-                    :disabled="!booking.selectedLocation"
-                  />
-                </div>
-              </div>
-              <div class="col-md-4 mb-6">
-                <label class="form-label" for="pick_up_time_to">Pick Up Time To</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-clock"></i></span>
-                  <input
-                    type="time"
-                    class="form-control"
-                    v-model="booking.pick_up_time_to"
-                    id="pick_up_time_to"
-                    required
-                    :disabled="!booking.selectedLocation"
-                  />
-                </div>
-              </div>
-              <div class="col-md-4 mb-6">
-                <label class="form-label" for="drop_off_location">Drop Off Location</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-map-pin"></i></span>
-                  <select
-                    class="form-select"
-                    v-model="booking.selectedDropLocation"
-                    @change="updateDropTimes"
-                    required
-                  >
-                    <option value="">Select Location</option>
-                    <option
-                      v-for="location in parseDropLocations(booking.drop_time)"
-                      :key="location.location"
-                      :value="location"
-                    >
-                      {{ location.location }} ({{ location.charge ? +location.charge : 'Free' }})
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-4 mb-6">
-                <label class="form-label" for="drop_time_from">Drop Off Time From</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-clock"></i></span>
-                  <input
-                    type="time"
-                    class="form-control"
-                    v-model="booking.drop_time_from"
-                    id="drop_time_from"
-                    required
-                    :disabled="!booking.selectedDropLocation"
-                  />
-                </div>
-              </div>
-              <div class="col-md-4 mb-6">
-                <label class="form-label" for="drop_time_to">Drop Off Time To</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-clock"></i></span>
-                  <input
-                    type="time"
-                    class="form-control"
-                    v-model="booking.drop_time_to"
-                    id="drop_time_to"
-                    required
-                    :disabled="!booking.selectedDropLocation"
-                  />
-                </div>
-              </div>
-              <div class="col-md-6 mb-6">
-                <label class="form-label" for="travel_date">Travel Date</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-calendar"></i></span>
-                  <input
-                    type="date"
-                    class="form-control"
-                    v-model="booking.travel_date"
-                    id="travel_date"
-                    required
-                  />
-                </div>
-              </div>
-              <div class="col-md-6 mb-6">
-                <label class="form-label" for="discount">Discount</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-tag"></i></span>
-                  <select class="form-select" id="discount" multiple required>
-                    <option value="">Select Discount</option>
-                  </select>
-                </div>
-              </div>
             </div>
           </div>
           <!-- Booking Info Block -->
@@ -660,7 +529,140 @@ export default {
               />
             </div>
           </div>
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="pick_up_location">Pick Up Location</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-map-pin"></i></span>
+              <select
+                class="form-select"
+                v-model="booking.selectedLocation"
+                @change="updatePickupTimes"
+                required
+              >
+                <option value="">Select Location</option>
+                <option
+                  v-for="location in parsePickupLocations(booking.pick_up_time)"
+                  :key="location.location"
+                  :value="location"
+                >
+                  {{ location.location }} ({{ location.charge ? '฿' + location.charge : 'Free' }})
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="pick_up_time_from">Pick Up Time From</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-clock"></i></span>
+              <input
+                type="time"
+                class="form-control"
+                v-model="booking.pick_up_time_from"
+                id="pick_up_time_from"
+                required
+                :disabled="!booking.selectedLocation"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="pick_up_time_to">Pick Up Time To</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-clock"></i></span>
+              <input
+                type="time"
+                class="form-control"
+                v-model="booking.pick_up_time_to"
+                id="pick_up_time_to"
+                required
+                :disabled="!booking.selectedLocation"
+              />
+            </div>
+          </div>
 
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="drop_off_location">Drop Off Location</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-map-pin"></i></span>
+              <select
+                class="form-select"
+                v-model="booking.selectedDropLocation"
+                @change="updateDropTimes"
+                required
+              >
+                <option value="">Select Location</option>
+                <option
+                  v-for="location in parseDropLocations(booking.drop_time)"
+                  :key="location.location"
+                  :value="location"
+                >
+                  {{ location.location }} ({{ location.charge ? +location.charge : 'Free' }})
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="drop_off_time">Drop Off Time</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-calendar"></i></span>
+              <input
+                type="datetime-local"
+                class="form-control"
+                v-model="booking.drop_off_time"
+                id="drop_off_time"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="drop_time_from">Drop Off Time From</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-clock"></i></span>
+              <input
+                type="time"
+                class="form-control"
+                v-model="booking.drop_time_from"
+                id="drop_time_from"
+                required
+                :disabled="!booking.selectedDropLocation"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="drop_time_to">Drop Off Time To</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-clock"></i></span>
+              <input
+                type="time"
+                class="form-control"
+                v-model="booking.drop_time_to"
+                id="drop_time_to"
+                required
+                :disabled="!booking.selectedDropLocation"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="travel_date">Travel Date</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-calendar"></i></span>
+              <input
+                type="date"
+                class="form-control"
+                v-model="booking.travel_date"
+                id="travel_date"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="discount">Discount</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-tag"></i></span>
+              <select class="form-select" id="discount" multiple required>
+                <option value="">Select Discount</option>
+              </select>
+            </div>
+          </div>
           <div class="col-md-6 mb-6">
             <label class="form-label" for="transport_types">Transport Types</label>
             <div class="input-group input-group-merge">
@@ -753,45 +755,23 @@ export default {
             <hr />
             <dt class="col-8 fw-normal">Total Travelers</dt>
             <dd class="col-4 text-end">{{ sidebarData.totalTravelers }}</dd>
+            <dt class="col-6 fw-normal">Coupon Discount</dt>
+            <dd class="col-6 text-end"><a href="javascript:void(0)">Apply Coupon</a></dd>
 
-            <dt class="col-6 fw-normal">Total Booking</dt>
+            <dt class="col-6 fw-normal">Order Total</dt>
             <dd class="col-6 text-end">{{ sidebarData.totalPrice }}</dd>
-            <hr />
-            <h6><b>Pick and Drop charge</b></h6>
-            <dt class="col-6 fw-normal">
-              Pick from {{ booking.selectedLocation?.location || 'N/A' }}
-            </dt>
-            <dd class="col-6 text-end">
-              <span>{{ sidebarData.pickUpCharge ? '฿' + sidebarData.pickUpCharge : 'Free' }}</span>
-            </dd>
 
-            <dt class="col-6 fw-normal">
-              Drop To {{ booking.selectedDropLocation?.location || 'N/A' }}
-            </dt>
-            <dd class="col-6 text-end">
-              <span>{{
-                sidebarData.dropOffCharge ? '฿' + sidebarData.dropOffCharge : 'Free'
-              }}</span>
-            </dd>
-
-            <dt class="col-6 fw-normal">Park Fee</dt>
+            <dt class="col-6 fw-normal">Delivery Charges</dt>
             <dd class="col-6 text-end">
               <s class="text-muted">$5.00</s>
               <span class="badge bg-label-success ms-1">Free</span>
             </dd>
           </dl>
 
-          <hr />
-
-          <dt class="col-6 fw-normal">Coupon Discount</dt>
-          <dd class="col-6 text-end">234</dd>
-
           <hr class="mx-n6 my-6" />
           <dl class="row mb-0">
             <dt class="col-6 text-heading">Total</dt>
-            <dd class="col-6 fw-medium text-end text-heading mb-0">
-              {{ sidebarData.totalPrice + sidebarData.pickUpCharge + sidebarData.dropOffCharge }}
-            </dd>
+            <dd class="col-6 fw-medium text-end text-heading mb-0">{{ sidebarData.totalPrice }}</dd>
           </dl>
           <br />
           <br />
@@ -825,7 +805,7 @@ export default {
   position: sticky;
   top: 20px;
 }
-.cart-page .select2-container {
+.select2-container {
   box-sizing: border-box;
   display: inline-block;
   margin: 0;
