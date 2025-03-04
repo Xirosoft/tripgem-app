@@ -830,11 +830,11 @@ export default {
               <span class="input-group-text"><i class="ti ti-credit-card"></i></span>
               <select class="form-select" v-model="booking.payment_method" id="discount" required>
                 <option selected>Select Payment Method</option>
-                <option value="1">Card</option>
-                <option value="2">PayPal</option>
-                <option value="3">Cash</option>
-                <option value="4">Scan</option>
-                <option value="5">Due</option>
+                <option value="card">Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="cash">Cash</option>
+                <option value="scan">Scan</option>
+                <option value="due">Due</option>
               </select>
             </div>
           </div>

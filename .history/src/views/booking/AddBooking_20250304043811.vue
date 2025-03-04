@@ -49,8 +49,6 @@ export default {
         drop_time_to: '', // Add drop_time_to property
         drop_time: '', // Add drop_time property
         selectedDropLocation: null, // Add selectedDropLocation property
-        net_adult_price: '', // Add net_adult_price property
-        net_child_price: '', // Add net_child_price property
       },
       tour: null,
       error: null,
@@ -181,55 +179,12 @@ export default {
           invoice_id: this.booking.invoice_id,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          net_adult_price: parseFloat(this.booking.net_adult_price),
-          net_child_price: parseFloat(this.booking.net_child_price),
         }
 
         const response = await axios.post(`${config.apiUrl}/booking/add`, bookingData, {
           headers: config.getHeaders(),
         })
         console.log('Booking successful:', response.data)
-        // Handle successful booking (e.g., redirect to a confirmation page)
-        this.clearDiscountOptions() // Clear discount options after successful booking
-      } catch (error) {
-        this.error = 'Failed to submit booking'
-        console.error(error)
-      } finally {
-        this.loading = false
-      }
-    },
-    parseLocation(location) {
-      if (!location) {
-        return ''
-      }
-      try {
-        const parsedLocation = JSON.parse(location)
-        return parsedLocation[0]?.name || ''
-      } catch (error) {
-        console.error('Error parsing location:', error)
-        return ''
-      }
-    },
-    parsePickupLocations(pick_up_time) {
-      if (!pick_up_time) {
-        return []
-      }
-      try {
-        const parsedLocation = JSON.parse(pick_up_time)
-        return parsedLocation.map((loc) => ({
-          location: loc.location,
-          charge: loc.charge,
-          from: loc.from,
-          to: loc.to,
-        }))
-      } catch (error) {
-        console.error('Error parsing pickup locations:', error)
-        return []
-      }
-    },
-    updatePickupTimes() {
-      if (this.booking.selectedLocation) {
-        this.booking.pick_up_time_from = this.booking.selectedLocation.from
         this.booking.pick_up_time_to = this.booking.selectedLocation.to
       } else {
         this.booking.pick_up_time_from = ''
@@ -694,32 +649,6 @@ export default {
                   </select>
                 </div>
               </div>
-              <div class="col-md-6 mb-6">
-                <label class="form-label" for="net_adult_price">Net Adult Price</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-money"></i></span>
-                  <input
-                    type="number"
-                    class="form-control"
-                    v-model="booking.net_adult_price"
-                    id="net_adult_price"
-                    required
-                  />
-                </div>
-              </div>
-              <div class="col-md-6 mb-6">
-                <label class="form-label" for="net_child_price">Net Child Price</label>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text"><i class="ti ti-money"></i></span>
-                  <input
-                    type="number"
-                    class="form-control"
-                    v-model="booking.net_child_price"
-                    id="net_child_price"
-                    required
-                  />
-                </div>
-              </div>
             </div>
           </div>
           <!-- Booking Info Block -->
@@ -830,11 +759,11 @@ export default {
               <span class="input-group-text"><i class="ti ti-credit-card"></i></span>
               <select class="form-select" v-model="booking.payment_method" id="discount" required>
                 <option selected>Select Payment Method</option>
-                <option value="1">Card</option>
-                <option value="2">PayPal</option>
-                <option value="3">Cash</option>
-                <option value="4">Scan</option>
-                <option value="5">Due</option>
+                <option value="card">Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="cash">Cash</option>
+                <option value="scan">Scan</option>
+                <option value="due">Due</option>
               </select>
             </div>
           </div>
