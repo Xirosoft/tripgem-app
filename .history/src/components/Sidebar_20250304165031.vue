@@ -26,7 +26,7 @@ export default {
         },
         {
           title: 'Tour Search',
-          icon: 'ti ti-search',
+          icon: 'ti ti-home',
           path: '/tour-search',
           active: false,
           permission: {

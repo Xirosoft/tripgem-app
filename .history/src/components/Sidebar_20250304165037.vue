@@ -19,50 +19,170 @@ export default {
           icon: 'ti ti-home',
           path: '/',
           active: false,
-          permission: 'user_panel',
+          permission: {
+            module: 'user_dashboard',
+            action: 'read',
+          },
+        },
+        {
+          title: 'Tour Search',
+          icon: 'ti ti-serach',
+          path: '/tour-search',
+          active: false,
+          permission: {
+            module: 'user_dashboard',
+            action: 'read',
+          },
         },
         {
           title: 'Merchant',
-          icon: 'ti ti-calendar',
+          icon: 'ti ti-briefcase',
           active: false,
-          permission: 'merchant_module',
+          permission: {
+            module: 'merchant_module',
+            action: 'read',
+          },
           submenu: [
             {
               title: 'All Merchants',
               path: '/merchants',
               active: false,
+              permission: {
+                module: 'merchant_module',
+                action: 'read',
+              },
             },
             {
               title: 'Add Merchant',
               path: '/merchant/add',
               active: false,
-              permission: 'add_merchant',
+              permission: {
+                module: 'merchant_module',
+                action: 'create',
+              },
             },
           ],
         },
-
+        {
+          title: 'Tour Listing',
+          icon: 'ti ti-package',
+          active: false,
+          permission: {
+            module: 'tour_module',
+            action: 'read',
+          },
+          submenu: [
+            {
+              title: 'All Tours',
+              path: '/all-tours',
+              active: false,
+              permission: {
+                module: 'tour_module',
+                action: 'read',
+              },
+            },
+            {
+              title: 'Add tour',
+              path: '/add-tour',
+              active: false,
+              permission: {
+                module: 'tour_module',
+                action: 'create',
+              },
+            },
+            {
+              title: 'Categories',
+              path: '/tour-category',
+              active: false,
+              permission: {
+                module: 'tour_module',
+                action: 'read',
+              },
+            },
+            {
+              title: 'Locations',
+              path: '/tour-location',
+              active: false,
+              permission: {
+                module: 'tour_module',
+                action: 'read',
+              },
+            },
+            {
+              title: 'Tags',
+              path: '/tour-tags',
+              active: false,
+              permission: {
+                module: 'tour_module',
+                action: 'read',
+              },
+            },
+          ],
+        },
+        {
+          title: 'Settings',
+          icon: 'ti ti-tool',
+          active: false,
+          permission: {
+            module: 'settings_module',
+            action: 'read',
+          },
+        },
+        {
+          title: 'Bookings',
+          icon: 'ti ti-calendar',
+          active: false,
+          permission: {
+            module: 'booking_module',
+            action: 'read',
+          },
+          submenu: [
+            {
+              title: 'All Bookings',
+              path: '/all-bookings',
+              active: false,
+              permission: {
+                module: 'booking_module',
+                action: 'read',
+              },
+            },
+            {
+              title: 'Add Booking',
+              path: '/add-booking',
+              active: false,
+              permission: {
+                module: 'booking_module',
+                action: 'create',
+              },
+            },
+          ],
+        },
         {
           title: 'Users',
           icon: 'menu-icon tf-icons ti ti-users',
           active: false,
-          permission: 'manage_users',
+          permission: {
+            module: 'manage_users',
+            action: 'read',
+          },
           submenu: [
             {
               title: 'All Users',
               path: '/users',
               active: false,
+              permission: {
+                module: 'manage_users',
+                action: 'read',
+              },
             },
-            // {
-            //   title: 'Add user',
-            //   path: '/user/add',
-            //   active: false,
-            //   // permission: 'add_user',
-            // },
             {
               title: 'Profile',
               path: `/users/profile/${userId}`,
               active: false,
-              // permission: 'add_user',
+              permission: {
+                module: 'manage_users',
+                action: 'read',
+              },
             },
           ],
         },
@@ -70,17 +190,28 @@ export default {
           title: 'Roles & Permissions',
           icon: 'menu-icon tf-icons ti ti-settings',
           active: false,
-          permission: 'add_new_permission',
+          permission: {
+            module: 'roles_and_permissions',
+            action: 'read',
+          },
           submenu: [
             {
               title: 'Roles',
               path: '/roles',
               active: false,
+              permission: {
+                module: 'roles_and_permissions',
+                action: 'read',
+              },
             },
             {
               title: 'Permissions',
               path: '/permissions',
               active: false,
+              permission: {
+                module: 'roles_and_permissions',
+                action: 'read',
+              },
             },
           ],
         },
@@ -91,7 +222,10 @@ export default {
           badge: '5',
           badgeClass: 'bg-danger',
           active: false,
-          permission: 'notification_modules',
+          permission: {
+            module: 'notification_modules',
+            action: 'read',
+          },
         },
       ],
     }
@@ -99,21 +233,29 @@ export default {
   mounted() {},
   computed: {
     filteredMenuItems() {
-      return this.menuItems.filter((item) => this.uCan('read', item.permission))
+      const filteredItems = this.menuItems.filter((item) => {
+        const canAccess = this.uCan(item.permission.action, item.permission.module)
+        return canAccess
+      })
+      return filteredItems
     },
   },
   methods: {
+    // Method to toggle submenu
     menuToggle(event) {
       const menuItem = event.target.closest('.menu-item')
       if (menuItem) {
-        // menuItem.classList.toggle('active')
         menuItem.classList.toggle('open')
       }
     },
+
+    // Method to filter submenu items
     filteredSubmenuItems(submenu) {
-      return submenu.filter(
-        (subitem) => !subitem.permission || this.uCan('create', subitem.permission),
-      )
+      const filteredSubItems = submenu.filter((subitem) => {
+        const canAccess = this.uCan(subitem.permission.action, subitem.permission.module)
+        return canAccess
+      })
+      return filteredSubItems
     },
   },
 }

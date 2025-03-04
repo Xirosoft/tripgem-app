@@ -9,46 +9,28 @@ export const useAddBookingStore = defineStore('addBooking', {
     error: null,
     loading: false,
     booking: {
-      user_id: '',
-      tour_id: '',
-      merchant_id: '',
+      tour_id: null,
       tour_name: '',
-      full_name: '',
-      contact_number: '',
-      hotel_name: '',
-      room_number: '',
-      email: '',
+      merchant_id: null,
+      merchant_name: '',
+      user_name: '',
+      adult_price: 0,
+      child_price: 0,
+      total_price: 0,
       location: '',
-      booking_date: '',
+      available_seat: 0,
       pick_up_time: '',
-      pick_up_location: '',
-      drop_off_location: '',
-      drop_off_time: '',
-      phone: '',
-      travel_date: '',
-      discount: [], // Change discount to an array to hold multiple selected discounts
-      transport_types: '',
-      adult_price: '',
-      child_price: '',
-      total_price: '',
-      payment_method: '',
-      promo_id: '',
-      note: '',
-      num_traveler_adult: '',
-      num_traveler_child: '',
-      total_traveller: '',
-      status: '',
-      invoice_id: '',
-      nationality: '', // Add nationality property
-      selectedLocation: null, // Add selectedLocation property
-      pick_up_time_from: '', // Add pick_up_time_from property
-      pick_up_time_to: '', // Add pick_up_time_to property
-      drop_time_from: '', // Add drop_time_from property
-      drop_time_to: '', // Add drop_time_to property
-      drop_time: '', // Add drop_time property
-      selectedDropLocation: null, // Add selectedDropLocation property
-      net_adult_price: '', // Add net_adult_price property
-      net_child_price: '', // Add net_child_price property
+      thumbnail: '',
+      park_fee: {},
+      discount: 0,
+      discountDetails: {},
+      number_of_adult: 0,
+      number_of_child: 0,
+      booking_date: '',
+      customer_name: '',
+      customer_email: '',
+      customer_phone: '',
+      special_request: '',
     },
   }),
   actions: {

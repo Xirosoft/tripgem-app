@@ -2,6 +2,7 @@
 import axios from 'axios'
 import jQuery from 'jquery'
 import select2 from 'select2'
+import { useAddBookingStore } from '../../stores/booking/AddBooking.js'
 import config from '../../config/config'
 const $ = jQuery
 window.$ = window.jQuery = jQuery
@@ -864,6 +865,15 @@ export default {
               </div>
             </div>
           </div>
+
+          <!-- Gift wrap -->
+          <div class="bg-lighter rounded p-6">
+            <h6 class="mb-2">Buying gift for a loved one?</h6>
+            <p class="mb-2">Gift wrap and personalized message on card, Only for $2.</p>
+            <a href="javascript:void(0)" class="fw-medium">Add a gift wrap</a>
+          </div>
+          <hr class="mx-n6 my-6" />
+
           <!-- Price Details -->
           <h6>Price Details</h6>
           <dl class="row mb-0 text-heading">

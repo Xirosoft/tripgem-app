@@ -1,13 +1,17 @@
 <script>
-import axios from 'axios'
 import jQuery from 'jquery'
 import select2 from 'select2'
-import config from '../../config/config'
+import { useAddBookingStore } from '../../stores/booking/AddBooking.js'
 const $ = jQuery
 window.$ = window.jQuery = jQuery
 select2() // Initialize select2
+
 export default {
   name: 'AddBooking',
+  setup() {
+    const addBookingStore = useAddBookingStore()
+    return { addBookingStore }
+  },
   data() {
     return {
       booking: {
@@ -98,106 +102,6 @@ export default {
     },
   },
   methods: {
-    async fetchTourData(tourId) {
-      this.loading = true
-      this.error = null
-      try {
-        const response = await axios.get(`${config.apiUrl}/tour/view/${tourId}`, {
-          headers: config.getHeaders(),
-        })
-        this.tour = response.data
-        console.log('Tour data:', this.tour)
-
-        this.booking = this.tour
-        this.booking.tour_id = this.tour.tour_id
-        this.booking.tour_name = this.tour.tour_name
-        this.booking.merchant_id = this.tour.merchant_id
-        this.booking.adult_price = this.tour.regular_price_adult
-        this.booking.child_price = this.tour.regular_price_child
-
-        this.booking.total_price = this.tour.total_price
-        this.booking.location = this.tour.location
-        this.booking.merchant_name = this.tour.merchant_name
-        this.booking.user_name = this.tour.user_name
-        this.booking.available_seat = this.tour.available_seat
-
-        this.booking.pick_up_time = this.tour.pick_up_time
-        this.booking.thumbnail = this.tour.thumbnail
-        this.booking.thumbnail = this.tour.thumbnail
-        this.booking.park_fee = JSON.parse(this.tour.park_fee)
-        console.log('Park Fee:', this.booking.park_fee)
-
-        this.booking.discount = this.tour.discount
-        this.booking.discountDetails = JSON.parse(this.tour.discount)
-        console.log('Discount:', this.booking.discountDetails)
-        this.populateDiscountOptions() // Populate discount options after fetching tour data
-      } catch (error) {
-        this.error = 'Failed to fetch tour data'
-        console.error(error)
-      } finally {
-        this.loading = false
-      }
-    },
-    async submitForm() {
-      this.loading = true
-      this.error = null
-      try {
-        const bookingData = {
-          user_id: this.booking.user_id,
-          tour_id: this.booking.tour_id,
-          merchant_id: this.booking.merchant_id,
-          tour_name: this.booking.tour_name,
-          full_name: this.booking.full_name,
-          contact_number: this.booking.contact_number,
-          hotel_name: this.booking.hotel_name,
-          pick_up_location: this.booking.selectedLocation?.location || '',
-          drop_location: this.booking.selectedDropLocation?.location || '',
-          pickup_time: this.booking.pick_up_time_from,
-          drop_time: this.booking.drop_time_from,
-          discount: this.booking.discount.join(', '),
-          pickup_fee: this.booking.selectedLocation?.charge || 0,
-          drop_fee: this.booking.selectedDropLocation?.charge || 0,
-          adult_park_fee: this.booking.park_fee?.price_adult_park_fee || 0,
-          child_park_fee: this.booking.park_fee?.price_child_park_fee || 0,
-          num_adult_park: this.booking.num_traveler_adult,
-          num_child_park: this.booking.num_traveler_child,
-          total_park_fee: this.calculateParkFee(),
-          room_number: this.booking.room_number,
-          email: this.booking.email,
-          nationality: this.booking.nationality,
-          booking_date: new Date().toISOString(),
-          travel_date: this.booking.travel_date,
-          adult_price: this.booking.adult_price,
-          child_price: this.booking.child_price,
-          total_price: this.sidebarData.totalPrice,
-          payment_method: this.booking.payment_method,
-          promo_id: this.booking.promo_id,
-          note: this.booking.note,
-          num_traveler_infant: this.booking.num_traveler_infant,
-          num_traveler_adult: this.booking.num_traveler_adult,
-          num_traveler_child: this.booking.num_traveler_child,
-          total_traveller: this.sidebarData.totalTravelers,
-          status: this.booking.status,
-          invoice_id: this.booking.invoice_id,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          net_adult_price: parseFloat(this.booking.net_adult_price),
-          net_child_price: parseFloat(this.booking.net_child_price),
-        }
-
-        const response = await axios.post(`${config.apiUrl}/booking/add`, bookingData, {
-          headers: config.getHeaders(),
-        })
-        console.log('Booking successful:', response.data)
-        // Handle successful booking (e.g., redirect to a confirmation page)
-        this.clearDiscountOptions() // Clear discount options after successful booking
-      } catch (error) {
-        this.error = 'Failed to submit booking'
-        console.error(error)
-      } finally {
-        this.loading = false
-      }
-    },
     parseLocation(location) {
       if (!location) {
         return ''
@@ -294,7 +198,7 @@ export default {
   mounted() {
     const tourId = this.$route.params.id
     if (tourId) {
-      this.fetchTourData(tourId)
+      this.addBookingStore.fetchTourData(tourId)
     }
     this.$nextTick(() => {
       $('#multicol-country')
@@ -302,7 +206,7 @@ export default {
           allowClear: true,
         })
         .on('change', (e) => {
-          this.booking.nationality = e.target.value
+          this.addBookingStore.booking.nationality = e.target.value
           this.calculateParkFee()
         })
       $('#discount')
@@ -311,7 +215,7 @@ export default {
           allowClear: true,
         })
         .on('change', (e) => {
-          this.booking.discount = $(e.target).val()
+          this.addBookingStore.booking.discount = $(e.target).val()
         })
     })
   },
@@ -864,6 +768,15 @@ export default {
               </div>
             </div>
           </div>
+
+          <!-- Gift wrap -->
+          <div class="bg-lighter rounded p-6">
+            <h6 class="mb-2">Buying gift for a loved one?</h6>
+            <p class="mb-2">Gift wrap and personalized message on card, Only for $2.</p>
+            <a href="javascript:void(0)" class="fw-medium">Add a gift wrap</a>
+          </div>
+          <hr class="mx-n6 my-6" />
+
           <!-- Price Details -->
           <h6>Price Details</h6>
           <dl class="row mb-0 text-heading">
