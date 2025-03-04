@@ -840,7 +840,7 @@ export default {
                 <option value="2" disabled>Stripe</option>
                 <option value="3">Bank Transfer</option>
                 <option value="4">Scan Transfer</option>
-                <option value="5" disabled>Credit Card</option>
+                <option value="5" disabled>Card</option>
                 <option value="6">Due</option>
               </select>
             </div>

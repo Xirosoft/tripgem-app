@@ -427,51 +427,45 @@ export default {
                           </div>
                         </div>
                       </div>
-                      <div class="col-12 mt-4">
+                        <div class="col-12 mt-4">
                         <div v-if="booking.park_fee" class="row park-fee-block">
                           <div class="col-lg-6">
-                            <div class="row g-3">
-                              <div class="col-6">
-                                <div class="d-flex flex-column">
-                                  <label class="form-label mb-1">Adult Park Fee</label>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    value="1"
-                                    min="1"
-                                    max="5"
-                                  />
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                <div class="d-flex flex-column">
-                                  <label class="form-label mb-1">Child Park Fee</label>
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm"
-                                    value="0"
-                                    min="0"
-                                    max="35"
-                                  />
-                                </div>
+                          <div class="row g-3">
+                            <div class="col-6">
+                            <div class="d-flex flex-column">
+                              <label class="form-label mb-1">Adult Park Fee</label>
+                              <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              value="1"
+                              min="1"
+                              max="5"
+                              />
+                            </div>
+                            </div>
+                            <div class="col-6">
+                            <div class="d-flex flex-column">
+                              <label class="form-label mb-1">Child Park Fee</label>
+                              <input
+                              type="number"
+                              class="form-control form-control-sm"
+                              value="0"
+                              min="0"
+                              max="35"
                               </div>
                             </div>
                           </div>
-                          <div class="col-lg-6">
-                            <div class="">
-                              <h6 class="mb-1">Park Fee Details</h6>
-                              <div class="d-flex justify-content-between mb-0">
-                                <span>Adult Fee:</span>
-                                <span class="text-primary fw-bold">
-                                  ฿{{ calculateParkFee() / (booking.num_traveler_adult || 1) }}
-                                </span>
-                              </div>
-                              <div class="d-flex justify-content-between">
-                                <span>Child Fee:</span>
-                                <span class="text-primary fw-bold">
-                                  ฿{{ calculateParkFee() / (booking.num_traveler_child || 1) }}
-                                </span>
-                              </div>
+                          <div class="col-md-6">
+                            <p class="mb-0 pb-0"><b>Park Fee</b></p>
+                            <div class="mt-md- mb-md-1">
+                              <span class="text-primary"
+                                >{{ calculateParkFee() / (booking.num_traveler_adult || 1) }}/</span
+                              >Adult
+                            </div>
+                            <div class="mt-md- mb-md-1">
+                              <span class="text-primary"
+                                >{{ calculateParkFee() / (booking.num_traveler_child || 1) }}/</span
+                              >Child
                             </div>
                           </div>
                         </div>
@@ -840,7 +834,7 @@ export default {
                 <option value="2" disabled>Stripe</option>
                 <option value="3">Bank Transfer</option>
                 <option value="4">Scan Transfer</option>
-                <option value="5" disabled>Credit Card</option>
+                <option value="5" disabled>Card</option>
                 <option value="6">Due</option>
               </select>
             </div>

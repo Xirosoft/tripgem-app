@@ -458,9 +458,9 @@ export default {
                             </div>
                           </div>
                           <div class="col-lg-6">
-                            <div class="">
-                              <h6 class="mb-1">Park Fee Details</h6>
-                              <div class="d-flex justify-content-between mb-0">
+                            <div class="border-0 p-3">
+                              <h6 class="mb-3">Park Fee Details</h6>
+                              <div class="d-flex justify-content-between mb-2">
                                 <span>Adult Fee:</span>
                                 <span class="text-primary fw-bold">
                                   ฿{{ calculateParkFee() / (booking.num_traveler_adult || 1) }}
@@ -840,7 +840,7 @@ export default {
                 <option value="2" disabled>Stripe</option>
                 <option value="3">Bank Transfer</option>
                 <option value="4">Scan Transfer</option>
-                <option value="5" disabled>Credit Card</option>
+                <option value="5" disabled>Card</option>
                 <option value="6">Due</option>
               </select>
             </div>

@@ -85,7 +85,7 @@ export default {
           { data: 'hotel_name' },
           { data: 'room_number' },
           { data: 'email' },
-          { data: 'nationality' },
+          { data: 'nant' },
           { data: 'booking_date' },
           { data: 'travel_date' },
           { data: 'total_price' },
