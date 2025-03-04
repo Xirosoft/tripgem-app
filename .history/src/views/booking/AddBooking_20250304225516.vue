@@ -49,8 +49,8 @@ export default {
         drop_time_to: '', // Add drop_time_to property
         drop_time: '', // Add drop_time property
         selectedDropLocation: null, // Add selectedDropLocation property
-        net_price_adult: '', // Add net_adult_price property
-        net_price_child: '', // Add net_child_price property
+        net_adult_price: '', // Add net_adult_price property
+        net_child_price: '', // Add net_child_price property
       },
       tour: null,
       error: null,
@@ -66,10 +66,6 @@ export default {
         payment_slip: '',
       },
       showModal: false,
-      editingPrice: {
-        adult: false,
-        child: false,
-      },
     }
   },
   computed: {
@@ -110,24 +106,6 @@ export default {
         discountAmount,
         parkFee,
       }
-    },
-    adultFee() {
-      if (!this.booking.park_fee) return 0
-      const parkFee = this.booking.park_fee
-      const isLocal = this.booking.nationality === 'Thailand'
-      return (
-        parseFloat(this.booking.adult_park_fee) ||
-        (isLocal ? parkFee.local_price_adult_park_fee : parkFee.price_adult_park_fee)
-      )
-    },
-    childFee() {
-      if (!this.booking.park_fee) return 0
-      const parkFee = this.booking.park_fee
-      const isLocal = this.booking.nationality === 'Thailand'
-      return (
-        parseFloat(this.booking.child_park_fee) ||
-        (isLocal ? parkFee.local_price_child_park_fee : parkFee.price_child_park_fee)
-      )
     },
   },
   methods: {
@@ -217,8 +195,8 @@ export default {
           invoice_id: this.booking.invoice_id,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          net_price_adult: parseFloat(this.booking.net_price_adult),
-          net_price_child: parseFloat(this.booking.net_price_child),
+          net_adult_price: parseFloat(this.booking.net_adult_price),
+          net_child_price: parseFloat(this.booking.net_child_price),
         }
 
         const bookingResponse = await axios.post(`${config.apiUrl}/booking/add`, bookingData, {
@@ -341,9 +319,14 @@ export default {
       discountSelect.trigger('change')
     },
     calculateParkFee() {
+      if (!this.booking.park_fee) return 0
+      const parkFee = this.booking.park_fee
+      const isLocal = this.booking.nationality === 'Thailand'
+      const adultFee = isLocal ? parkFee.local_price_adult_park_fee : parkFee.price_adult_park_fee
+      const childFee = isLocal ? parkFee.local_price_child_park_fee : parkFee.price_child_park_fee
       return (
-        this.adultFee * (this.booking.adult_park_fee_count || 0) +
-        this.childFee * (this.booking.child_park_fee_count || 0)
+        adultFee * (this.booking.num_traveler_adult || 0) +
+        childFee * (this.booking.num_traveler_child || 0)
       )
     },
   },
@@ -369,14 +352,6 @@ export default {
         .on('change', (e) => {
           this.booking.discount = $(e.target).val()
         })
-      $('#input_adult_park_fee').on('input', (e) => {
-        this.booking.adult_park_fee = e.target.value
-        this.calculateParkFee()
-      })
-      $('#input_child_park_fee').on('input', (e) => {
-        this.booking.child_park_fee = e.target.value
-        this.calculateParkFee()
-      })
     })
   },
 }
@@ -476,30 +451,20 @@ export default {
                           <!-- <p><b>Price</b></p> -->
                           <div class="mt-md- mb-md-1">
                             <span class="text-primary">Adult Price:</span>
-                            <span v-if="!editingPrice.adult" @click="editingPrice.adult = true">
-                              {{ booking.adult_price }}
-                            </span>
                             <input
-                              v-else
                               type="number"
                               class="form-control form-control-sm"
                               v-model="booking.adult_price"
-                              min="0"
-                              @blur="editingPrice.adult = false"
+                              :min="booking.net_price_adult"
                             />
                           </div>
                           <div class="mt-md- mb-md-1">
                             <span class="text-primary">Child Price:</span>
-                            <span v-if="!editingPrice.child" @click="editingPrice.child = true">
-                              {{ booking.child_price }}
-                            </span>
                             <input
-                              v-else
                               type="number"
                               class="form-control form-control-sm"
                               v-model="booking.child_price"
                               min="0"
-                              @blur="editingPrice.child = false"
                             />
                           </div>
                         </div>
@@ -514,11 +479,9 @@ export default {
                                   <input
                                     type="number"
                                     class="form-control form-control-sm"
-                                    value="0"
-                                    min="0"
-                                    max="35"
-                                    id="input_adult_park_fee"
-                                    v-model="booking.adult_park_fee_count"
+                                    value="1"
+                                    min="1"
+                                    max="5"
                                   />
                                 </div>
                               </div>
@@ -531,8 +494,6 @@ export default {
                                     value="0"
                                     min="0"
                                     max="35"
-                                    id="input_child_park_fee"
-                                    v-model="booking.child_park_fee_count"
                                   />
                                 </div>
                               </div>
@@ -543,11 +504,15 @@ export default {
                               <h6 class="mb-1">Park Fee Details</h6>
                               <div class="d-flex justify-content-between mb-0">
                                 <span>Adult Fee:</span>
-                                <span class="text-primary fw-bold"> ฿{{ adultFee || 0 }} </span>
+                                <span class="text-primary fw-bold">
+                                  ฿{{ calculateParkFee() / (booking.num_traveler_adult || 1) }}
+                                </span>
                               </div>
                               <div class="d-flex justify-content-between">
                                 <span>Child Fee:</span>
-                                <span class="text-primary fw-bold"> ฿{{ childFee || 0 }} </span>
+                                <span class="text-primary fw-bold">
+                                  ฿{{ calculateParkFee() / (booking.num_traveler_child || 1) }}
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -914,13 +879,7 @@ export default {
             <label class="form-label" for="note">Note</label>
             <div class="input-group input-group-merge">
               <span class="input-group-text"><i class="ti ti-message-dots"></i></span>
-              <textarea
-                class="form-control"
-                v-model="booking.note"
-                id="note"
-                required
-                style="height: 38px"
-              ></textarea>
+              <textarea class="form-control" v-model="booking.note" id="note" required></textarea>
             </div>
           </div>
         </div>
@@ -1032,24 +991,21 @@ export default {
               <option value="5">Due</option>
             </select>
           </div>
-          <div v-if="payment.payment_method === '1' || payment.payment_method === '3'" class="mb-3">
+          <div
+            v-if="
+              payment.payment_method === 'Bank Transfer' ||
+              payment.payment_method === 'Scan Transfer'
+            "
+            class="mb-3"
+          >
             <label for="payment_slip" class="form-label">Upload Payment Slip</label>
             <input type="file" class="form-control" id="payment_slip" @change="handleFileUpload" />
-            <div class="mb-3">
-              <label for="transaction_id" class="form-label">Transaction ID</label>
-              <input
-                type="text"
-                v-model="payment.transaction_id"
-                class="form-control"
-                id="transaction_id"
-              />
-            </div>
           </div>
-          <div v-if="payment.payment_method === '5'" class="mb-3">
+          <div v-if="payment.payment_method === 'Due'" class="mb-3">
             <label for="due_date" class="form-label">Due Date</label>
             <input type="date" v-model="payment.due_date" class="form-control" id="due_date" />
           </div>
-          <div v-if="payment.payment_method === '4'" class="mb-3">
+          <div v-if="payment.payment_method === 'Bank Transfer'" class="mb-3">
             <label for="bank_details" class="form-label">Bank Details</label>
             <input
               type="text"
@@ -1057,15 +1013,15 @@ export default {
               class="form-control"
               id="bank_details"
             />
-            <div class="mb-3">
-              <label for="transaction_id" class="form-label">Transaction ID</label>
-              <input
-                type="text"
-                v-model="payment.transaction_id"
-                class="form-control"
-                id="transaction_id"
-              />
-            </div>
+          </div>
+          <div class="mb-3">
+            <label for="transaction_id" class="form-label">Transaction ID</label>
+            <input
+              type="text"
+              v-model="payment.transaction_id"
+              class="form-control"
+              id="transaction_id"
+            />
           </div>
         </div>
         <div class="modal-footer">
@@ -1108,8 +1064,5 @@ export default {
   flex: 1 1 auto;
   width: 1% !important;
   min-width: 0;
-}
-.cart-page input {
-  text-transform: capitalize;
 }
 </style>

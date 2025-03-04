@@ -49,8 +49,8 @@ export default {
         drop_time_to: '', // Add drop_time_to property
         drop_time: '', // Add drop_time property
         selectedDropLocation: null, // Add selectedDropLocation property
-        net_price_adult: '', // Add net_adult_price property
-        net_price_child: '', // Add net_child_price property
+        net_adult_price: '', // Add net_adult_price property
+        net_child_price: '', // Add net_child_price property
       },
       tour: null,
       error: null,
@@ -217,8 +217,8 @@ export default {
           invoice_id: this.booking.invoice_id,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          net_price_adult: parseFloat(this.booking.net_price_adult),
-          net_price_child: parseFloat(this.booking.net_price_child),
+          net_adult_price: parseFloat(this.booking.net_adult_price),
+          net_child_price: parseFloat(this.booking.net_child_price),
         }
 
         const bookingResponse = await axios.post(`${config.apiUrl}/booking/add`, bookingData, {

@@ -2,8 +2,8 @@
 import { debounce } from 'lodash'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import SearchCard from '../../components/preloader/SearchCard.vue'
 import { useTourSearchStore } from '../../stores/tour/TourSearch.js'
+import { SearchCard } from '/../components/preloader/SearchCard.vue'
 
 export default {
   name: 'TourSearch',
@@ -349,7 +349,7 @@ export default {
             <div
               v-for="tour in paginatedTours"
               :key="tour.id"
-              class="list-group-item list-group-item-action d-flex align-items-center cursor-pointer waves-effect pr-0 mb-4"
+              class="list-group-item list-group-item-action d-flex align-items-center cursor-pointer waves-effect pr-0"
             >
               <div class="row w-100 pt-2 pb-2">
                 <div class="col-md-3">

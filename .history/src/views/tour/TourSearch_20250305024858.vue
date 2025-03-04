@@ -341,7 +341,7 @@ export default {
       </div>
     </div>
     <div class="col-md-7">
-      <div v-if="loading"><SearchCard /></div>
+      <div><SearchCard /></div>
       <div v-if="error">{{ error }}</div>
       <div v-if="tours.length">
         <div class="demo-inline-spacing mt-4">

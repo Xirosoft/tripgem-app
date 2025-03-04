@@ -49,8 +49,8 @@ export default {
         drop_time_to: '', // Add drop_time_to property
         drop_time: '', // Add drop_time property
         selectedDropLocation: null, // Add selectedDropLocation property
-        net_price_adult: '', // Add net_adult_price property
-        net_price_child: '', // Add net_child_price property
+        net_adult_price: '', // Add net_adult_price property
+        net_child_price: '', // Add net_child_price property
       },
       tour: null,
       error: null,
@@ -217,8 +217,8 @@ export default {
           invoice_id: this.booking.invoice_id,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          net_price_adult: parseFloat(this.booking.net_price_adult),
-          net_price_child: parseFloat(this.booking.net_price_child),
+          net_adult_price: parseFloat(this.booking.net_adult_price),
+          net_child_price: parseFloat(this.booking.net_child_price),
         }
 
         const bookingResponse = await axios.post(`${config.apiUrl}/booking/add`, bookingData, {
@@ -1035,15 +1035,6 @@ export default {
           <div v-if="payment.payment_method === '1' || payment.payment_method === '3'" class="mb-3">
             <label for="payment_slip" class="form-label">Upload Payment Slip</label>
             <input type="file" class="form-control" id="payment_slip" @change="handleFileUpload" />
-            <div class="mb-3">
-              <label for="transaction_id" class="form-label">Transaction ID</label>
-              <input
-                type="text"
-                v-model="payment.transaction_id"
-                class="form-control"
-                id="transaction_id"
-              />
-            </div>
           </div>
           <div v-if="payment.payment_method === '5'" class="mb-3">
             <label for="due_date" class="form-label">Due Date</label>
@@ -1057,15 +1048,6 @@ export default {
               class="form-control"
               id="bank_details"
             />
-            <div class="mb-3">
-              <label for="transaction_id" class="form-label">Transaction ID</label>
-              <input
-                type="text"
-                v-model="payment.transaction_id"
-                class="form-control"
-                id="transaction_id"
-              />
-            </div>
           </div>
         </div>
         <div class="modal-footer">
