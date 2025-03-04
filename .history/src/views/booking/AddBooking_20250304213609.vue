@@ -740,7 +740,6 @@ export default {
                     v-model="booking.net_price_adult"
                     id="net_adult_price"
                     required
-                    readonly
                   />
                 </div>
               </div>
@@ -754,7 +753,6 @@ export default {
                     v-model="booking.net_price_child"
                     id="net_child_price"
                     required
-                    readonly
                   />
                 </div>
               </div>
@@ -859,7 +857,6 @@ export default {
                 v-model="booking.transport_types"
                 id="transport_types"
                 required
-                readonly
               />
             </div>
           </div>

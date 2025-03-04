@@ -184,7 +184,7 @@ export default {
           adult_price: this.booking.adult_price,
           child_price: this.booking.child_price,
           total_price: this.sidebarData.totalPrice,
-          payment_method: this.booking.payment_method,
+          payment_method: this.booking.payment_method, // Use booking.payment_method
           promo_id: this.booking.promo_id,
           note: this.booking.note,
           num_traveler_infant: this.booking.num_traveler_infant,
@@ -207,7 +207,7 @@ export default {
         const paymentData = {
           booking_id: bookingId,
           amount: this.sidebarData.totalPrice,
-          payment_method: this.payment.payment_method,
+          payment_method: this.booking.payment_method, // Use booking.payment_method
           payment_status: 'Completed',
           transaction_id: this.payment.transaction_id,
           bank_details: this.payment.bank_details,
@@ -737,10 +737,9 @@ export default {
                   <input
                     type="number"
                     class="form-control"
-                    v-model="booking.net_price_adult"
+                    v-model="booking.net_adult_price"
                     id="net_adult_price"
                     required
-                    readonly
                   />
                 </div>
               </div>
@@ -751,10 +750,9 @@ export default {
                   <input
                     type="number"
                     class="form-control"
-                    v-model="booking.net_price_child"
+                    v-model="booking.net_child_price"
                     id="net_child_price"
                     required
-                    readonly
                   />
                 </div>
               </div>
@@ -859,7 +857,6 @@ export default {
                 v-model="booking.transport_types"
                 id="transport_types"
                 required
-                readonly
               />
             </div>
           </div>

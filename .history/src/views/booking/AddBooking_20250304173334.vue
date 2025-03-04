@@ -737,10 +737,9 @@ export default {
                   <input
                     type="number"
                     class="form-control"
-                    v-model="booking.net_price_adult"
+                    v-model="booking.net_adult_price"
                     id="net_adult_price"
                     required
-                    readonly
                   />
                 </div>
               </div>
@@ -751,10 +750,9 @@ export default {
                   <input
                     type="number"
                     class="form-control"
-                    v-model="booking.net_price_child"
+                    v-model="booking.net_child_price"
                     id="net_child_price"
                     required
-                    readonly
                   />
                 </div>
               </div>
@@ -859,8 +857,22 @@ export default {
                 v-model="booking.transport_types"
                 id="transport_types"
                 required
-                readonly
               />
+            </div>
+          </div>
+          <div class="col-md-6 mb-6">
+            <label class="form-label" for="payment_method">Payment Method</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="ti ti-credit-card"></i></span>
+              <select class="form-select" v-model="booking.payment_method" id="discount" required>
+                <option value="" selected>Select Payment Method</option>
+                <option value="1" disabled>PayPal</option>
+                <option value="2" disabled>Stripe</option>
+                <option value="3">Bank Transfer</option>
+                <option value="4">Scan Transfer</option>
+                <option value="5" disabled>Credit Card</option>
+                <option value="6">Due</option>
+              </select>
             </div>
           </div>
           <div class="col-md-6 mb-6">
@@ -971,12 +983,12 @@ export default {
           <div class="mb-3">
             <label for="payment_method" class="form-label">Payment Method</label>
             <select v-model="payment.payment_method" class="form-select" id="payment_method">
-              <option value="1" disabled>PayPal</option>
-              <option value="2" disabled>Stripe</option>
-              <option value="3">Bank Transfer</option>
-              <option value="3">Scan Transfer</option>
-              <option value="4" disabled>Credit Card</option>
-              <option value="5">Due</option>
+              <option value="PayPal">PayPal</option>
+              <option value="Stripe">Stripe</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Scan Transfer">Scan Transfer</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Due">Due</option>
             </select>
           </div>
           <div

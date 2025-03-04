@@ -737,10 +737,9 @@ export default {
                   <input
                     type="number"
                     class="form-control"
-                    v-model="booking.net_price_adult"
+                    v-model="booking.net_adult_price"
                     id="net_adult_price"
                     required
-                    readonly
                   />
                 </div>
               </div>
@@ -751,10 +750,9 @@ export default {
                   <input
                     type="number"
                     class="form-control"
-                    v-model="booking.net_price_child"
+                    v-model="booking.net_child_price"
                     id="net_child_price"
                     required
-                    readonly
                   />
                 </div>
               </div>
@@ -859,7 +857,6 @@ export default {
                 v-model="booking.transport_types"
                 id="transport_types"
                 required
-                readonly
               />
             </div>
           </div>
