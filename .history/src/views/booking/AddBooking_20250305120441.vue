@@ -249,8 +249,7 @@ export default {
         console.log('Payment successful:', paymentResponse.data)
 
         // Update available seats
-        const updatedAvailableSeats =
-          this.booking.available_seat - this.sidebarData.MinusTotalTravelers
+        const updatedAvailableSeats = this.booking.available_seat - this.sidebarData.totalTravelers
         await axios.put(
           `${config.apiUrl}/tour/edit/${this.booking.tour_id}`,
           {

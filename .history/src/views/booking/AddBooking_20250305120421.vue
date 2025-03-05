@@ -174,7 +174,7 @@ export default {
       }
     },
     async submitForm() {
-      if (this.sidebarData.MinusTotalTravelers > this.booking.available_seat) {
+      if (this.sidebarData.totalTravelers > this.booking.available_seat) {
         this.error = 'Not enough available seats for the selected tour.'
         return
       }
@@ -249,8 +249,7 @@ export default {
         console.log('Payment successful:', paymentResponse.data)
 
         // Update available seats
-        const updatedAvailableSeats =
-          this.booking.available_seat - this.sidebarData.MinusTotalTravelers
+        const updatedAvailableSeats = this.booking.available_seat - this.sidebarData.totalTravelers
         await axios.put(
           `${config.apiUrl}/tour/edit/${this.booking.tour_id}`,
           {
