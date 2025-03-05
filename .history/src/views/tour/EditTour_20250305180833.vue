@@ -29,11 +29,11 @@ const formData = ref({
   tour_start_time: '',
   tour_end_time: '',
   regular_price_adult: 0,
-  price_adult_park_fee: { amount: 0, include_park_fee: true },
-  local_price_adult_park_fee: { amount: 0, include_park_fee: true },
+  net_price_adult: { amount: 0, include_park_fee: true },
+  local_net_price_adult: { amount: 0, include_park_fee: true },
   regular_price_child: 0,
-  price_child_park_fee: { amount: 0, include_park_fee: true },
-  local_price_child_park_fee: { amount: 0, include_park_fee: true },
+  net_price_child: { amount: 0, include_park_fee: true },
+  local_net_price_child: { amount: 0, include_park_fee: true },
   park_fee: {
     price_child_park_fee: 0,
     price_adult_park_fee: 0,
@@ -145,16 +145,20 @@ const removeDiscount = (index) => {
 }
 
 const toggleParkFee = (target) => {
+  console.log('Toggle Park Fee:', target)
+  console.log(formData.value[target])
+
   formData.value[target].include_park_fee = !formData.value[target].include_park_fee
+  // console.log(formData.value[target].include_park_fee)
 
   if (!formData.value[target].include_park_fee) {
-    if (target === 'price_adult_park_fee') {
+    if (target === 'park_fee') {
       formData.value.park_fee.price_adult_park_fee = 0
-    } else if (target === 'local_price_adult_park_fee') {
+    } else if (target === 'local_park_fee') {
       formData.value.park_fee.local_price_adult_park_fee = 0
-    } else if (target === 'price_child_park_fee') {
+    } else if (target === 'park_fee_child') {
       formData.value.park_fee.price_child_park_fee = 0
-    } else if (target === 'local_price_child_park_fee') {
+    } else if (target === 'local_park_fee') {
       formData.value.park_fee.local_price_child_park_fee = 0
     }
   }
@@ -171,7 +175,7 @@ const clearForm = () => {
     tour_start_time: '',
     tour_end_time: '',
     regular_price_adult: 0,
-    price_adult_park_fee: { amount: 0, include_park_fee: true },
+    net_price_adult: { amount: 0, include_park_fee: true },
     local_net_price_adult: { amount: 0, include_park_fee: true },
     regular_price_child: 0,
     net_price_child: { amount: 0, include_park_fee: true },
@@ -373,8 +377,8 @@ const handleSubmit = async () => {
       position: 'top-right',
       duration: 5000,
     })
-    // clearForm()
-    // router.push('/all-tours')
+    clearForm()
+    router.push('/all-tours')
   } catch (error) {
     console.log('Failed to update tour: ' + error.message)
   }
@@ -597,12 +601,7 @@ onMounted(async () => {
       </div>
       <div class="d-flex align-content-center flex-wrap gap-4">
         <div class="d-flex gap-4">
-          <button
-            class="btn btn-label-secondary"
-            @click="router.push(`/view-tour/${route.params.id}`)"
-          >
-            View Tour
-          </button>
+          <button class="btn btn-label-secondary">View Tour</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
         <button type="submit" class="btn btn-primary" @click="handleSubmit">Update Tour</button>
@@ -784,22 +783,16 @@ onMounted(async () => {
                         <button
                           type="button"
                           class="btn btn-outline-secondary"
-                          @click="toggleParkFee('price_adult_park_fee')"
+                          @click="toggleParkFee('park_fee')"
                         >
                           {{
-                            formData.price_adult_park_fee.include_park_fee
+                            formData.net_price_adult.include_park_fee
                               ? 'Include Park Fee'
                               : 'Exclude Park Fee'
                           }}
                         </button>
                       </div>
-                      <div
-                        v-if="
-                          !formData.price_adult_park_fee.include_park_fee ||
-                          formData.park_fee.price_adult_park_fee > 0
-                        "
-                        class="mt-2"
-                      >
+                      <div v-if="!formData.net_price_adult.include_park_fee" class="mt-2">
                         <label class="form-label" for="adult-park-fee">National Park fee</label>
                         <input
                           type="number"
@@ -824,27 +817,21 @@ onMounted(async () => {
                           placeholder="Local Net Price"
                           v-model="formData.local_net_price_adult"
                           min="0"
-                          step="10"
+                          step="0.01"
                         />
                         <button
                           type="button"
                           class="btn btn-outline-secondary"
-                          @click="toggleParkFee('local_price_adult_park_fee')"
+                          @click="toggleParkFee('park_fee')"
                         >
                           {{
-                            formData.local_price_adult_park_fee.include_park_fee
+                            formData.local_net_price_adult.include_park_fee
                               ? 'Include Park Fee'
                               : 'Exclude Park Fee'
                           }}
                         </button>
                       </div>
-                      <div
-                        v-if="
-                          !formData.local_price_adult_park_fee.include_park_fee ||
-                          formData.park_fee.local_price_adult_park_fee > 0
-                        "
-                        class="mt-2"
-                      >
+                      <div v-if="!formData.local_net_price_adult.include_park_fee" class="mt-2">
                         <label class="form-label" for="local-adult-park-fee"
                           >National Park fee</label
                         >
@@ -939,22 +926,16 @@ onMounted(async () => {
                         <button
                           type="button"
                           class="btn btn-outline-secondary"
-                          @click="toggleParkFee('price_child_park_fee')"
+                          @click="toggleParkFee('net_price_child')"
                         >
                           {{
-                            formData.price_child_park_fee.include_park_fee
+                            formData.net_price_child.include_park_fee
                               ? 'Include Park Fee'
                               : 'Exclude Park Fee'
                           }}
                         </button>
                       </div>
-                      <div
-                        v-if="
-                          !formData.price_child_park_fee.include_park_fee ||
-                          formData.park_fee.price_child_park_fee > 0
-                        "
-                        class="mt-2"
-                      >
+                      <div v-if="!formData.net_price_child.include_park_fee" class="mt-2">
                         <label class="form-label" for="child-park-fee">National Park fee</label>
                         <input
                           type="number"
@@ -984,22 +965,16 @@ onMounted(async () => {
                         <button
                           type="button"
                           class="btn btn-outline-secondary"
-                          @click="toggleParkFee('local_price_child_park_fee')"
+                          @click="toggleParkFee('local_net_price_child')"
                         >
                           {{
-                            formData.local_price_child_park_fee.include_park_fee
+                            formData.local_net_price_child.include_park_fee
                               ? 'Include Park Fee'
                               : 'Exclude Park Fee'
                           }}
                         </button>
                       </div>
-                      <div
-                        v-if="
-                          !formData.local_price_child_park_fee.include_park_fee ||
-                          formData.park_fee.local_price_child_park_fee > 0
-                        "
-                        class="mt-2"
-                      >
+                      <div v-if="!formData.local_net_price_child.include_park_fee" class="mt-2">
                         <label class="form-label" for="local-child-park-fee"
                           >National Park fee</label
                         >

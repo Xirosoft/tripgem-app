@@ -597,12 +597,7 @@ onMounted(async () => {
       </div>
       <div class="d-flex align-content-center flex-wrap gap-4">
         <div class="d-flex gap-4">
-          <button
-            class="btn btn-label-secondary"
-            @click="router.push(`/view-tour/${route.params.id}`)"
-          >
-            View Tour
-          </button>
+          <button class="btn btn-label-secondary">View Tour</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
         <button type="submit" class="btn btn-primary" @click="handleSubmit">Update Tour</button>

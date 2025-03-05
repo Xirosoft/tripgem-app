@@ -29,11 +29,11 @@ const formData = ref({
   tour_start_time: '',
   tour_end_time: '',
   regular_price_adult: 0,
-  price_adult_park_fee: { amount: 0, include_park_fee: true },
-  local_price_adult_park_fee: { amount: 0, include_park_fee: true },
+  net_price_adult: { amount: 0, include_park_fee: true },
+  local_net_price_adult: { amount: 0, include_park_fee: true },
   regular_price_child: 0,
-  price_child_park_fee: { amount: 0, include_park_fee: true },
-  local_price_child_park_fee: { amount: 0, include_park_fee: true },
+  net_price_child: { amount: 0, include_park_fee: true },
+  local_net_price_child: { amount: 0, include_park_fee: true },
   park_fee: {
     price_child_park_fee: 0,
     price_adult_park_fee: 0,
@@ -144,97 +144,96 @@ const removeDiscount = (index) => {
   formData.value.discount.splice(index, 1)
 }
 
-const toggleParkFee = (target) => {
+const toggleParkFee = (target) => {) => {
   formData.value[target].include_park_fee = !formData.value[target].include_park_fee
-
   if (!formData.value[target].include_park_fee) {
-    if (target === 'price_adult_park_fee') {
+    if (target === 'net_price_adult') {
       formData.value.park_fee.price_adult_park_fee = 0
-    } else if (target === 'local_price_adult_park_fee') {
+    } else if (target === 'local_net_price_adult') {
       formData.value.park_fee.local_price_adult_park_fee = 0
-    } else if (target === 'price_child_park_fee') {
+    } else if (target === 'net_price_child') {
       formData.value.park_fee.price_child_park_fee = 0
-    } else if (target === 'local_price_child_park_fee') {
+    } else if (target === 'local_net_price_child') {
       formData.value.park_fee.local_price_child_park_fee = 0
-    }
-  }
-}
-
-const clearForm = () => {
-  formData.value = {
-    merchant_id: '',
-    user_id: userId,
-    tour_name: '',
-    subheading: '',
+    }ser_id: userId,
+  } tour_name: '',
+}   subheading: '',
     description: '',
-    itinerary: '',
-    tour_start_time: '',
+const clearForm = () => {
+  formData.value = { '',
+    merchant_id: '',',
+    user_id: userId,ult: 0,
+    tour_name: '',t: { amount: 0, include_park_fee: true },
+    subheading: '',_adult: { amount: 0, include_park_fee: true },
+    description: '',ild: 0,
+    itinerary: '',d: { amount: 0, include_park_fee: true },
+    tour_start_time: '',d: { amount: 0, include_park_fee: true },
     tour_end_time: '',
-    regular_price_adult: 0,
-    price_adult_park_fee: { amount: 0, include_park_fee: true },
+    regular_price_adult: 0, 0,
+    net_price_adult: { amount: 0, include_park_fee: true },
     local_net_price_adult: { amount: 0, include_park_fee: true },
-    regular_price_child: 0,
+    regular_price_child: 0,k_fee: 0,
     net_price_child: { amount: 0, include_park_fee: true },
     local_net_price_child: { amount: 0, include_park_fee: true },
-    park_fee: {
+    park_fee: {ates: {
       price_child_park_fee: 0,
       price_adult_park_fee: 0,
       local_price_adult_park_fee: 0,
       local_price_child_park_fee: 0,
-    },
+    },tal_seat: 0,
     discount: [], // Initialize as an empty array
     available_dates: {
-      from: '',
-      to: '',
-    },
+      from: '','',
+      to: '',_types: '',
+    },nguages_supported: [],
     available_seat: 0,
     total_seat: 0,
     image_gallery: [],
-    video_gallery: [],
-    thumbnail: '',
+    video_gallery: [],y: '',
+    thumbnail: '',ntage: 0,
     transport_types: '',
     languages_supported: [],
     highlights: '',
-    min_age: 0,
-    max_age: 0,
-    cancellation_policy: '',
-    discount_percentage: 0,
-    tour_type: '',
+    min_age: 0,[],
+    max_age: 0,e: [{ from: '', to: '', location: '', charge: 0 }],
+    cancellation_policy: '',to: '', location: '', charge: 0 }],
+    discount_percentage: 0,: '',
+    tour_type: '',on_details: '',
     currency: [],
     status: '',
     tour_meta: [],
     pick_up_time: [{ from: '', to: '', location: '', charge: 0 }],
     drop_time: [{ from: '', to: '', location: '', charge: 0 }],
     pickup_location_details: '',
-    dropoff_location_details: '',
-    duration: '',
+    dropoff_location_details: '',ng' ? JSON.parse(field) : field
+    duration: '', {
+  } console.error('Failed to parse JSON field:', error)
+}   return []
   }
-}
-
 const parseJsonField = (field) => {
   try {
     return typeof field === 'string' ? JSON.parse(field) : field
   } catch (error) {
     console.error('Failed to parse JSON field:', error)
-    return []
-  }
-}
-
+    return []Id) {
+  }   throw new Error('Tour ID is missing')
+}   }
+    console.log('Tour ID:', tourId)
 const loadTourDetails = async () => {
-  try {
+  try {st tourDetails = await editTourStore.fetchTourDetails(tourId)
     const tourId = route.params.id
-    if (!tourId) {
+    if (!tourId) {ror('Failed to fetch tour details')
       throw new Error('Tour ID is missing')
     }
-    console.log('Tour ID:', tourId)
-
-    const tourDetails = await editTourStore.fetchTourDetails(tourId)
-    if (!tourDetails) {
-      throw new Error('Failed to fetch tour details')
-    }
-
-    formData.value = { ...formData.value, ...tourDetails }
+    console.log('Tour ID:', tourId)value, ...tourDetails }
     // Ensure select dropdowns are updated with existing data
+    const tourDetails = await editTourStore.fetchTourDetails(tourId)languages_supported)
+    if (!tourDetails) {ency = parseJsonField(tourDetails.currency)
+      throw new Error('Failed to fetch tour details')|| ''
+    }ormData.value.subheading = tourDetails.subheading || ''
+    formData.value.highlights = tourDetails.highlights || ''
+    formData.value = { ...formData.value, ...tourDetails }llation_policy || ''
+    // Ensure select dropdowns are updated with existing dataount) || []
     formData.value.languages_supported = parseJsonField(tourDetails.languages_supported)
     formData.value.currency = parseJsonField(tourDetails.currency)
     formData.value.tour_name = tourDetails.tour_name || ''
@@ -243,55 +242,55 @@ const loadTourDetails = async () => {
     formData.value.cancellation_policy = tourDetails.cancellation_policy || ''
     formData.value.discount = parseJsonField(tourDetails.discount) || []
     formData.value.park_fee = parseJsonField(tourDetails.park_fee) || {
-      price_child_park_fee: 0,
-      price_adult_park_fee: 0,
-      local_price_adult_park_fee: 0,
-      local_price_child_park_fee: 0,
-    }
-
+      price_child_park_fee: 0,ice_child_park_fee = formData.value.park_fee.price_child_park_fee || 0
+      price_adult_park_fee: 0,ice_adult_park_fee = formData.value.park_fee.price_adult_park_fee || 0
+      local_price_adult_park_fee: 0,ice_adult_park_fee =
+      local_price_child_park_fee: 0,price_adult_park_fee || 0
+    }ormData.value.park_fee.local_price_child_park_fee =
+      formData.value.park_fee.local_price_child_park_fee || 0
     // Ensure all properties of park_fee are initialized
     formData.value.park_fee.price_child_park_fee = formData.value.park_fee.price_child_park_fee || 0
     formData.value.park_fee.price_adult_park_fee = formData.value.park_fee.price_adult_park_fee || 0
-    formData.value.park_fee.local_price_adult_park_fee =
-      formData.value.park_fee.local_price_adult_park_fee || 0
-    formData.value.park_fee.local_price_child_park_fee =
+    formData.value.park_fee.local_price_adult_park_fee =s.drop_time)
+      formData.value.park_fee.local_price_adult_park_fee || 0r_meta)
+    formData.value.park_fee.local_price_child_park_fee =etails.available_days)
       formData.value.park_fee.local_price_child_park_fee || 0
-
+    formData.value.tour_type = tourDetails.tour_type || ''
     formData.value.pick_up_time = parseJsonField(tourDetails.pick_up_time)
     formData.value.available_dates = parseJsonField(tourDetails.available_dates)
     formData.value.drop_time = parseJsonField(tourDetails.drop_time)
     formData.value.tour_meta = parseJsonField(tourDetails.tour_meta)
     formData.value.available_days = parseJsonField(tourDetails.available_days)
-    formData.value.status = tourDetails.status
-    formData.value.tour_type = tourDetails.tour_type || ''
-    formData.value.transport_types = tourDetails.transport_types
-    formData.value.merchant_id = tourDetails.merchant_id || ''
-    formData.value.user_id = tourDetails.user_id || ''
+    formData.value.status = tourDetails.statusetails.tags)
+    formData.value.tour_type = tourDetails.tour_type || ''.value.image_gallery)
+    formData.value.transport_types = tourDetails.transport_types.video_gallery)
+    formData.value.merchant_id = tourDetails.merchant_id || ''image_gallery) || []
+    formData.value.user_id = tourDetails.user_id || ''Details.video_gallery) || []
     formData.value.location = parseJsonField(tourDetails.location)
     formData.value.category = parseJsonField(tourDetails.category)
-    formData.value.tags = parseJsonField(tourDetails.tags)
+    formData.value.tags = parseJsonField(tourDetails.tags)me
     formData.value.image_gallery = parseJsonField(formData.value.image_gallery)
     formData.value.video_gallery = parseJsonField(formData.value.video_gallery)
     formData.value.image_gallery = parseJsonField(tourDetails.image_gallery) || []
-    formData.value.video_gallery = parseJsonField(tourDetails.video_gallery) || []
-
-    if (formData.value.location.length > 0) {
+    formData.value.video_gallery = parseJsonField(tourDetails.video_gallery) || []name) {
+      FilterCategory.value = formData.value.category[0].category_name
+    if (formData.value.location.length > 0) {ory.value)
       FilterLocation.value = formData.value.location[0].name
       // console.log(FilterLocation.value)
-    }
-
+    }f (formData.value.tags.length > 0) {
+      FilterTags.value = formData.value.tags.map((tag) => ({ id: tag.id, name: tag.tag_name }))
     if (formData.value.category.length > 0 && formData.value.category[0].category_name) {
       FilterCategory.value = formData.value.category[0].category_name
       // console.log('Category:', FilterCategory.value)
-    }
-
+    }/ Initialize select2 with existing data
+    setTimeout(() => {
     if (formData.value.tags.length > 0) {
       FilterTags.value = formData.value.tags.map((tag) => ({ id: tag.id, name: tag.tag_name }))
-      // console.log(FilterTags.value)
-    }
-
+      // console.log(FilterTags.value)ported?.map(
+    }       (lang) => lang?.charAt(0).toUpperCase() + lang?.slice(1).toLowerCase(),
+          ),
     // Initialize select2 with existing data
-    setTimeout(() => {
+    setTimeout(() => {ge')
       $('#language')
         .val(
           formData.value.languages_supported?.map(
@@ -299,267 +298,267 @@ const loadTourDetails = async () => {
           ),
         )
         .trigger('change')
-      $('#currency')
+      $('#currency'))
         .val(
-          formData.value.currency?.map(
+          formData.value.currency?.map(rAt(0).toUpperCase() +
             (curr) => curr?.charAt(0).toUpperCase() + curr?.slice(1).toLowerCase(),
           ),
-        )
+        )trigger('change')
         .trigger('change')
       $('#tour-type')
-        .val(
-          formData.value.tour_type?.charAt(0).toUpperCase() +
+        .val(mData.value.transport_types?.charAt(0).toUpperCase() +
+          formData.value.tour_type?.charAt(0).toUpperCase() +ase(),
             formData.value.tour_type?.slice(1).toLowerCase(),
-        )
-        .trigger('change')
-      $('#transport-type')
-        .val(
+        )trigger('change')
+        .trigger('change')(formData.value.status).trigger('change')
+      $('#transport-type')ormData.value.location[0]?.id).trigger('change') // Ensure location is set
+        .val(lection').val(formData.value.category[0]?.id).trigger('change') // Ensure category is set
           formData.value.transport_types?.charAt(0).toUpperCase() +
             formData.value.transport_types?.slice(1).toLowerCase(),
-        )
+        ).error('Failed to load tour details: ' + error.message)
         .trigger('change')
       $('#status-org').val(formData.value.status).trigger('change')
       $('#location').val(formData.value.location[0]?.id).trigger('change') // Ensure location is set
       $('#collection').val(formData.value.category[0]?.id).trigger('change') // Ensure category is set
-    }, 0)
-  } catch (error) {
-    toast.error('Failed to load tour details: ' + error.message)
-  }
+    }, 0)ole.log('Location Data:', locationData)
+  } catch (error) {cation = locationData
+    toast.error('Failed to load tour details: ' + error.message)on_name }]
+  } : []
+} FilterLocation.value = locationData ? locationData.location_name : ''
 }
-
 const handleLocationChange = (locationData) => {
   // console.log('Location Data:', locationData)
   formData.value.location = locationData
     ? [{ id: locationData.location_id, name: locationData.location_name }]
-    : []
-  FilterLocation.value = locationData ? locationData.location_name : ''
-}
-
+    : []ta.value.category = category
+  FilterLocation.value = locationData ? locationData.location_name : ''e }]
+}   : []
+  FilterCategory.value = category ? category.category_name : ''
 const handleCategoryChange = (category) => {
   // console.log('Category:', category)
-
+const handleTagsChange = (tags) => {
   formData.value.category = category
-    ? [{ id: category.category_id, category_name: category.category_name }]
+    ? [{ id: category.category_id, category_name: category.category_name }] }))
     : []
   FilterCategory.value = category ? category.category_name : ''
-}
-
+}onst handleSubmit = async () => {
+  try {
 const handleTagsChange = (tags) => {
   // console.log('Tags:', tags)
   formData.value.tags = tags.map((tag) => ({ id: tag.id, tag_name: tag.name }))
-}
-
-const handleSubmit = async () => {
-  try {
-    const tourId = route.params.id
-    if (!tourId) {
-      throw new Error('Tour ID is missing')
-    }
+}   }
     // Ensure all select values are correctly set
+const handleSubmit = async () => {nt.querySelector('#status-org').value
+  try {mData.value.tour_type = document.querySelector('#tour-type').value
+    const tourId = route.params.id = document.querySelector('#transport-type').value
+    if (!tourId) {.languages_supported = $('#language').val()
+      throw new Error('Tour ID is missing')).val()
+    }
+    // Ensure all select values are correctly setue.location)
     formData.value.status = document.querySelector('#status-org').value
     formData.value.tour_type = document.querySelector('#tour-type').value
     formData.value.transport_types = document.querySelector('#transport-type').value
     formData.value.languages_supported = $('#language').val()
     formData.value.currency = $('#currency').val()
-
+    await editTourStore.updateTourDetails(tourId, formData.value)
     // console.log('Form Location:', formData.value.location)
     // console.log($('#location').val())
-
+      duration: 5000,
     // console.log('Form Category:', formData.value.category)
     // console.log('Form Tags:', formData.value.tags)
-
+    router.push('/all-tours')
     await editTourStore.updateTourDetails(tourId, formData.value)
-    toast.success('Tour updated successfully!', {
+    toast.success('Tour updated successfully!', {.message)
       position: 'top-right',
       duration: 5000,
     })
-    // clearForm()
-    // router.push('/all-tours')
-  } catch (error) {
+    clearForm()mbnailUpload = async (file) => {
+    router.push('/all-tours')
+  } catch (error) {it DragAndDropUpload(file, formData.value, null, toast, 'thumbnail')
     console.log('Failed to update tour: ' + error.message)
-  }
-}
-
+  } // toast.success('Thumbnail uploaded successfully')
+} } catch (error) {
+    toast.error('Failed to upload thumbnail', error)
 const handleThumbnailUpload = async (file) => {
   try {
     const url = await DragAndDropUpload(file, formData.value, null, toast, 'thumbnail')
-    formData.value.thumbnail = url.url
+    formData.value.thumbnail = url.url (files) => {
     // toast.success('Thumbnail uploaded successfully')
   } catch (error) {
     toast.error('Failed to upload thumbnail', error)
-  }
-}
+  } for (const file of files) {
+}     console.log('File:', file)
 
-const handleImageGalleryUpload = async (files) => {
-  console.log('Files:', files)
+const handleImageGalleryUpload = async (files) => { null, toast, 'image_gallery')
+  console.log('Files:', files)rl)
 
-  try {
+  try {/ formData.value.image_gallery.push(thumbnail.url)
     for (const file of files) {
-      console.log('File:', file)
-
+      console.log('File:', file)oaded successfully')
+  } catch (error) {
       await DragAndDropUpload(file, formData.value, null, toast, 'image_gallery')
       // console.log('URL:', url)
-
+    // toast.error('Failed to upload images...', error)
       // formData.value.image_gallery.push(thumbnail.url)
     }
     // toast.success('Images uploaded successfully')
-  } catch (error) {
-    console.log('Error:', error)
+  } catch (error) {lleryUpload = async (videoFiles) => {
+    console.log('Error:', error)deoFiles)
 
     // toast.error('Failed to upload images...', error)
-  }
-}
-
+  } for (const file of videoFiles) {
+}     await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
+      // formData.value.video_gallery.push(video.url)
 const handleVideoGalleryUpload = async (videoFiles) => {
   console.log('Video Files:', videoFiles)
-
-  try {
-    for (const file of videoFiles) {
+  } catch (error) {
+  try {sole.error(error)
+    for (const file of videoFiles) { videos', error)
       await DragAndDropUpload(file, formData.value, null, toast, 'video_gallery')
       // formData.value.video_gallery.push(video.url)
       // console.log('success in')
-    }
-  } catch (error) {
+    } removeThumbnail = () => {
+  } catch (error) {umbnail = ''
     console.error(error)
-    // toast.error('Failed to upload videos', error)
-  }
-}
-
-const removeThumbnail = () => {
-  formData.value.thumbnail = ''
+    // toast.error('Failed to upload videos', error)'#thumbnail .dz-preview')
+  } if (thumbnailPreview) {
+}     thumbnailPreview.remove()
+    }
+const removeThumbnail = () => {r thumbnail
+  formData.value.thumbnail = ''ail', handleThumbnailUpload, formData.value, toast)
   nextTick(() => {
     const thumbnailPreview = document.querySelector('#thumbnail .dz-preview')
     if (thumbnailPreview) {
-      thumbnailPreview.remove()
-    }
+      thumbnailPreview.remove()(index) => {
+    }sole.log('Index:', index)
     // Reinitialize Dropzone for thumbnail
     initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
-  })
-}
-
+  })xtTick(() => {
+}   const imagePreviews = document.querySelectorAll('#image_gallery .dz-preview')
+    if (imagePreviews[index]) {
 const removeImageFromGallery = (index) => {
   console.log('Index:', index)
-
+  })
   formData.value.image_gallery.splice(index, 1)
   nextTick(() => {
     const imagePreviews = document.querySelectorAll('#image_gallery .dz-preview')
-    if (imagePreviews[index]) {
+    if (imagePreviews[index]) {splice(index, 1)
       imagePreviews[index].remove()
+    }onst videoPreviews = document.querySelectorAll('#video_gallery .dz-preview')
+  })if (videoPreviews[index]) {
+}     videoPreviews[index].remove()
     }
-  })
-}
-
 const removeVideoFromGallery = (index) => {
   formData.value.video_gallery.splice(index, 1)
   nextTick(() => {
     const videoPreviews = document.querySelectorAll('#video_gallery .dz-preview')
-    if (videoPreviews[index]) {
-      videoPreviews[index].remove()
-    }
+    if (videoPreviews[index]) {Thumbnail
+      videoPreviews[index].remove()oveImageFromGallery
+    }w.removeVideoFromGallery = removeVideoFromGallery
   })
-}
-
+}nMounted(async () => {
+  // console.log('Route params:', route.params)
 // Make functions accessible in the template
 window.removeThumbnail = removeThumbnail
 window.removeImageFromGallery = removeImageFromGallery
 window.removeVideoFromGallery = removeVideoFromGallery
-
+  handleMerchantUserChange(formData.value.merchant_id, formData.value.user_id)
 onMounted(async () => {
   // console.log('Route params:', route.params)
-  initializeAddTour()
+  initializeAddTour()or = new Quill('.tour-itinerary', {
   await loadTourDetails()
-
+      toolbar: '.itinerary-toolbar',
   // Set selected merchant and user
   handleMerchantUserChange(formData.value.merchant_id, formData.value.user_id)
-
+    theme: 'snow',
   // Initialize Quill editor for itinerary
   const itineraryEditor = new Quill('.tour-itinerary', {
-    modules: {
-      toolbar: '.itinerary-toolbar',
+    modules: {al content for itinerary editor
+      toolbar: '.itinerary-toolbar',ormData.value.itinerary
     },
-    placeholder: 'Tour Itinerary',
-    theme: 'snow',
+    placeholder: 'Tour Itinerary',editor change
+    theme: 'snow',on('text-change', () => {
+  })formData.value.itinerary = itineraryEditor.root.innerHTML
   })
-
   // Set initial content for itinerary editor
   itineraryEditor.root.innerHTML = formData.value.itinerary
-
+  const descriptionEditor = new Quill('.tour-description-editor', {
   // Update formData.itinerary on editor change
   itineraryEditor.on('text-change', () => {
     formData.value.itinerary = itineraryEditor.root.innerHTML
-  })
-
+  })placeholder: 'Tour Description',
+    theme: 'snow',
   // Initialize Quill editor for description
   const descriptionEditor = new Quill('.tour-description-editor', {
-    modules: {
-      toolbar: '.description-toolbar',
+    modules: {al content for description editor
+      toolbar: '.description-toolbar',ormData.value.description
     },
-    placeholder: 'Tour Description',
-    theme: 'snow',
+    placeholder: 'Tour Description',editor change
+    theme: 'snow',r.on('text-change', () => {
+  })formData.value.description = descriptionEditor.root.innerHTML
   })
-
   // Set initial content for description editor
   descriptionEditor.root.innerHTML = formData.value.description
-
-  // Update formData.description on editor change
-  descriptionEditor.on('text-change', () => {
-    formData.value.description = descriptionEditor.root.innerHTML
-  })
-
-  // Initialize Dropzones
   initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)
+  // Update formData.description on editor changeoGalleryUpload, formData.value, toast, true)
+  descriptionEditor.on('text-change', () => {bnailUpload, formData.value, toast)
+    formData.value.description = descriptionEditor.root.innerHTML
+  }) Display existing images in the gallery
+  formData.value.image_gallery.forEach((image, index) => {
+  // Initialize Dropzonesdocument.createElement('div')
+  initializeDropzone('#image_gallery', handleImageGalleryUpload, formData.value, toast, true)e')
   initializeDropzone('#video_gallery', handleVideoGalleryUpload, formData.value, toast, true)
   initializeDropzone('#thumbnail', handleThumbnailUpload, formData.value, toast)
-
-  // Display existing images in the gallery
+      <div class="dz-image">
+  // Display existing images in the gallery Image" />
   formData.value.image_gallery.forEach((image, index) => {
     const imagePreview = document.createElement('div')
     imagePreview.classList.add('dz-preview', 'dz-processing', 'dz-image-preview', 'dz-complete')
-    const imageUrl = typeof image === 'string' ? image : image.url || ''
+    const imageUrl = typeof image === 'string' ? image : image.url || ''n></div>
     imagePreview.innerHTML = `
-      <div class="dz-image">
+      <div class="dz-image">class="btn btn-danger dz-remove" onclick="removeImageFromGallery(${index})">Remove</button>
         <img src="${imageUrl}" alt="Gallery Image" />
       </div>
-      <div class="dz-details">
-        <div class="dz-size"><span>1 MB</span></div>
+      <div class="dz-details">allery .dz-message')
+        <div class="dz-size"><span>1 MB</span></div>view)
         <div class="dz-filename"><span>${imageUrl.split('/').pop()}</span></div>
       </div>
       <button type="button" class="btn btn-danger dz-remove" onclick="removeImageFromGallery(${index})">Remove</button>
-    `
-    document
-      .querySelector('#image_gallery .dz-message')
-      .insertAdjacentElement('beforebegin', imagePreview)
-  })
-
+    `mData.value.video_gallery.forEach((video, index) => {
+    documentdeoPreview = document.createElement('div')
+      .querySelector('#image_gallery .dz-message')rocessing', 'dz-video-preview', 'dz-complete')
+      .insertAdjacentElement('beforebegin', imagePreview)video.url || ''
+  })videoPreview.innerHTML = `
+      <div class="dz-video">
   // Display existing videos in the gallery
   formData.value.video_gallery.forEach((video, index) => {
     const videoPreview = document.createElement('div')
     videoPreview.classList.add('dz-preview', 'dz-processing', 'dz-video-preview', 'dz-complete')
     const videoUrl = typeof video === 'string' ? video : video.url || ''
     videoPreview.innerHTML = `
-      <div class="dz-video">
-        <video controls>
+      <div class="dz-video">><span>1 MB</span></div>
+        <video controls>ilename"><span>${videoUrl.split('/').pop()}</span></div>
           <source src="${videoUrl}" type="video/mp4">
-          Your browser does not support the video tag.
+          Your browser does not support the video tag.emove" onclick="removeVideoFromGallery(${index})">Remove</button>
         </video>
       </div>
-      <div class="dz-details">
-        <div class="dz-size"><span>1 MB</span></div>
+      <div class="dz-details">allery .dz-message')
+        <div class="dz-size"><span>1 MB</span></div>view)
         <div class="dz-filename"><span>${videoUrl.split('/').pop()}</span></div>
       </div>
       <button type="button" class="btn btn-danger dz-remove" onclick="removeVideoFromGallery(${index})">Remove</button>
-    `
-    document
+    `onst response = await import('../../utils/json/tourTypes.json')
+    documents.value = response.default
       .querySelector('#video_gallery .dz-message')
       .insertAdjacentElement('beforebegin', videoPreview)
-  })
-
+  })console.error('Failed to load tour types:', error)
+  }
   try {
     const response = await import('../../utils/json/tourTypes.json')
-    tourTypes.value = response.default
-    // console.log(tourTypes.value)
+    tourTypes.value = response.default../utils/json/transportTypes.json')
+    // console.log(tourTypes.value).default
   } catch (error) {
-    console.error('Failed to load tour types:', error)
+    console.error('Failed to load tour types:', error)rror)
   }
 
   try {
@@ -575,99 +574,94 @@ onMounted(async () => {
   } catch (error) {
     console.error('Failed to load guide languages:', error)
   }
-
-  try {
+})
+  try {t>
     const response = await import('../../utils/json/currencies.json')
     currencies.value = response.default
-  } catch (error) {
+  } catch (error) {commerce">
     console.error('Failed to load currencies:', error)
-  }
-})
+  } <div
+})    class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4"
 </script>
-
-<template>
-  <div class="app-ecommerce">
-    <!-- Add Product -->
-    <div
-      class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4"
-    >
       <div class="d-flex flex-column justify-content-center">
+<template>4 class="mb-1">Edit Tour</h4>
+  <div class="app-ecommerce">s placed across your store</p>
+    <!-- Add Product -->
+    <diviv class="d-flex align-content-center flex-wrap gap-4">
+      class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-6 row-gap-4"
+    >     <button class="btn btn-label-secondary">View Tour</button>
+      <div class="d-flex flex-column justify-content-center">utton>
         <h4 class="mb-1">Edit Tour</h4>
-        <p class="mb-0">Orders placed across your store</p>
+        <p class="mb-0">Orders placed across your store</p>k="handleSubmit">Update Tour</button>
       </div>
       <div class="d-flex align-content-center flex-wrap gap-4">
         <div class="d-flex gap-4">
-          <button
-            class="btn btn-label-secondary"
-            @click="router.push(`/view-tour/${route.params.id}`)"
-          >
-            View Tour
-          </button>
+          <button class="btn btn-label-secondary">View Tour</button>
           <button class="btn btn-label-primary">Save draft</button>
-        </div>
+        </div>ss="col-12 col-lg-8">
         <button type="submit" class="btn btn-primary" @click="handleSubmit">Update Tour</button>
-      </div>
-    </div>
-
-    <div class="row">
-      <!-- First column-->
+      </div>ut type="hidden" name="merchant_id" v-model="formData.merchant_id" />
+    </div>-- Product Information -->
+        <div class="card mb-6">
+    <div class="row">"card-header">
+      <!-- First column-->d-tile mb-0">Tour Listing information</h5>
       <div class="col-12 col-lg-8">
         <input type="hidden" name="user_id" v-model="formData.user_id" />
         <input type="hidden" name="merchant_id" v-model="formData.merchant_id" />
-        <!-- Product Information -->
+        <!-- Product Information -->el" for="tour-title">Title</label>
         <div class="card mb-6">
           <div class="card-header">
             <h5 class="card-tile mb-0">Tour Listing information</h5>
-          </div>
-          <div class="card-body">
-            <div class="mb-6">
+          </div>id="tour-title"
+          <div class="card-body"> title"
+            <div class="mb-6">ata.tour_name"
               <label class="form-label" for="tour-title">Title</label>
               <input
                 type="text"
                 class="form-control"
-                id="tour-title"
+                id="tour-title"m-label" for="tour-subtitle">Sub Title</label>
                 placeholder="Tour title"
                 v-model="formData.tour_name"
                 aria-label="Tour title"
-              />
-            </div>
-            <div class="mb-6">
+              />id="tour-subtitle"
+            </div>aceholder="Sub title"
+            <div class="mb-6">ata.subheading"
               <label class="form-label" for="tour-subtitle">Sub Title</label>
               <input
                 type="text"
                 class="form-control"
                 id="tour-subtitle"
-                placeholder="Sub title"
+                placeholder="Sub title"iption (Optional)</label>
                 v-model="formData.subheading"
-                aria-label="Tour subtitle"
-              />
-            </div>
-            <!-- Description -->
-            <div>
+                aria-label="Tour subtitle"olbar border-0 border-bottom">
+              />  <div class="d-flex justify-content-start">
+            </div>  <span class="ql-formats me-0">
+            <!-- Description -->ass="ql-bold"></button>
+            <div>     <button class="ql-italic"></button>
               <label class="mb-1">Description (Optional)</label>
-              <div class="form-control p-0">
+              <div class="form-control p-0">" value="ordered"></button>
                 <div class="description-toolbar border-0 border-bottom">
                   <div class="d-flex justify-content-start">
-                    <span class="ql-formats me-0">
+                    <span class="ql-formats me-0">utton>
                       <button class="ql-bold"></button>
                       <button class="ql-italic"></button>
                       <button class="ql-underline"></button>
-                      <button class="ql-list" value="ordered"></button>
+                      <button class="ql-list" value="ordered"></button>v>
                       <button class="ql-list" value="bullet"></button>
                       <button class="ql-link"></button>
                       <button class="ql-image"></button>
-                    </span>
-                  </div>
-                </div>
+                    </span>"mb-1">Itinerary (Optional)</label>
+                  </div>="form-control p-0">
+                </div>lass="itinerary-toolbar border-0 border-bottom">
                 <div class="tour-description-editor border-0 pb-6"></div>
-              </div>
-            </div>
-            <div class="mt-5">
+              </div><span class="ql-formats me-0">
+            </div>    <button class="ql-bold"></button>
+            <div class="mt-5">class="ql-italic"></button>
               <label class="mb-1">Itinerary (Optional)</label>
-              <div class="form-control p-0">
+              <div class="form-control p-0">" value="ordered"></button>
                 <div class="itinerary-toolbar border-0 border-bottom">
                   <div class="d-flex justify-content-start">
-                    <span class="ql-formats me-0">
+                    <span class="ql-formats me-0">utton>
                       <button class="ql-bold"></button>
                       <button class="ql-italic"></button>
                       <button class="ql-underline"></button>
@@ -675,68 +669,68 @@ onMounted(async () => {
                       <button class="ql-list" value="bullet"></button>
                       <button class="ql-link"></button>
                       <button class="ql-image"></button>
-                    </span>
-                  </div>
-                </div>
+                    </span>6 mt-6">
+                  </div>ss="form-label" for="tour-highlights">Highlights</label>
+                </div>a
                 <div class="tour-itinerary border-0 pb-6"></div>
-              </div>
-            </div>
-
-            <div class="mb-6 mt-6">
+              </div>s="form-control"
+            </div>="tour-highlights"
+                placeholder="Highlights"
+            <div class="mb-6 mt-6">ighlights"
               <label class="form-label" for="tour-highlights">Highlights</label>
-              <textarea
+              <textareaea>
                 type="text"
                 class="form-control"
-                id="tour-highlights"
+                id="tour-highlights"el" for="tour-cancellation-policy">Cancellation Policy</label>
                 placeholder="Highlights"
                 v-model="formData.highlights"
                 aria-label="Tour highlights"
-              ></textarea>
-            </div>
-            <div class="mb-6 mt-6">
+              ></textarea>ancellation-policy"
+            </div>aceholder="Cancellation Policy"
+            <div class="mb-6 mt-6">ancellation_policy"
               <label class="form-label" for="tour-cancellation-policy">Cancellation Policy</label>
-              <textarea
+              <textareaea>
                 type="text"
                 class="form-control"
                 id="tour-cancellation-policy"
                 placeholder="Cancellation Policy"
                 v-model="formData.cancellation_policy"
                 aria-label="Tour cancellation policy"
-              ></textarea>
-            </div>
-          </div>
-        </div>
+              ></textarea>b-6">
+            </div>ss="card-header">
+          </div>class="card-title mb-0">Price Section</h5>
+        </div>v>
         <!-- /Product Information -->
-
-        <!-- Price -->
-        <div class="card mb-6">
-          <div class="card-header">
-            <h5 class="card-title mb-0">Price Section</h5>
-          </div>
-          <div class="card-body">
             <div class="row">
-              <!-- Navigation -->
+        <!-- Price -->igation -->
+        <div class="card mb-6">2 col-md-4 col-xl-5 col-xxl-4 mx-auto card-separator">
+          <div class="card-header">justify-content-between flex-column mb-4 mb-md-0 pe-md-4">
+            <h5 class="card-title mb-0">Price Section</h5>
+          </div>    <ul class="nav nav-pills flex-column w-100">
+          <div class="card-body">nav-item">
+            <div class="row">on
+              <!-- Navigation -->nav-link active"
               <div class="col-12 col-md-4 col-xl-5 col-xxl-4 mx-auto card-separator">
                 <div class="d-flex justify-content-between flex-column mb-4 mb-md-0 pe-md-4">
                   <div class="nav-align-left">
                     <ul class="nav nav-pills flex-column w-100">
-                      <li class="nav-item">
-                        <button
+                      <li class="nav-item">n-middle">Adult Price</span>
+                        <buttonn>
                           class="nav-link active"
                           data-bs-toggle="tab"
                           data-bs-target="#AdultPrice"
-                        >
+                        > class="nav-link"
                           <i class="ti ti-box ti-sm me-1_5"></i>
                           <span class="align-middle">Adult Price</span>
                         </button>
-                      </li>
-                      <li class="nav-item">
-                        <button
+                      </li>i class="ti ti-car ti-sm me-1_5"></i>
+                      <li class="nav-item">n-middle">Child Price</span>
+                        <buttonn>
                           class="nav-link"
                           data-bs-toggle="tab"
-                          data-bs-target="#tour_end_time"
-                        >
-                          <i class="ti ti-car ti-sm me-1_5"></i>
+                          data-bs-target="#tour_end_time"toggle="tab" data-bs-target="#age_rules">
+                        > <i class="ti ti-car ti-sm me-1_5"></i>
+                          <i class="ti ti-car ti-sm me-1_5"></i>span>
                           <span class="align-middle">Child Price</span>
                         </button>
                       </li>
@@ -745,106 +739,87 @@ onMounted(async () => {
                           <i class="ti ti-car ti-sm me-1_5"></i>
                           <span class="align-middle">Age Rules</span>
                         </button>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <!-- /Navigation -->
-              <!-- Options -->
+                      </li>ol-12 col-md-8 col-xl-7 col-xxl-8 pt-6 pt-md-0">
+                    </ul>s="tab-content p-0 ps-md-4">
+                  </div>dultPrice Tab -->
+                </div> class="tab-pane fade show active" id="AdultPrice" role="tabpanel">
+              </div><h6 class="text-body">Adult Price</h6>
+              <!-- /Navigation -->l-12 mb-3">
+              <!-- Options -->lass="form-label" for="adult-regular-price">Regular Price</label>
               <div class="col-12 col-md-8 col-xl-7 col-xxl-8 pt-6 pt-md-0">
                 <div class="tab-content p-0 ps-md-4">
-                  <!-- AdultPrice Tab -->
+                  <!-- AdultPrice Tab -->ol"
                   <div class="tab-pane fade show active" id="AdultPrice" role="tabpanel">
                     <h6 class="text-body">Adult Price</h6>
-                    <div class="col-12 mb-3">
+                    <div class="col-12 mb-3">ular_price_adult"
                       <label class="form-label" for="adult-regular-price">Regular Price</label>
-                      <input
+                      <input="0.01"
                         type="number"
                         class="form-control"
                         id="adult-regular-price"
-                        placeholder="Regular Price"
+                        placeholder="Regular Price"="adult-net-price">Net Price</label>
                         v-model="formData.regular_price_adult"
                         min="0"
-                        step="0.01"
-                      />
-                    </div>
-                    <div class="col-12 mb-3">
+                        step="0.01"ber"
+                      />  class="form-control"
+                    </div>id="adult-net-price"
+                    <div class="col-12 mb-3">ice"
                       <label class="form-label" for="adult-net-price">Net Price</label>
                       <div class="input-group">
-                        <input
+                        <input="0.01"
                           type="number"
                           class="form-control"
                           id="adult-net-price"
-                          placeholder="Net Price"
-                          v-model="formData.net_price_adult"
+                          placeholder="Net Price"secondary"
+                          v-model="formData.net_price_adult.amount"dult')"
                           min="0"
                           step="0.01"
-                        />
-                        <button
-                          type="button"
+                        />  formData.net_price_adult.include_park_fee
+                        <button 'Include Park Fee'
+                          type="button"e Park Fee'
                           class="btn btn-outline-secondary"
                           @click="toggleParkFee('price_adult_park_fee')"
-                        >
-                          {{
-                            formData.price_adult_park_fee.include_park_fee
+                        >iv>
+                          {{-if="!formData.net_price_adult.include_park_fee" class="mt-2">
+                            formData.park_fee.price_adult_park_fee === 0">National Park fee</label>
                               ? 'Include Park Fee'
                               : 'Exclude Park Fee'
-                          }}
-                        </button>
-                      </div>
-                      <div
-                        v-if="
-                          !formData.price_adult_park_fee.include_park_fee ||
-                          formData.park_fee.price_adult_park_fee > 0
-                        "
-                        class="mt-2"
-                      >
+                          }}ass="form-control"
+                        </button>lt-park-fee"
+                      </div>aceholder="Enter Park Fee"
+                      <div v-if="formData.park_fee.price_adult_park_fee !== 0" class="mt-2">
                         <label class="form-label" for="adult-park-fee">National Park fee</label>
-                        <input
+                        <input="0.01"
                           type="number"
                           class="form-control"
                           id="adult-park-fee"
                           placeholder="Enter Park Fee"
-                          v-model="formData.park_fee.price_adult_park_fee"
-                          min="0"
+                          v-model="formData.park_fee.price_adult_park_fee""
+                          min="0"t Price(Thai People)</label
                           step="0.01"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-12 mb-3">
+                        /> class="input-group">
+                      </div>ut
+                    </div>type="number"
+                    <div class="col-12 mb-3">"
                       <label class="form-label" for="local-adult-net-price"
                         >Local Net Price(Thai People)</label
-                      >
+                      >   v-model="formData.local_net_price_adult"
                       <div class="input-group">
-                        <input
+                        <input="0.01"
                           type="number"
                           class="form-control"
                           id="local-adult-net-price"
-                          placeholder="Local Net Price"
-                          v-model="formData.local_net_price_adult"
+                          placeholder="Local Net Price"ary"
+                          v-model="formData.local_net_price_adult.amount"dult')"
                           min="0"
-                          step="10"
-                        />
-                        <button
-                          type="button"
+                          step="0.01"
+                        />  formData.local_net_price_adult.include_park_fee
+                        <button 'Include Park Fee'
+                          type="button"e Park Fee'
                           class="btn btn-outline-secondary"
-                          @click="toggleParkFee('local_price_adult_park_fee')"
-                        >
-                          {{
-                            formData.local_price_adult_park_fee.include_park_fee
-                              ? 'Include Park Fee'
-                              : 'Exclude Park Fee'
-                          }}
                         </button>
                       </div>
-                      <div
-                        v-if="
-                          !formData.local_price_adult_park_fee.include_park_fee ||
-                          formData.park_fee.local_price_adult_park_fee > 0
-                        "
-                        class="mt-2"
-                      >
+                      <div v-if="!formData.local_net_price_adult.include_park_fee" class="mt-2">
                         <label class="form-label" for="local-adult-park-fee"
                           >National Park fee</label
                         >
@@ -939,22 +914,16 @@ onMounted(async () => {
                         <button
                           type="button"
                           class="btn btn-outline-secondary"
-                          @click="toggleParkFee('price_child_park_fee')"
+                          @click="toggleParkFee('net_price_child')"
                         >
                           {{
-                            formData.price_child_park_fee.include_park_fee
+                            formData.net_price_child.include_park_fee
                               ? 'Include Park Fee'
                               : 'Exclude Park Fee'
                           }}
                         </button>
                       </div>
-                      <div
-                        v-if="
-                          !formData.price_child_park_fee.include_park_fee ||
-                          formData.park_fee.price_child_park_fee > 0
-                        "
-                        class="mt-2"
-                      >
+                      <div v-if="!formData.net_price_child.include_park_fee" class="mt-2">
                         <label class="form-label" for="child-park-fee">National Park fee</label>
                         <input
                           type="number"
@@ -984,22 +953,16 @@ onMounted(async () => {
                         <button
                           type="button"
                           class="btn btn-outline-secondary"
-                          @click="toggleParkFee('local_price_child_park_fee')"
+                          @click="toggleParkFee('local_net_price_child')"
                         >
                           {{
-                            formData.local_price_child_park_fee.include_park_fee
+                            formData.local_net_price_child.include_park_fee
                               ? 'Include Park Fee'
                               : 'Exclude Park Fee'
                           }}
                         </button>
                       </div>
-                      <div
-                        v-if="
-                          !formData.local_price_child_park_fee.include_park_fee ||
-                          formData.park_fee.local_price_child_park_fee > 0
-                        "
-                        class="mt-2"
-                      >
+                      <div v-if="!formData.local_net_price_child.include_park_fee" class="mt-2">
                         <label class="form-label" for="local-child-park-fee"
                           >National Park fee</label
                         >
