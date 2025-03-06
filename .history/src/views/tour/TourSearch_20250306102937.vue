@@ -353,22 +353,17 @@ export default {
             >
               <div class="row w-100 pt-2 pb-2">
                 <div class="col-md-3">
-                  <div class="thumb-wrap">
-                    <img
-                      :src="tour.thumbnail"
-                      alt="Tour Thumbnail"
-                      class="rounded me-3 img-fluid"
-                      v-if="tour.thumbnail"
-                    />
-                    <div class="tour-oparetor">
-                      <i class="ti ti-shadow ti-md"></i> {{ tour.merchant_name }}
-                    </div>
-                  </div>
+                  <img
+                    :src="tour.thumbnail"
+                    alt="Tour Thumbnail"
+                    class="rounded me-3 img-fluid"
+                    v-if="tour.thumbnail"
+                  />
                 </div>
                 <div class="col-md-7">
                   <div class="content-area justify-content-between">
-                    <div class="heading mb-2">
-                      <h5 class="mb-1 fw-normal">{{ tour.tour_name }}</h5>
+                    <div class="heading">
+                      <h6 class="mb-1 fw-normal">{{ tour.tour_name }}</h6>
                       <small class="text-muted"
                         >{{ tour.description?.split(' ').slice(0, 20).join(' ')
                         }}{{ tour.description?.split(' ').length > 20 ? '...' : '' }}</small
@@ -376,18 +371,26 @@ export default {
                     </div>
                     <ul class="p-0 m-0">
                       <li class="mb-2 d-flex justify-content-between align-items-center">
+                        <div class="badge bg-label-secondary rounded p-1">
+                          <i class="ti ti-circle-check"></i>
+                        </div>
+                        <div class="d-flex justify-content-between w-100 flex-wrap">
+                          <h6 class="mb-0 ms-4">Details</h6>
+                          <div class="d-flex">
+                            <p class="mb-0"><b>Net</b></p>
+                            <p class="ms-4 text-secondary mb-0"><b>Regular</b></p>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="mb-2 d-flex justify-content-between align-items-center">
                         <div class="badge bg-label-success rounded p-1">
                           <i class="ti ti-mail ti-md"></i>
                         </div>
                         <div class="d-flex justify-content-between w-100 flex-wrap">
                           <h6 class="mb-0 ms-4">Adult Price</h6>
                           <div class="d-flex">
-                            <p class="mb-0">
-                              <b></b> <span class="currency">฿</span>{{ tour.net_price_adult }}
-                            </p>
-                            <p class="ms-4 text-success mb-0">
-                              <b> </b> <span class="currency">฿</span>{{ tour.regular_price_adult }}
-                            </p>
+                            <p class="mb-0">12,346</p>
+                            <p class="ms-4 text-success mb-0">0.3%</p>
                           </div>
                         </div>
                       </li>
@@ -398,12 +401,8 @@ export default {
                         <div class="d-flex justify-content-between w-100 flex-wrap">
                           <h6 class="mb-0 ms-4">Child Price</h6>
                           <div class="d-flex">
-                            <p class="mb-0">
-                              <span class="currency">฿</span>{{ tour.net_price_child }}
-                            </p>
-                            <p class="ms-4 text-success mb-0">
-                              <span class="currency">฿</span>{{ tour.regular_price_child }}
-                            </p>
+                            <p class="mb-0">8,734</p>
+                            <p class="ms-4 text-success mb-0">2.1%</p>
                           </div>
                         </div>
                       </li>
@@ -414,35 +413,47 @@ export default {
                         <div class="d-flex justify-content-between w-100 flex-wrap">
                           <h6 class="mb-0 ms-4">Available Seat</h6>
                           <div>&nbsp; &nbsp;</div>
-                          <div>
-                            <span class="text-muted"> {{ tour.available_seat }} &nbsp;</span>
-                          </div>
                           <div class="d-flex flex-grow-1 align-items-center">
-                            &nbsp;
+                            <span class="text-muted">29%</span> &nbsp;
                             <div class="progress w-100 me-4" style="height: 8px">
                               <div
-                                class="progress-bar"
-                                :class="{
-                                  'bg-success': (tour.available_seat / tour.total_seat) * 100 <= 30,
-                                  'bg-warning':
-                                    (tour.available_seat / tour.total_seat) * 100 > 30 &&
-                                    (tour.available_seat / tour.total_seat) * 100 <= 70,
-                                  'bg-danger': (tour.available_seat / tour.total_seat) * 100 > 70,
-                                }"
+                                class="progress-bar bg-warning"
                                 role="progressbar"
-                                :style="{
-                                  width: `${(tour.available_seat / tour.total_seat) * 100}%`,
-                                }"
-                                :aria-valuenow="(tour.available_seat / tour.total_seat) * 100"
+                                style="width: 29%"
+                                aria-valuenow="29"
                                 aria-valuemin="0"
                                 aria-valuemax="100"
                               ></div>
                             </div>
-                            <span class="text-muted"> {{ tour.total_seat }}</span>
+                            <span class="text-muted">29%</span>
                           </div>
                         </div>
                       </li>
                     </ul>
+                    <div class="user-status">
+                      <span class="badge badge-dot bg-success"></span>
+                      <small>Available Seat: {{ tour.available_seat }}</small>
+                    </div>
+                    <div class="user-status">
+                      <span class="badge badge-dot bg-info"></span>
+                      <small
+                        >Adult Price: ฿{{
+                          tour.net_price_adult + ' | ฿' + tour.regular_price_adult
+                        }}</small
+                      >
+                    </div>
+                    <div class="user-status">
+                      <span class="badge badge-dot bg-info"></span>
+                      <small
+                        >Child Price: ฿{{
+                          tour.net_price_child + ' | ฿' + tour.regular_price_child
+                        }}</small
+                      >
+                    </div>
+                    <div class="user-status">
+                      <span class="badge badge-dot bg-info"></span>
+                      <small>Tour Operator: {{ tour.merchant_name }}</small>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-2">
@@ -455,7 +466,7 @@ export default {
                       Book Now
                     </button>
                     <button
-                      class="btn btn-label-primary btn-sm waves-effect mt-2"
+                      class="btn btn-sm btn-danger waves-effect waves-light mt-2"
                       @click="router.push(`/view-tour/${tour.tour_id}`)"
                     >
                       <i class="ti ti-eye me-1"></i>
@@ -491,7 +502,7 @@ export default {
         </nav>
       </div>
       <div v-else>
-        <!-- <p>No tours available.</p> -->
+        <p>No tours available.</p>
       </div>
     </div>
     <div class="col-md-3">
@@ -635,17 +646,5 @@ export default {
   flex-direction: row;
   height: 100%;
   align-content: center;
-}
-.thumb-wrap {
-  position: relative;
-}
-.tour-oparetor {
-  position: absolute;
-  bottom: 8px;
-  text-align: center;
-  background: #ffffffbd;
-  margin: 5px;
-  border-radius: 8px;
-  padding: 2px 4px;
 }
 </style>

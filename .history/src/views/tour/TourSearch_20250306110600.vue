@@ -368,7 +368,7 @@ export default {
                 <div class="col-md-7">
                   <div class="content-area justify-content-between">
                     <div class="heading mb-2">
-                      <h5 class="mb-1 fw-normal">{{ tour.tour_name }}</h5>
+                      <h6 class="mb-1 fw-normal">{{ tour.tour_name }}</h6>
                       <small class="text-muted"
                         >{{ tour.description?.split(' ').slice(0, 20).join(' ')
                         }}{{ tour.description?.split(' ').length > 20 ? '...' : '' }}</small
@@ -455,7 +455,7 @@ export default {
                       Book Now
                     </button>
                     <button
-                      class="btn btn-label-primary btn-sm waves-effect mt-2"
+                      class="btn btn-sm btn-danger waves-effect waves-light mt-2"
                       @click="router.push(`/view-tour/${tour.tour_id}`)"
                     >
                       <i class="ti ti-eye me-1"></i>
@@ -491,7 +491,7 @@ export default {
         </nav>
       </div>
       <div v-else>
-        <!-- <p>No tours available.</p> -->
+        <p>No tours available.</p>
       </div>
     </div>
     <div class="col-md-3">

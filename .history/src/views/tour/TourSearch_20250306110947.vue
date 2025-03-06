@@ -491,7 +491,8 @@ export default {
         </nav>
       </div>
       <div v-else>
-        <!-- <p>No tours available.</p> -->
+        <p>No tours available.</p>
+        z
       </div>
     </div>
     <div class="col-md-3">

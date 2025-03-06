@@ -455,7 +455,7 @@ export default {
                       Book Now
                     </button>
                     <button
-                      class="btn btn-label-primary btn-sm waves-effect mt-2"
+                      class="btn btn-label-primary waves-effect mt-2"
                       @click="router.push(`/view-tour/${tour.tour_id}`)"
                     >
                       <i class="ti ti-eye me-1"></i>
@@ -491,7 +491,8 @@ export default {
         </nav>
       </div>
       <div v-else>
-        <!-- <p>No tours available.</p> -->
+        <p>No tours available.</p>
+        z
       </div>
     </div>
     <div class="col-md-3">

@@ -1685,13 +1685,18 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped>
+<style>
 @import 'dropzone/dist/dropzone.css';
 @import '@yaireo/tagify/dist/tagify.css';
 @import 'quill/dist/quill.snow.css';
 @import 'select2/dist/css/select2.css';
 @import 'flatpickr/dist/flatpickr.css';
-
+.list-group img {
+  height: 170px;
+  width: auto;
+  object-fit: cover;
+  min-width: 100%;
+}
 body .select2-container .select2-selection--single {
   height: auto;
 }
