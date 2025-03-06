@@ -6,7 +6,6 @@ import { DragAndDropUpload, handleFileUpload } from '@/utils/handleFileUpload'
 import Dropzone from 'dropzone'
 import jQuery from 'jquery'
 import select2 from 'select2'
-import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import config from '../../config/config'
 const $ = jQuery
@@ -36,10 +35,7 @@ export default {
     const toast = useToast()
     const editMerchantStore = useEditMerchantStore()
     const usersStore = useUsersStore()
-    const router = useRouter()
-    const route = useRoute()
-
-    return { toast, editMerchantStore, usersStore, router, route }
+    return { toast, editMerchantStore, usersStore }
   },
   data() {
     return {

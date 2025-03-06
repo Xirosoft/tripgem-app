@@ -38,8 +38,7 @@ export default {
     const usersStore = useUsersStore()
     const router = useRouter()
     const route = useRoute()
-
-    return { toast, editMerchantStore, usersStore, router, route }
+    return { toast, editMerchantStore, usersStore }
   },
   data() {
     return {

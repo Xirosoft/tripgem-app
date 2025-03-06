@@ -254,6 +254,7 @@ export default {
       </div>
       <div class="col-xl-8 col-lg-7 col-md-7">
         <!-- Activity Timeline -->
+
         <!--/ Activity Timeline -->
         <div class="row">
           <!-- Connections -->

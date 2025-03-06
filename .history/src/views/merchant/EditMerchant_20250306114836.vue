@@ -6,9 +6,9 @@ import { DragAndDropUpload, handleFileUpload } from '@/utils/handleFileUpload'
 import Dropzone from 'dropzone'
 import jQuery from 'jquery'
 import select2 from 'select2'
-import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import config from '../../config/config'
+import { useRouter, useRoute } from 'vue-router'
 const $ = jQuery
 window.$ = window.jQuery = jQuery
 select2() // Initialize select2

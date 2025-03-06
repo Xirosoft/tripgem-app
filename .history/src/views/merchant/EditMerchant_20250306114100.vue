@@ -26,7 +26,8 @@ import 'select2/dist/js/select2.full.js'
 import 'typeahead.js'
 
 Dropzone.autoDiscover = false
-
+const router = useRouter()
+const route = useRoute()
 export default {
   name: 'EditMerchant',
   components: {
@@ -36,10 +37,8 @@ export default {
     const toast = useToast()
     const editMerchantStore = useEditMerchantStore()
     const usersStore = useUsersStore()
-    const router = useRouter()
-    const route = useRoute()
 
-    return { toast, editMerchantStore, usersStore, router, route }
+    return { toast, editMerchantStore, usersStore }
   },
   data() {
     return {

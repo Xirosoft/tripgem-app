@@ -4,11 +4,11 @@ import { useEditMerchantStore } from '@/stores/merchant/EditMerchant'
 import { useUsersStore } from '@/stores/users'
 import { DragAndDropUpload, handleFileUpload } from '@/utils/handleFileUpload'
 import Dropzone from 'dropzone'
-import jQuery from 'jquery'
-import select2 from 'select2'
-import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import config from '../../config/config'
+
+import jQuery from 'jquery'
+import select2 from 'select2'
 const $ = jQuery
 window.$ = window.jQuery = jQuery
 select2() // Initialize select2
@@ -36,10 +36,7 @@ export default {
     const toast = useToast()
     const editMerchantStore = useEditMerchantStore()
     const usersStore = useUsersStore()
-    const router = useRouter()
-    const route = useRoute()
-
-    return { toast, editMerchantStore, usersStore, router, route }
+    return { toast, editMerchantStore, usersStore }
   },
   data() {
     return {
@@ -442,12 +439,7 @@ export default {
       </div>
       <div class="d-flex align-content-center flex-wrap gap-4">
         <div class="d-flex gap-4">
-          <button
-            class="btn btn-label-secondary"
-            @click="router.push(`/merchant/view/${route.params.id}`)"
-          >
-            View Merchant
-          </button>
+          <button class="btn btn-label-secondary">Discard</button>
           <button class="btn btn-label-primary">Save draft</button>
         </div>
         <button type="submit" class="btn btn-primary" @click.prevent="submitForm">Update</button>

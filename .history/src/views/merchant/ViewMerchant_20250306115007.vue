@@ -101,7 +101,7 @@ export default {
 
     <!-- User Profile Content -->
     <div class="row">
-      <div class="col-xl-4 col-lg-5 col-md-5">
+      <div class="col-xl-12">
         <!-- About User -->
         <div class="card mb-6">
           <div class="card-body">
@@ -183,7 +183,27 @@ export default {
         </div>
         <!--/ About User -->
         <!-- Profile Overview -->
-
+        <div class="card mb-6">
+          <div class="card-body">
+            <small class="card-text text-uppercase text-muted small">Overview</small>
+            <ul class="list-unstyled mb-0 mt-3 pt-1">
+              <li class="d-flex align-items-end mb-4">
+                <i class="ti ti-check ti-lg"></i
+                ><span class="fw-medium mx-2">Registration Number:</span>
+                <span>{{ merchant.registration_number }}</span>
+              </li>
+              <li class="d-flex align-items-end mb-4">
+                <i class="ti ti-layout-grid ti-lg"></i
+                ><span class="fw-medium mx-2">Tourism License Number:</span>
+                <span>{{ merchant.tourism_license_number }}</span>
+              </li>
+              <li class="d-flex align-items-end">
+                <i class="ti ti-users ti-lg"></i><span class="fw-medium mx-2">TIN:</span>
+                <span>{{ merchant.tin }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
         <!--/ Profile Overview -->
         <div class="col-lg-12">
           <div class="card card-action mb-6">
@@ -254,6 +274,7 @@ export default {
       </div>
       <div class="col-xl-8 col-lg-7 col-md-7">
         <!-- Activity Timeline -->
+
         <!--/ Activity Timeline -->
         <div class="row">
           <!-- Connections -->
