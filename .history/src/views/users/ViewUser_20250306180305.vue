@@ -255,12 +255,12 @@ export default {
                 <p class="mb-2">Invoices have been paid to the company</p>
                 <div class="d-flex align-items-center mb-2">
                   <div class="badge bg-lighter rounded d-flex align-items-center">
-                    <!-- <img
+                    <img
                       src="../../assets//img/icons/misc/pdf.png"
                       alt="img"
                       width="15"
                       class="me-2"
-                    /> -->
+                    />
                     <span class="h6 mb-0 text-body">invoices.pdf</span>
                   </div>
                 </div>

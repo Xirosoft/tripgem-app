@@ -527,7 +527,7 @@ export default {
             data-bs-toggle="dropdown"
           >
             <div class="avatar avatar-online">
-              <!-- <img src="@/src/frontend/assets/img/avatars/1.png" alt class="rounded-circle" /> -->
+              <img src="@/src/frontend/assets/img/avatars/1.png" alt class="rounded-circle" />
             </div>
           </a>
           <UserProfileDropdown />

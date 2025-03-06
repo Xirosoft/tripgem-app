@@ -370,11 +370,11 @@ export default {
                   <div class="d-flex">
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar">
-                        <!-- <img
+                        <img
                           src="@/src/frontend/assets/img/avatars/9.png"
                           alt
                           class="rounded-circle"
-                        /> -->
+                        />
                       </div>
                     </div>
                     <div class="flex-grow-1">
@@ -428,11 +428,11 @@ export default {
                   <div class="d-flex">
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar">
-                        <!-- <img
+                        <img
                           src="@/src/frontend/assets/img/avatars/5.png"
                           alt
                           class="rounded-circle"
-                        /> -->
+                        />
                       </div>
                     </div>
                     <div class="flex-grow-1">
@@ -456,11 +456,11 @@ export default {
                   <div class="d-flex">
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar">
-                        <!-- <img
+                        <img
                           src="@/src/frontend/assets/img/avatars/6.png"
                           alt
                           class="rounded-circle"
-                        /> -->
+                        />
                       </div>
                     </div>
                     <div class="flex-grow-1">
@@ -527,7 +527,7 @@ export default {
             data-bs-toggle="dropdown"
           >
             <div class="avatar avatar-online">
-              <!-- <img src="@/src/frontend/assets/img/avatars/1.png" alt class="rounded-circle" /> -->
+              <img src="@/src/frontend/assets/img/avatars/1.png" alt class="rounded-circle" />
             </div>
           </a>
           <UserProfileDropdown />
