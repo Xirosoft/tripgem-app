@@ -14,7 +14,7 @@ export function useCategoryStore() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${config.apiUrl}/tour/categories/view`, {
+      const response = await axios.get(`${config.apiUrl}/categories/view`, {
         headers: config.getHeaders(),
       })
       categories.value = response.data
