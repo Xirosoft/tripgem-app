@@ -758,9 +758,9 @@ export default {
                 @change="handleFileUpload($event, 'business_permits')"
               />
               <div v-if="uploadedFiles.business_permits.length">
-                <a :href="uploadedFiles.business_permits" target="_blank">
-                  {{ uploadedFiles.business_permits.split('/').pop() }}
-                </a>
+                <a :href="uploadedFiles.business_permits" target="_blank">{{
+                  uploadedFiles.business_permits
+                }}</a>
               </div>
             </div>
             <div class="mb-4">
@@ -772,11 +772,11 @@ export default {
                 accept=".pdf"
                 @change="handleFileUpload($event, 'membership_certificates')"
               />
-              <onDeactivated v-if="uploadedFiles.membership_certificates.length">
-                <a :href="uploadedFiles.membership_certificates" target="_blank">
-                  {{ uploadedFiles.membership_certificates.split('/').pop() }}
-                </a>
-              </onDeactivated>
+              <ul v-if="uploadedFiles.membership_certificates.length">
+                <li v-for="(file, index) in uploadedFiles.membership_certificates" :key="index">
+                  <a :href="file" target="_blank">{{ file }}</a>
+                </li>
+              </ul>
             </div>
             <div class="mb-4">
               <label class="form-label">Other Documents</label>
@@ -787,11 +787,11 @@ export default {
                 accept=".pdf"
                 @change="handleFileUpload($event, 'documents')"
               />
-              <div v-if="uploadedFiles.documents.length">
-                <a :href="uploadedFiles.documents" target="_blank">
-                  {{ uploadedFiles.documents.split('/').pop() }}
-                </a>
-              </div>
+              <ul v-if="uploadedFiles.documents.length">
+                <li v-for="(file, index) in uploadedFiles.documents" :key="index">
+                  <a :href="file" target="_blank">{{ file }}</a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

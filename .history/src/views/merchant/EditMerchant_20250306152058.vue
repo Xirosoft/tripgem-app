@@ -144,12 +144,12 @@ export default {
           }
         }
         // Set uploadedLogo and uploadedCoverPhoto if they exist
-        this.uploadedLogo = this.formData.logo_url || null
-        this.uploadedCoverPhoto = this.formData.cover_photo || null
-        // Set uploadedFiles if they exist
-        this.uploadedFiles.business_permits = this.formData.business_permits || []
-        this.uploadedFiles.membership_certificates = this.formData.membership_certificates || []
-        this.uploadedFiles.documents = this.formData.documents || []
+        if (this.formData.logo_url) {
+          this.uploadedLogo = this.formData.logo_url
+        }
+        if (this.formData.cover_photo) {
+          this.uploadedCoverPhoto = this.formData.cover_photo
+        }
         // Reinitialize Select2 components
         this.$nextTick(() => {
           this.initializeSelect2()
@@ -324,7 +324,7 @@ export default {
       const files = await handleFileUpload(event, key)
       if (files.length > 0) {
         this.uploadedFiles[key] = files.map((file) => file.url) // Ensure only URLs are stored
-        this.formData[key] = this.uploadedFiles[key] // Store all URLs
+        this.formData[key] = this.uploadedFiles[key][0] // Store only the first URL
       }
     },
 
@@ -337,11 +337,11 @@ export default {
 
     async submitForm() {
       try {
-        if (!this.formData.logo_url && !this.uploadedLogo) {
+        if (!this.formData.logo_url) {
           this.toast.error('Please upload company logo')
           return
         }
-        if (!this.formData.cover_photo && !this.uploadedCoverPhoto) {
+        if (!this.formData.cover_photo) {
           this.toast.error('Please upload cover photo')
           return
         }
@@ -359,8 +359,8 @@ export default {
             : this.formData.branch_locations.split(',').map((item) => item.trim()),
           established_year: Number(this.formData.established_year) || null,
           user_id: Number(this.formData.user_id),
-          logo_url: this.formData.logo_url.url || this.uploadedLogo,
-          cover_photo: this.formData.cover_photo.url || this.uploadedCoverPhoto,
+          logo_url: this.formData.logo_url.url,
+          cover_photo: this.formData.cover_photo.url,
         }
 
         console.log('Submit data:', submitData)
@@ -757,11 +757,6 @@ export default {
                 accept=".pdf"
                 @change="handleFileUpload($event, 'business_permits')"
               />
-              <div v-if="uploadedFiles.business_permits.length">
-                <a :href="uploadedFiles.business_permits" target="_blank">
-                  {{ uploadedFiles.business_permits.split('/').pop() }}
-                </a>
-              </div>
             </div>
             <div class="mb-4">
               <label class="form-label">Membership Certificates</label>
@@ -772,11 +767,6 @@ export default {
                 accept=".pdf"
                 @change="handleFileUpload($event, 'membership_certificates')"
               />
-              <onDeactivated v-if="uploadedFiles.membership_certificates.length">
-                <a :href="uploadedFiles.membership_certificates" target="_blank">
-                  {{ uploadedFiles.membership_certificates.split('/').pop() }}
-                </a>
-              </onDeactivated>
             </div>
             <div class="mb-4">
               <label class="form-label">Other Documents</label>
@@ -787,11 +777,6 @@ export default {
                 accept=".pdf"
                 @change="handleFileUpload($event, 'documents')"
               />
-              <div v-if="uploadedFiles.documents.length">
-                <a :href="uploadedFiles.documents" target="_blank">
-                  {{ uploadedFiles.documents.split('/').pop() }}
-                </a>
-              </div>
             </div>
           </div>
         </div>

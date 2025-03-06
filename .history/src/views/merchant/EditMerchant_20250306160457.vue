@@ -758,9 +758,11 @@ export default {
                 @change="handleFileUpload($event, 'business_permits')"
               />
               <div v-if="uploadedFiles.business_permits.length">
-                <a :href="uploadedFiles.business_permits" target="_blank">
-                  {{ uploadedFiles.business_permits.split('/').pop() }}
-                </a>
+                <a :href="uploadedFiles.business_permits" target="_blank"
+                  >{{
+                   {{ uploadedFiles.business_permits.split('/').pop() }}
+                  }}</a
+                >
               </div>
             </div>
             <div class="mb-4">
@@ -773,9 +775,11 @@ export default {
                 @change="handleFileUpload($event, 'membership_certificates')"
               />
               <onDeactivated v-if="uploadedFiles.membership_certificates.length">
-                <a :href="uploadedFiles.membership_certificates" target="_blank">
+                <a :href="uploadedFiles.membership_certificates" target="_blank"
+                  >{{
                   {{ uploadedFiles.membership_certificates.split('/').pop() }}
-                </a>
+                  }}</a
+                >
               </onDeactivated>
             </div>
             <div class="mb-4">
