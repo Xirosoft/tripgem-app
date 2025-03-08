@@ -2,7 +2,6 @@
 import UserProfileDropdown from '@/components/user/UserProfileDropdown.vue'
 import { useUsersStore } from '@/stores/user'
 import md5 from 'md5'
-import { computed } from 'vue'
 
 export default {
   name: 'HeaderSection',
@@ -20,6 +19,10 @@ export default {
   },
   mounted() {
     // Ensure Bootstrap dropdowns are initialized
+    // const dropdownElements = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+    // dropdownElements.map(function (dropdownToggleEl) {
+    //   return new bootstrap.Dropdown(dropdownToggleEl)
+    // })
   },
 }
 </script>
@@ -112,7 +115,7 @@ export default {
             href="javascript:void(0);"
             data-bs-toggle="dropdown"
           >
-            <i class="ti ti-md ti-device-desktop-analytics"></i>
+            <i class="ti ti-md"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
             <li>

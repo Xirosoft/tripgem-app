@@ -178,7 +178,7 @@ export default {
       $(this.$refs.bookingsTable).on('click', '.view-booking', (e) => {
         const data = this.table.row($(e.currentTarget).closest('tr')).data()
         if (data && data.booking_id) {
-          this.viewBooking(data.booking_id)
+          this.$router.push(`/view-booking/${data.tour_id}`)
         }
       })
 
@@ -227,8 +227,8 @@ export default {
           <tr>
             <th>Invoice</th>
             <th>Full Name</th>
-            <th>Contact</th>
-            <th>Hotel</th>
+            <th>Contact Number</th>
+            <th>Hotel Name</th>
             <th>Email</th>
             <th>Location</th>
             <th>Booking Date</th>

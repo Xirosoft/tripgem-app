@@ -28,7 +28,6 @@ import ViewTour from '@/views/tour/ViewTour.vue'
 
 import AddBooking from '@/views/booking/AddBooking.vue'
 import AllBookings from '@/views/booking/AllBookings.vue'
-import EditBooking from '@/views/booking/EditBooking.vue'
 import ViewBooking from '@/views/booking/ViewBooking.vue'
 
 const routes = [
@@ -282,8 +281,8 @@ const routes = [
   },
   {
     path: '/edit-booking/:id',
-    name: 'EditBooking',
-    component: EditBooking,
+    name: 'ViewBooking',
+    component: ViewBooking,
     props: true,
     meta: {
       requiresAuth: true,

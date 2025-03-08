@@ -112,7 +112,7 @@ export default {
             href="javascript:void(0);"
             data-bs-toggle="dropdown"
           >
-            <i class="ti ti-md ti-device-desktop-analytics"></i>
+            <i class="ti ti-md"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
             <li>

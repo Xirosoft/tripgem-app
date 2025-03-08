@@ -85,12 +85,7 @@ export default {
           { data: 'hotel_name' },
           { data: 'email' },
           { data: 'nationality' },
-          {
-            data: 'booking_date',
-            render: function (data) {
-              return data.split(' ')[0] // Show only the date part
-            },
-          },
+          { data: 'booking_date' },
           { data: 'travel_date' },
           { data: 'payment_method' },
           { data: 'status' },
@@ -227,8 +222,8 @@ export default {
           <tr>
             <th>Invoice</th>
             <th>Full Name</th>
-            <th>Contact</th>
-            <th>Hotel</th>
+            <th>Contact Number</th>
+            <th>Hotel Name</th>
             <th>Email</th>
             <th>Location</th>
             <th>Booking Date</th>

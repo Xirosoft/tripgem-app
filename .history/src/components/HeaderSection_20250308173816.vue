@@ -1,25 +1,19 @@
 <script>
 import UserProfileDropdown from '@/components/user/UserProfileDropdown.vue'
-import { useUsersStore } from '@/stores/user'
-import md5 from 'md5'
-import { computed } from 'vue'
+// import * as bootstrap from 'bootstrap' // Import Bootstrap JS
+// import 'bootstrap/dist/css/bootstrap.min.css' // Import Bootstrap CSS
 
 export default {
   name: 'HeaderSection',
   components: {
     UserProfileDropdown,
   },
-  setup() {
-    const usersStore = useUsersStore()
-    const userAvatar = computed(() => {
-      return usersStore.user && usersStore.user.email
-        ? `https://www.gravatar.com/avatar/${md5(usersStore.user.email)}?s=200&d=mp`
-        : '@/src/frontend/assets/img/avatars/1.png'
-    })
-    return { userAvatar }
-  },
   mounted() {
     // Ensure Bootstrap dropdowns are initialized
+    // const dropdownElements = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+    // dropdownElements.map(function (dropdownToggleEl) {
+    //   return new bootstrap.Dropdown(dropdownToggleEl)
+    // })
   },
 }
 </script>
@@ -112,7 +106,7 @@ export default {
             href="javascript:void(0);"
             data-bs-toggle="dropdown"
           >
-            <i class="ti ti-md ti-device-desktop-analytics"></i>
+            <i class="ti ti-md"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
             <li>
@@ -533,7 +527,13 @@ export default {
             data-bs-toggle="dropdown"
           >
             <div class="avatar avatar-online">
-              <img :src="userAvatar" alt="Avatar" class="rounded-circle" />
+              <img
+                v-if="usersStore.user && usersStore.user.email"
+                :src="`https://www.gravatar.com/avatar/${md5(usersStore.user.email)}?s=200&d=mp`"
+                alt="Avatar"
+                class="rounded-circle"
+              />
+              <!-- <img src="@/src/frontend/assets/img/avatars/1.png" alt class="rounded-circle" /> -->
             </div>
           </a>
           <UserProfileDropdown />

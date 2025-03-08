@@ -33,7 +33,7 @@ const userRole = computed(() => usersStore.getUserRole)
           <div class="flex-shrink-0 me-2">
             <div class="avatar avatar-online">
               <img
-                v-if="usersStore.user && usersStore.user.email"
+                v-if="usersStore.user.email"
                 :src="`https://www.gravatar.com/avatar/${md5(usersStore.user.email)}?s=200&d=mp`"
                 alt="Avatar"
                 class="rounded-circle"

@@ -20,6 +20,10 @@ export default {
   },
   mounted() {
     // Ensure Bootstrap dropdowns are initialized
+    // const dropdownElements = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+    // dropdownElements.map(function (dropdownToggleEl) {
+    //   return new bootstrap.Dropdown(dropdownToggleEl)
+    // })
   },
 }
 </script>
@@ -112,7 +116,7 @@ export default {
             href="javascript:void(0);"
             data-bs-toggle="dropdown"
           >
-            <i class="ti ti-md ti-device-desktop-analytics"></i>
+            <i class="ti ti-md"></i>
           </a>
           <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
             <li>
@@ -357,22 +361,6 @@ export default {
                     </div>
                     <div class="flex-grow-1">
                       <h6 class="mb-1 small">Whoo! You have new order 🛒</h6>
-                      <small class="mb-1 d-block text-body">ACME Inc. made new order $1,154</small>
-                      <small class="text-muted">1 day ago</small>
-                    </div>
-                    <div class="flex-shrink-0 dropdown-notifications-actions">
-                      <a href="javascript:void(0)" class="dropdown-notifications-read"
-                        ><span class="badge badge-dot"></span
-                      ></a>
-                      <a href="javascript:void(0)" class="dropdown-notifications-archive"
-                        ><span class="ti ti-x"></span
-                      ></a>
-                    </div>
-                  </div>
-                </li>
-                <li
-                  class="list-group-item list-group-item-action dropdown-notifications-item marked-as-read"
-                >
                   <div class="d-flex">
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar">

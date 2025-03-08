@@ -227,8 +227,8 @@ export default {
           <tr>
             <th>Invoice</th>
             <th>Full Name</th>
-            <th>Contact</th>
-            <th>Hotel</th>
+            <th>Contact Number</th>
+            <th>Hotel Name</th>
             <th>Email</th>
             <th>Location</th>
             <th>Booking Date</th>

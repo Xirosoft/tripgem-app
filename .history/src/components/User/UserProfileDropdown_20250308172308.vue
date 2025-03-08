@@ -1,9 +1,9 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
 import { useUsersStore } from '@/stores/user'
-import md5 from 'md5'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
 const authStore = useAuthStore()
 const usersStore = useUsersStore()
@@ -20,7 +20,7 @@ const user = computed(() => usersStore.getUser)
 const userName = computed(() =>
   user.value ? `${user.value.first_name} ${user.value.last_name}` : '',
 )
-console.log('user', usersStore.user ? usersStore.user.email : 'No user email available')
+console.log('user', user.value)
 
 const userRole = computed(() => usersStore.getUserRole)
 </script>
@@ -32,12 +32,13 @@ const userRole = computed(() => usersStore.getUserRole)
         <div class="d-flex align-items-center">
           <div class="flex-shrink-0 me-2">
             <div class="avatar avatar-online">
-              <img
-                v-if="usersStore.user && usersStore.user.email"
-                :src="`https://www.gravatar.com/avatar/${md5(usersStore.user.email)}?s=200&d=mp`"
+              <!-- <img src="/src/frontend/assets/img/avatars/1.png" alt class="rounded-circle" /> -->
+              <!-- <img
+                v-if="booking.email"
+                :src="`https://www.gravatar.com/avatar/${md5(booking.email)}?s=200&d=mp`"
                 alt="Avatar"
                 class="rounded-circle"
-              />
+              /> -->
             </div>
           </div>
           <div class="flex-grow-1">

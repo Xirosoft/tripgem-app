@@ -28,8 +28,6 @@ import ViewTour from '@/views/tour/ViewTour.vue'
 
 import AddBooking from '@/views/booking/AddBooking.vue'
 import AllBookings from '@/views/booking/AllBookings.vue'
-import EditBooking from '@/views/booking/EditBooking.vue'
-import ViewBooking from '@/views/booking/ViewBooking.vue'
 
 const routes = [
   {
@@ -252,7 +250,6 @@ const routes = [
     path: '/all-bookings',
     name: 'AllBookings',
     component: AllBookings,
-    props: true,
     meta: {
       requiresAuth: true,
       permissions: 'read',
@@ -271,9 +268,8 @@ const routes = [
   },
   {
     path: '/view-booking/:id',
-    name: 'ViewBooking',
-    component: ViewBooking,
-    props: true,
+    name: 'AddBooking',
+    component: AddBooking,
     meta: {
       requiresAuth: true,
       permissions: 'read',
@@ -282,16 +278,14 @@ const routes = [
   },
   {
     path: '/edit-booking/:id',
-    name: 'EditBooking',
-    component: EditBooking,
-    props: true,
+    name: 'AddBooking',
+    component: AddBooking,
     meta: {
       requiresAuth: true,
       permissions: 'read',
       permissionName: 'tour_module',
     },
   },
-
   { path: '/:pathMatch(.*)*', component: MiscError }, // Catch-all route
 ]
 
