@@ -79,7 +79,7 @@ export default {
       this.table = $(this.$refs.bookingsTable).DataTable({
         data: this.bookingStore.bookings,
         columns: [
-          { data: 'booking_id' },
+          { data: 'invoice_id' },
           { data: 'full_name' },
           { data: 'contact_number' },
           { data: 'hotel_name' },

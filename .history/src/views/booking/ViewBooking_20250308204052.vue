@@ -49,9 +49,9 @@ export default {
         >View Tour</router-link
       >
       <router-link
-        :to="'/edit-booking/' + booking.booking_id"
+        :to="'/edit-tour/' + booking.tour_id"
         class="btn btn-label-primary delete-order waves-effect"
-        >Edit Tour</router-link
+        >VEditiew Tour</router-link
       >
       <button class="btn btn-label-danger delete-order waves-effect">Delete Booking</button>
     </div>

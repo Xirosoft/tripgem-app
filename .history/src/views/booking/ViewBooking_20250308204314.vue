@@ -49,7 +49,7 @@ export default {
         >View Tour</router-link
       >
       <router-link
-        :to="'/edit-booking/' + booking.booking_id"
+        :to="'/edit-booking/' + booking.tour_id"
         class="btn btn-label-primary delete-order waves-effect"
         >Edit Tour</router-link
       >

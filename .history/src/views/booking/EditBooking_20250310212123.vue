@@ -159,6 +159,8 @@ export default {
         this.booking.thumbnail = this.tour.thumbnail
         this.booking.transport_types = this.tour.transport_types
         this.booking.nationality = this.tour.nationality // Set nationality
+        // this.booking.park_fee = JSON.parse(this.tour.park_fee)
+        // console.log('Park Fee:', this.booking.park_fee)
         this.booking.nationality = 'Bangladesh'
         console.log(this.booking.nationality)
 

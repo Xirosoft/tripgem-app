@@ -141,6 +141,11 @@ export default {
           headers: config.getHeaders(),
         })
         this.tour = response.data
+
+        // console.log('Tour data:', this.tour)
+
+        // this.booking = this.tour
+        // this.booking.tour_id = this.tour.tour_id
         this.booking.tour_name = this.tour.tour_name
         this.booking.merchant_id = this.tour.merchant_id
         this.booking.adult_price = this.tour.regular_price_adult
@@ -159,6 +164,10 @@ export default {
         this.booking.thumbnail = this.tour.thumbnail
         this.booking.transport_types = this.tour.transport_types
         this.booking.nationality = this.tour.nationality // Set nationality
+        this.booking.pick_up_location = this.tour.pick_up_location // Set pick-up location
+        this.booking.drop_location = this.tour.drop_location // Set drop-off location
+        // this.booking.park_fee = JSON.parse(this.tour.park_fee)
+        // console.log('Park Fee:', this.booking.park_fee)
         this.booking.nationality = 'Bangladesh'
         console.log(this.booking.nationality)
 
@@ -168,6 +177,8 @@ export default {
         this.populateDiscountOptions() // Populate discount options after fetching tour data
         this.$nextTick(() => {
           $('#multicol-country').val(this.booking.nationality).trigger('change')
+          $('#pick_up_location').val(this.booking.pick_up_location).trigger('change')
+          $('#drop_off_location').val(this.booking.drop_location).trigger('change')
         })
       } catch (error) {
         this.error = 'Failed to fetch tour data'
@@ -186,6 +197,25 @@ export default {
         this.booking = response.data
         // Ensure park_fee is defined before accessing its properties
         this.booking.nationality = 'Bangladesh'
+        // console.log('Booking:', this.booking.drop_location)
+        // console.log('Booking:', this.booking.pick_up_location)
+        // console.log(this.booking.nationality)
+        this.booking.pick_up_location = this.booking.pick_up_location // Set pick-up location
+        this.booking.drop_location = this.booking.drop_location // Set drop-off location
+
+        console.log('Booking:', this.booking.drop_location)
+        console.log('Booking:', this.booking.pick_up_location)
+        // this.booking.pick_up_time = JSON.parse(this.tour.pick_up_time)
+        // this.booking.drop_time = JSON.parse(this.tour.drop_time)
+        // this.booking.parkfee = JSON.parse(this.booking.park_fee)
+        // console.log('Park Fee:', this.booking.parkfee)
+
+        // if (this.booking.park_fee) {
+        //   console.log('Adult Park Fee:', this.booking.park_fee.price_adult_park_fee)
+        //   console.log('Child Park Fee:', this.booking.park_fee.price_child_park_fee)
+        //   console.log('Local Adult Park Fee:', this.booking.park_fee.local_price_adult_park_fee)
+        //   console.log('Local Child Park Fee:', this.booking.park_fee.local_price_child_park_fee)
+        // }
         await this.fetchTourData(this.booking.tour_id) // Fetch tour data using tour ID from booking
       } catch (error) {
         this.error = 'Failed to fetch booking data'
@@ -411,6 +441,20 @@ export default {
         .on('change', (e) => {
           this.booking.nationality = e.target.value
           this.calculateParkFee()
+        })
+      $('#pick_up_location')
+        .select2({
+          allowClear: true,
+        })
+        .on('change', (e) => {
+          this.booking.pick_up_location = e.target.value
+        })
+      $('#drop_off_location')
+        .select2({
+          allowClear: true,
+        })
+        .on('change', (e) => {
+          this.booking.drop_location = e.target.value
         })
       $('#discount')
         .select2({
@@ -711,6 +755,7 @@ export default {
                 <div class="input-group input-group-merge">
                   <span class="input-group-text"><i class="ti ti-map-pin"></i></span>
                   <select
+                    id="pick_up_location"
                     class="form-select"
                     v-model="booking.selectedLocation"
                     @change="updatePickupTimes"
@@ -762,6 +807,7 @@ export default {
                 <div class="input-group input-group-merge">
                   <span class="input-group-text"><i class="ti ti-map-pin"></i></span>
                   <select
+                    id="drop_off_location"
                     class="form-select"
                     v-model="booking.selectedDropLocation"
                     @change="updateDropTimes"

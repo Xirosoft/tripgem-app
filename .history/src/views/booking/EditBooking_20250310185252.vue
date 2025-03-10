@@ -141,6 +141,11 @@ export default {
           headers: config.getHeaders(),
         })
         this.tour = response.data
+
+        console.log('Tour data:', this.tour)
+
+        // this.booking = this.tour
+        // this.booking.tour_id = this.tour.tour_id
         this.booking.tour_name = this.tour.tour_name
         this.booking.merchant_id = this.tour.merchant_id
         this.booking.adult_price = this.tour.regular_price_adult
@@ -155,10 +160,11 @@ export default {
         this.booking.available_seat = this.tour.available_seat
 
         this.booking.pick_up_time = this.tour.pick_up_time
-        this.booking.drop_time = this.tour.drop_time
         this.booking.thumbnail = this.tour.thumbnail
         this.booking.transport_types = this.tour.transport_types
         this.booking.nationality = this.tour.nationality // Set nationality
+        // this.booking.park_fee = JSON.parse(this.tour.park_fee)
+        // console.log('Park Fee:', this.booking.park_fee)
         this.booking.nationality = 'Bangladesh'
         console.log(this.booking.nationality)
 
@@ -186,6 +192,19 @@ export default {
         this.booking = response.data
         // Ensure park_fee is defined before accessing its properties
         this.booking.nationality = 'Bangladesh'
+        console.log('Booking:', this.booking)
+        console.log(this.booking.nationality)
+        // this.booking.pick_up_time = JSON.parse(this.tour.pick_up_time)
+        // this.booking.drop_time = JSON.parse(this.tour.drop_time)
+        // this.booking.parkfee = JSON.parse(this.booking.park_fee)
+        // console.log('Park Fee:', this.booking.parkfee)
+
+        // if (this.booking.park_fee) {
+        //   console.log('Adult Park Fee:', this.booking.park_fee.price_adult_park_fee)
+        //   console.log('Child Park Fee:', this.booking.park_fee.price_child_park_fee)
+        //   console.log('Local Adult Park Fee:', this.booking.park_fee.local_price_adult_park_fee)
+        //   console.log('Local Child Park Fee:', this.booking.park_fee.local_price_child_park_fee)
+        // }
         await this.fetchTourData(this.booking.tour_id) // Fetch tour data using tour ID from booking
       } catch (error) {
         this.error = 'Failed to fetch booking data'
@@ -718,7 +737,7 @@ export default {
                   >
                     <option value="">Select Location</option>
                     <option
-                      v-for="location in parsePickupLocations(booking.pick_up_time)"
+                      v-for="location in parsePickupLocations(tour.pick_up_time)"
                       :key="location.location"
                       :value="location"
                     >
@@ -769,7 +788,7 @@ export default {
                   >
                     <option value="">Select Location</option>
                     <option
-                      v-for="location in parseDropLocations(booking.drop_time)"
+                      v-for="location in parseDropLocations(tour.drop_time)"
                       :key="location.location"
                       :value="location"
                     >

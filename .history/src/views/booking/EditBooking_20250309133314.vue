@@ -141,12 +141,17 @@ export default {
           headers: config.getHeaders(),
         })
         this.tour = response.data
+
+        console.log('Tour data:', this.tour)
+
+        // this.booking = this.tour
+        // this.booking.tour_id = this.tour.tour_id
         this.booking.tour_name = this.tour.tour_name
         this.booking.merchant_id = this.tour.merchant_id
         this.booking.adult_price = this.tour.regular_price_adult
         this.booking.child_price = this.tour.regular_price_child
-        this.booking.net_price_adult = this.tour.net_price_adult
-        this.booking.net_price_child = this.tour.net_price_child
+        this.booking.net_adult_price = this.tour.net_adult_price
+        this.booking.net_child_price = this.tour.net_child_price
 
         this.booking.total_price = this.tour.total_price
         this.booking.location = this.tour.location
@@ -155,20 +160,15 @@ export default {
         this.booking.available_seat = this.tour.available_seat
 
         this.booking.pick_up_time = this.tour.pick_up_time
-        this.booking.drop_time = this.tour.drop_time
         this.booking.thumbnail = this.tour.thumbnail
-        this.booking.transport_types = this.tour.transport_types
-        this.booking.nationality = this.tour.nationality // Set nationality
-        this.booking.nationality = 'Bangladesh'
-        console.log(this.booking.nationality)
+        // this.booking.thumbnail = this.tour.thumbnail
+        this.booking.park_fee = JSON.parse(this.tour.park_fee)
+        console.log('Park Fee:', this.booking.park_fee)
 
         // this.booking.discount = this.tour.discount
         this.booking.discountDetails = JSON.parse(this.tour.discount)
-        // console.log('Discount:', this.booking.discountDetails)
+        console.log('Discount:', this.booking.discountDetails)
         this.populateDiscountOptions() // Populate discount options after fetching tour data
-        this.$nextTick(() => {
-          $('#multicol-country').val(this.booking.nationality).trigger('change')
-        })
       } catch (error) {
         this.error = 'Failed to fetch tour data'
         console.error(error)
@@ -184,8 +184,9 @@ export default {
           headers: config.getHeaders(),
         })
         this.booking = response.data
-        // Ensure park_fee is defined before accessing its properties
-        this.booking.nationality = 'Bangladesh'
+        console.log('Booking data:', this.booking.num_traveler_adult)
+        console.log('Booking data:', this.booking)
+
         await this.fetchTourData(this.booking.tour_id) // Fetch tour data using tour ID from booking
       } catch (error) {
         this.error = 'Failed to fetch booking data'
@@ -222,8 +223,8 @@ export default {
           drop_fee: this.booking.selectedDropLocation?.charge || 0,
           adult_park_fee: this.booking.park_fee?.price_adult_park_fee || 0,
           child_park_fee: this.booking.park_fee?.price_child_park_fee || 0,
-          num_adult_park: this.booking.num_adult_park,
-          num_child_park: this.booking.num_child_park,
+          num_adult_park: this.booking.num_traveler_adult,
+          num_child_park: this.booking.num_traveler_child,
           total_park_fee: this.calculateParkFee(),
           room_number: this.booking.room_number,
           email: this.booking.email,
@@ -319,7 +320,7 @@ export default {
       }
     },
     parsePickupLocations(pick_up_time) {
-      // console.log('Pick up time:', pick_up_time)
+      console.log('Pick up time:', pick_up_time)
 
       if (!pick_up_time) {
         return []
@@ -356,7 +357,7 @@ export default {
       }
     },
     parseDropLocations(drop_time) {
-      // console.log('Drop time:', drop_time)
+      console.log('Drop time:', drop_time)
 
       if (!drop_time) {
         return []
@@ -569,7 +570,7 @@ export default {
                                     min="0"
                                     max="35"
                                     id="input_adult_park_fee"
-                                    v-model="booking.num_adult_park"
+                                    v-model="booking.adult_park_fee_count"
                                   />
                                 </div>
                               </div>
@@ -583,7 +584,7 @@ export default {
                                     min="0"
                                     max="35"
                                     id="input_child_park_fee"
-                                    v-model="booking.num_child_park"
+                                    v-model="booking.child_park_fee_count"
                                   />
                                 </div>
                               </div>
@@ -1055,7 +1056,7 @@ export default {
           <br />
           <div class="d-grid">
             <button type="submit" class="btn btn-primary btn-next waves-effect waves-light">
-              Update Booking
+              Place Booking
             </button>
           </div>
         </div>
